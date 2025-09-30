@@ -1,11 +1,11 @@
-Team Name: TBD (depends on project descritption)
+Team Name: Sub4You
 Team Members:
 
 - Akarsh Gupta (CS) -- gupta3a6@mail.uc.edu
 - Rakshana Venkateswaran (CS) -- venkatrs@mail.uc.edu
 
-Project topic: TBD
+Project topic: A sublease application to help students find sublease or roommates to live with off campus.
 
-This is out repository for our capstone project, the project description is TBD. 
+This is our repository for our capstone project.
 
 FACULTY ADVISOR: Dr. Will Hawkins
