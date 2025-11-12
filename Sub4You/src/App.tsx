@@ -1,12 +1,13 @@
-import './App.css'
+import PageBackground from './components/PageBackground'
+import TopBar from './components/TopBar'
 
+/**
+ * Landing Page Component
+ * This is the main landing page of the Sub4You website.
+ * All pages should use the PageBackground component to maintain consistent background.
+ */
 export const App = () => (
-  <div className="app">
-    <div className="app__background" aria-hidden="true" />
-    <div className="app__glass">
-      <h1>Sub4You</h1>
-      <p>Tailored subscription management with a touch of liquid glass.</p>
-      <button type="button">Get Started</button>
-    </div>
-  </div>
+  <PageBackground>
+    <TopBar />
+  </PageBackground>
 )

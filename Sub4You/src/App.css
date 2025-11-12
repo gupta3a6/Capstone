@@ -1,161 +1,86 @@
-:root {
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #f5f7ff;
-  background-color: #030415;
-}
+@import "tailwindcss";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: radial-gradient(circle at top left, #0c1d4a 0%, #040617 100%);
-  color: inherit;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-.app {
-  position: relative;
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  padding: 3rem 1.5rem;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.app__background {
-  position: absolute;
-  inset: -20%;
-  background:
-    radial-gradient(at 20% 20%, rgba(76, 197, 255, 0.8), rgba(76, 197, 255, 0) 55%),
-    radial-gradient(at 80% 15%, rgba(255, 98, 203, 0.75), rgba(255, 98, 203, 0) 60%),
-    radial-gradient(at 35% 80%, rgba(147, 123, 255, 0.7), rgba(147, 123, 255, 0) 65%),
-    linear-gradient(115deg, #050721 0%, #030414 50%, #050721 100%);
-  filter: blur(80px) saturate(130%);
-  opacity: 0.8;
-  transform: translate3d(0, 0, 0) scale(1.05);
-  animation: liquid-drift 16s ease-in-out infinite alternate;
-  z-index: -2;
-}
-
-.app__background::before,
-.app__background::after {
-  content: '';
-  position: absolute;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 60%);
-  width: clamp(180px, 32vw, 320px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  opacity: 0.8;
-  filter: blur(12px);
-}
-
-.app__background::before {
-  top: 12%;
-  left: 18%;
-  animation: bubble-float 22s ease-in-out infinite;
-}
-
-.app__background::after {
-  bottom: 14%;
-  right: 20%;
-  animation: bubble-float 18s ease-in-out infinite reverse;
-}
-
-.app__glass {
-  position: relative;
-  z-index: 1;
-  width: min(420px, 100%);
-  padding: clamp(2rem, 4vw, 3rem);
-  border-radius: 24px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow:
-    0 25px 50px -40px rgba(10, 10, 60, 0.9),
-    inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  display: grid;
-  gap: 1.25rem;
-  text-align: center;
-}
-
-.app__glass::before {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  opacity: 0.35;
-  pointer-events: none;
-}
-
-.app__glass h1 {
-  margin: 0;
-  font-size: clamp(2rem, 5vw, 2.75rem);
-  letter-spacing: 0.015em;
-}
-
-.app__glass p {
-  margin: 0;
-  color: rgba(245, 247, 255, 0.85);
-  font-size: clamp(1rem, 2.3vw, 1.1rem);
-  line-height: 1.6;
-}
-
-.app__glass button {
-  justify-self: center;
-  padding: 0.8rem 2.2rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: linear-gradient(120deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.2));
-  color: #050721;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
-  box-shadow: 0 15px 30px -20px rgba(255, 255, 255, 0.8);
-}
-
-.app__glass button:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 22px 40px -28px rgba(255, 255, 255, 0.9);
-}
-
-.app__glass button:focus-visible {
-  outline: 3px solid rgba(124, 211, 255, 0.75);
-  outline-offset: 3px;
-}
-
-@keyframes liquid-drift {
-  0% {
-    transform: translate3d(-2%, -1%, 0) scale(1.05) rotate(0deg);
+@layer base {
+  :root {
+    --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
-  50% {
-    transform: translate3d(2%, 1%, 0) scale(1.1) rotate(1deg);
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
-  100% {
-    transform: translate3d(-1%, 2%, 0) scale(1.04) rotate(-1deg);
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: #000000;
+    color: #0a0a0a;
+    font-family: var(--font-sans);
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
   }
 }
 
-@keyframes bubble-float {
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
+@layer components {
+  @keyframes sunrise {
+    from {
+      transform: translate(-50%, 150%) scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, 70%) scale(1);
+      opacity: 1;
+    }
   }
-  50% {
-    transform: translate3d(10%, -8%, 0) scale(1.08);
+
+  @keyframes blob-pulse {
+    0%, 100% {
+      transform: translate(-50%, 70%) scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: translate(-50%, 70%) scale(1.15);
+      opacity: 0.85;
+    }
   }
-  100% {
-    transform: translate3d(-6%, 10%, 0) scale(0.96);
+
+
+  .gradient-blob {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
+
+  .gradient-blob::before {
+    content: '';
+    position: absolute;
+    width: 1500px;
+    height: 1500px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(255, 100, 0, 0.8) 0%,
+      rgba(255, 120, 0, 0.6) 20%,
+      rgba(255, 140, 0, 0.5) 35%,
+      rgba(200, 120, 100, 0.4) 50%,
+      rgba(150, 150, 200, 0.3) 65%,
+      rgba(100, 150, 255, 0.2) 80%,
+      rgba(50, 100, 255, 0.1) 95%,
+      transparent 100%
+    );
+    filter: blur(100px);
+    bottom: 0;
+    left: 50%;
+    animation: 
+      sunrise 4s ease-in-out forwards,
+      blob-pulse 6s ease-in-out 4s infinite;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+
 }
