@@ -9,6 +9,12 @@ interface TopBarProps {
   rightWidth?: number | string
   /** Height of the Login button glass surface on the right */
   rightHeight?: number | string
+  /** Callback function when Login button is clicked */
+  onLoginClick?: () => void
+  /** Callback function when Sign Up button is clicked */
+  onSignUpClick?: () => void
+  /** Callback function when Sub4You brand/logo is clicked */
+  onHomeClick?: () => void
 }
 
 /**
@@ -17,18 +23,21 @@ interface TopBarProps {
  * This provides a consistent top navigation bar across all pages.
  * Features:
  * - Sub4You logo/brand on the left
- * - Login button on the right (symmetrical)
+ * - Login and Sign Up buttons on the right
  * 
  * @param leftWidth - Width of the Sub4You brand glass surface (default: 200)
  * @param leftHeight - Height of the Sub4You brand glass surface (default: 75)
- * @param rightWidth - Width of the Login button glass surface (default: 200)
- * @param rightHeight - Height of the Login button glass surface (default: 75)
+ * @param rightWidth - Width of the button glass surfaces (default: 150)
+ * @param rightHeight - Height of the button glass surfaces (default: 75)
  */
 export const TopBar = ({
   leftWidth = 200,
   leftHeight = 75,
-  rightWidth = 200,
+  rightWidth = 150,
   rightHeight = 75,
+  onLoginClick,
+  onSignUpClick,
+  onHomeClick,
 }: TopBarProps = {}) => {
   const baseGlassProps = {
     borderRadius: 50,
@@ -61,17 +70,35 @@ export const TopBar = ({
       <div className="pointer-events-auto">
         <GlassSurface {...leftGlassProps}>
           <div className="p-4 text-center">
-            <h1 className="text-2xl font-bold text-white">Sub4You</h1>
+            <button 
+              onClick={onHomeClick}
+              className="text-2xl font-bold text-white hover:opacity-80 transition-opacity cursor-pointer"
+            >
+              Sub4You
+            </button>
           </div>
         </GlassSurface>
       </div>
 
-      {/* Right side - Login button */}
-      <div className="pointer-events-auto">
+      {/* Right side - Login and Sign Up buttons */}
+      <div className="pointer-events-auto flex items-center gap-4">
         <GlassSurface {...rightGlassProps}>
           <div className="p-4 text-center">
-            <button className="text-xl font-semibold text-white hover:opacity-80 transition-opacity">
+            <button 
+              onClick={onLoginClick}
+              className="text-xl font-semibold text-white hover:opacity-80 transition-opacity"
+            >
               Login
+            </button>
+          </div>
+        </GlassSurface>
+        <GlassSurface {...rightGlassProps}>
+          <div className="p-4 text-center">
+            <button 
+              onClick={onSignUpClick}
+              className="text-xl font-semibold text-white hover:opacity-80 transition-opacity"
+            >
+              Sign Up
             </button>
           </div>
         </GlassSurface>
