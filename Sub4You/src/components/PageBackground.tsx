@@ -6,12 +6,15 @@ interface PageBackgroundProps {
 }
 
 /**
- * PageBackground component that provides the consistent background (grey + orange blob)
+ * PageBackground component that provides the consistent background (black + orange blob)
  * for all pages of the website. Wrap all page content with this component.
  */
 export const PageBackground = ({ children }: PageBackgroundProps) => {
   return (
-    <div className="relative min-h-screen w-full text-dark-text font-sans">
+    <div 
+      className="relative min-h-screen w-full text-dark-text font-sans"
+      style={{ backgroundColor: '#000000', minHeight: '100vh' }}
+    >
       {/* Orange gradient blob background - Fixed */}
       <div className="fixed inset-0 gradient-blob" aria-hidden="true" style={{ zIndex: 0 }} />
       
