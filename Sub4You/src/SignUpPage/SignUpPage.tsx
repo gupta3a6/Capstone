@@ -1,22 +1,16 @@
 import { useState } from 'react'
-import PageBackground from '../components/PageBackground'
-import TopBar from '../components/TopBar'
 import GlassSurface from '../components/GlassSurface'
 
 /**
  * Sign Up Page Component
- * A sign up page with consistent background and top bar.
+ * A sign up page content.
  */
 export const SignUpPage = ({ 
-  onNavigateToLogin,
-  onNavigateToSignUp,
-  onNavigateToHome,
-  onSignUpSuccess
+  onSignUpSuccess,
+  onNavigateToLogin
 }: { 
-  onNavigateToLogin: () => void
-  onNavigateToSignUp: () => void
-  onNavigateToHome: () => void
-  onSignUpSuccess: (email: string) => void
+  onSignUpSuccess?: () => void
+  onNavigateToLogin?: () => void
 }) => {
   const [userType, setUserType] = useState<'sublease-seeker' | 'sublet-seeker' | ''>('')
   const [firstName, setFirstName] = useState('')
@@ -51,10 +45,7 @@ export const SignUpPage = ({
   }
 
   return (
-    <PageBackground>
-      <TopBar onLoginClick={onNavigateToLogin} onSignUpClick={onNavigateToSignUp} onHomeClick={onNavigateToHome} />
-      
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+    <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
         <GlassSurface {...glassProps}>
           <div className="p-8">
             <h2 className="text-3xl font-bold text-white text-center mb-8">Sign Up</h2>
@@ -64,8 +55,10 @@ export const SignUpPage = ({
               onSubmit={(e) => {
                 e.preventDefault()
                 if (isPasswordValid && firstName && lastName && email && userType) {
-                  // Simulate sending verification email
-                  onSignUpSuccess(email)
+                  // In a real app, this would call an API to create the account
+                  if (onSignUpSuccess) {
+                    onSignUpSuccess()
+                  }
                 }
               }}
             >
@@ -257,7 +250,6 @@ export const SignUpPage = ({
           </div>
         </GlassSurface>
       </div>
-    </PageBackground>
   )
 }
 

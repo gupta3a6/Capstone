@@ -1,23 +1,28 @@
 import { useState } from 'react'
-import PageBackground from '../components/PageBackground'
-import TopBar from '../components/TopBar'
 import GlassSurface from '../components/GlassSurface'
 
 /**
  * Login Page Component
- * A simple login page with consistent background and top bar.
+ * A simple login page content.
  */
 export const LoginPage = ({ 
   onNavigateToSignUp,
-  onNavigateToLogin,
-  onNavigateToHome
+  onLoginSuccess
 }: { 
-  onNavigateToSignUp: () => void
-  onNavigateToLogin: () => void
-  onNavigateToHome: () => void
-}) => {
+  onNavigateToSignUp?: () => void
+  onLoginSuccess?: () => void
+} = {}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // In a real app, you would validate credentials with an API here
+    // For now, we'll just call onLoginSuccess if both fields are filled
+    if (email && password && onLoginSuccess) {
+      onLoginSuccess()
+    }
+  }
   const glassProps = {
     borderRadius: 30,
     distortionScale: -150,
@@ -34,15 +39,12 @@ export const LoginPage = ({
   }
 
   return (
-    <PageBackground>
-      <TopBar onLoginClick={onNavigateToLogin} onSignUpClick={onNavigateToSignUp} onHomeClick={onNavigateToHome} />
-      
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+    <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
         <GlassSurface {...glassProps}>
           <div className="p-8">
             <h2 className="text-3xl font-bold text-white text-center mb-8">Login</h2>
             
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
                   Email
@@ -96,7 +98,6 @@ export const LoginPage = ({
           </div>
         </GlassSurface>
       </div>
-    </PageBackground>
   )
 }
 

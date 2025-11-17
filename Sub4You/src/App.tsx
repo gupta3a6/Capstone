@@ -1,21 +1,9 @@
-import PageBackground from './components/PageBackground'
-import TopBar from './components/TopBar'
-
 /**
  * Landing Page Component
- * This is the main landing page of the Sub4You website.
- * All pages should use the PageBackground component to maintain consistent background.
+ * This is the main landing page content of the Sub4You website.
  */
-export const App = ({ 
-  onNavigateToLogin,
-  onNavigateToSignUp,
-  onNavigateToHome
-}: { 
-  onNavigateToLogin: () => void
-  onNavigateToSignUp: () => void
-  onNavigateToHome: () => void
-}) => (
-  <PageBackground>
-    <TopBar onLoginClick={onNavigateToLogin} onSignUpClick={onNavigateToSignUp} onHomeClick={onNavigateToHome} />
-  </PageBackground>
+export const App = () => (
+  <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+    {/* Add your home page content here */}
+  </div>
 )
