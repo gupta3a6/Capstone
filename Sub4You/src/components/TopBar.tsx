@@ -8,6 +8,10 @@ interface TopBarProps {
   children?: ReactNode
   profileImageSrc?: string
   profileImageAlt?: string
+  isLoggedIn?: boolean
+  onLoginClick?: () => void
+  onSignUpClick?: () => void
+  onHomeClick?: () => void
 }
 
 /**
@@ -18,7 +22,11 @@ interface TopBarProps {
 export const TopBar = ({ 
   children, 
   profileImageSrc,
-  profileImageAlt = 'Profile'
+  profileImageAlt = 'Profile',
+  isLoggedIn = false,
+  onLoginClick,
+  onSignUpClick,
+  onHomeClick
 }: TopBarProps = {}) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
@@ -28,7 +36,7 @@ export const TopBar = ({
 
   // Constants
   const CONFIG = {
-    height: 60,
+    height: 50,
     topPadding: 20,
     brandText: 'Sub4You',
     navPadding: { left: '60px', right: '24px' },
@@ -65,6 +73,14 @@ export const TopBar = ({
     borderRadius: CONFIG.height,
   }
 
+  const authButtonsProps = {
+    ...commonGlassProps,
+    width: 'auto',
+    height: CONFIG.height,
+    borderRadius: CONFIG.height,
+    minWidth: '260px',
+  }
+
   // Navigation items
   const navItems = [
     { label: 'Home', path: '/' },
@@ -90,6 +106,9 @@ export const TopBar = ({
   const handleNavClick = (path: string) => {
     console.log(`Navigate to: ${path}`)
     setIsSearchOpen(false)
+    if (path === '/' && onHomeClick) {
+      onHomeClick()
+    }
   }
 
   // Close search when clicking outside the glass surface
@@ -189,7 +208,7 @@ export const TopBar = ({
       style={{ paddingTop: `${CONFIG.topPadding}px` }}
     >
       <div 
-        className="pointer-events-auto flex items-center w-full gap-8 sm:gap-12 md:gap-16 lg:gap-20 xl:gap-24 2xl:gap-28"
+        className="pointer-events-auto flex items-center w-full gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-8"
       >
         {/* Brand text */}
         <div className="whitespace-nowrap pointer-events-auto flex items-center">
@@ -214,28 +233,53 @@ export const TopBar = ({
           </GlassSurface>
         </div>
 
-        {/* Profile button */}
+        {/* Profile button or Auth buttons */}
         <div className="pointer-events-auto flex items-center">
-          <GlassSurface {...circularButtonProps}>
-            <button 
-              className="w-full h-full flex items-center justify-center hover:opacity-80 transition-opacity"
-              aria-label={profileImageAlt}
-              onClick={() => console.log('Profile clicked')}
-            >
-              {profileImageSrc ? (
-                <img 
-                  src={profileImageSrc} 
-                  alt={profileImageAlt}
-                  className="w-full h-full object-cover rounded-full"
-                  style={{ width: '40px', height: '40px' }}
-                />
-              ) : (
-                <div className="flex items-center justify-center" style={{ width: '100%', height: '100%' }}>
-                  {profileIcon}
-                </div>
-              )}
-            </button>
-          </GlassSurface>
+          {isLoggedIn ? (
+            <GlassSurface {...circularButtonProps}>
+              <button 
+                className="w-full h-full flex items-center justify-center hover:opacity-80 transition-opacity"
+                aria-label={profileImageAlt}
+                onClick={() => console.log('Profile clicked')}
+              >
+                {profileImageSrc ? (
+                  <img 
+                    src={profileImageSrc} 
+                    alt={profileImageAlt}
+                    className="w-full h-full object-cover rounded-full"
+                    style={{ width: '40px', height: '40px' }}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center" style={{ width: '100%', height: '100%' }}>
+                    {profileIcon}
+                  </div>
+                )}
+              </button>
+            </GlassSurface>
+          ) : (
+            <GlassSurface {...authButtonsProps}>
+              <div className="w-full h-full flex items-center justify-center gap-3 px-4">
+                {onSignUpClick && (
+                  <button
+                    onClick={onSignUpClick}
+                    className="text-white hover:text-gray-200 transition-colors duration-200 font-medium text-sm whitespace-nowrap"
+                    aria-label="Sign Up"
+                  >
+                    Sign Up
+                  </button>
+                )}
+                {onLoginClick && (
+                  <button
+                    onClick={onLoginClick}
+                    className="text-white hover:text-gray-200 transition-colors duration-200 font-medium text-sm whitespace-nowrap"
+                    aria-label="Login"
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
+            </GlassSurface>
+          )}
         </div>
       </div>
     </div>
