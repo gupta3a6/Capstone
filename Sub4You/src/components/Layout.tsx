@@ -10,6 +10,8 @@ interface LayoutProps {
   onLoginClick?: () => void
   onSignUpClick?: () => void
   onHomeClick?: () => void
+  onProfileClick?: () => void
+  onLogoutClick?: () => void
 }
 
 /**
@@ -25,6 +27,8 @@ export const Layout = ({
   onLoginClick,
   onSignUpClick,
   onHomeClick,
+  onProfileClick,
+  onLogoutClick,
 }: LayoutProps) => {
   return (
     <PageBackground>
@@ -35,6 +39,8 @@ export const Layout = ({
         onLoginClick={onLoginClick}
         onSignUpClick={onSignUpClick}
         onHomeClick={onHomeClick}
+        onProfileClick={onProfileClick}
+        onLogoutClick={onLogoutClick}
       />
       {children}
     </PageBackground>

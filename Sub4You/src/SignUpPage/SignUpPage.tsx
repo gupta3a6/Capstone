@@ -1,22 +1,25 @@
 import { useState } from 'react'
 import GlassSurface from '../components/GlassSurface'
+import { supabase } from '../lib/supabase'
 
 /**
  * Sign Up Page Component
- * A sign up page content.
+ * Handles user registration with Supabase authentication.
  */
 export const SignUpPage = ({ 
   onSignUpSuccess,
   onNavigateToLogin
 }: { 
-  onSignUpSuccess?: () => void
+  onSignUpSuccess?: (isLoggedIn: boolean) => void
   onNavigateToLogin?: () => void
 }) => {
-  const [userType, setUserType] = useState<'sublease-seeker' | 'sublet-seeker' | ''>('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   // Password validation rules
   const passwordChecks = {
@@ -28,6 +31,84 @@ export const SignUpPage = ({
   }
 
   const isPasswordValid = Object.values(passwordChecks).every(check => check)
+
+  /**
+   * Handles the signup form submission
+   * Creates a new user account with Supabase
+   */
+  const handleSignUp = async () => {
+    // Clear previous errors
+    setError(null)
+    setSuccess(false)
+    
+    // Validate form fields
+    if (!isPasswordValid || !firstName || !lastName || !email) {
+      setError('Please fill in all fields and ensure password meets requirements')
+      return
+    }
+    
+    setIsLoading(true)
+    
+    try {
+      // Sign up with Supabase
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            first_name: firstName,
+            last_name: lastName,
+            full_name: `${firstName} ${lastName}`,
+          }
+        }
+      })
+      
+      // Handle errors
+      if (signUpError) {
+        if (signUpError.message.includes('already registered')) {
+          setError('An account with this email already exists. Please login instead.')
+        } else {
+          setError(signUpError.message || 'An error occurred during signup')
+        }
+        setIsLoading(false)
+        return
+      }
+      
+      // Success - account created
+      if (data.user) {
+        setSuccess(true)
+        
+        // If user has a session, they're automatically logged in (email confirmation disabled)
+        // If no session, email confirmation is required
+        if (data.session) {
+          // User is logged in - pass true to navigate to home
+          if (onSignUpSuccess) {
+            setTimeout(() => {
+              onSignUpSuccess(true) // true = user is logged in
+            }, 1500)
+          }
+        } else {
+          // Email confirmation required - pass false to navigate to login
+          if (onSignUpSuccess) {
+            setTimeout(() => {
+              onSignUpSuccess(false) // false = email confirmation needed
+            }, 2000)
+          }
+        }
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
+  /**
+   * Handles form submission
+   */
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    handleSignUp()
+  }
 
   const glassProps = {
     borderRadius: 30,
@@ -52,74 +133,8 @@ export const SignUpPage = ({
             
             <form 
               className="space-y-6"
-              onSubmit={(e) => {
-                e.preventDefault()
-                if (isPasswordValid && firstName && lastName && email && userType) {
-                  // In a real app, this would call an API to create the account
-                  if (onSignUpSuccess) {
-                    onSignUpSuccess()
-                  }
-                }
-              }}
+              onSubmit={handleSubmit}
             >
-              <div>
-                <label className="block text-white text-sm font-medium mb-3">
-                  I am a:
-                </label>
-                <div className="flex flex-col gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setUserType('sublease-seeker')}
-                    className={`py-3 px-4 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
-                      userType === 'sublease-seeker'
-                        ? 'bg-white/20 border-white/50 text-white'
-                        : 'bg-white/10 border-white/20 text-white/70 hover:bg-white/15'
-                    }`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                    <span>Sublease Seeker</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setUserType('sublet-seeker')}
-                    className={`py-3 px-4 rounded-lg border transition-all duration-200 flex items-center justify-center gap-2 ${
-                      userType === 'sublet-seeker'
-                        ? 'bg-white/20 border-white/50 text-white'
-                        : 'bg-white/10 border-white/20 text-white/70 hover:bg-white/15'
-                    }`}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                      />
-                    </svg>
-                    <span>Sublet Seeker</span>
-                  </button>
-                </div>
-              </div>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="firstName" className="block text-white text-sm font-medium mb-2">
@@ -131,7 +146,8 @@ export const SignUpPage = ({
                     name="firstName"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="First name"
                   />
                 </div>
@@ -146,7 +162,8 @@ export const SignUpPage = ({
                     name="lastName"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                    disabled={isLoading}
+                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     placeholder="Last name"
                   />
                 </div>
@@ -162,7 +179,8 @@ export const SignUpPage = ({
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  disabled={isLoading}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your email"
                 />
               </div>
@@ -177,13 +195,14 @@ export const SignUpPage = ({
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                   className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border ${
                     password && !isPasswordValid
                       ? 'border-red-400/50'
                       : password && isPasswordValid
                       ? 'border-green-400/50'
                       : 'border-white/20'
-                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent`}
+                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                   placeholder="Enter your password"
                 />
                 
@@ -226,12 +245,26 @@ export const SignUpPage = ({
                 )}
               </div>
               
+              {error && (
+                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
+                  <p className="text-red-400 text-sm text-center">{error}</p>
+                </div>
+              )}
+              
+              {success && (
+                <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
+                  <p className="text-green-400 text-sm text-center">
+                    Account created successfully! Redirecting...
+                  </p>
+                </div>
+              )}
+              
               <button
                 type="submit"
-                disabled={!isPasswordValid || !firstName || !lastName || !email || !userType}
+                disabled={!isPasswordValid || !firstName || !lastName || !email || isLoading}
                 className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
               >
-                Sign Up
+                {isLoading ? 'Creating account...' : 'Sign Up'}
               </button>
               
               <div className="text-center mt-4">

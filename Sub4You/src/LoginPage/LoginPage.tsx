@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import GlassSurface from '../components/GlassSurface'
+import { supabase } from '../lib/supabase'
 
 /**
  * Login Page Component
- * A simple login page content.
+ * Handles user authentication with Supabase.
  */
 export const LoginPage = ({ 
   onNavigateToSignUp,
@@ -14,14 +15,70 @@ export const LoginPage = ({
 } = {}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
   
+  /**
+   * Handles the login form submission
+   * Authenticates user with Supabase
+   */
+  const handleLogin = async () => {
+    // Clear previous errors and success
+    setError(null)
+    setSuccess(false)
+    
+    // Validate inputs
+    if (!email || !password) {
+      setError('Please fill in all fields')
+      return
+    }
+    
+    setIsLoading(true)
+    
+    try {
+      // Sign in with Supabase
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      
+      // Handle errors
+      if (signInError) {
+        // Handle specific error cases
+        if (signInError.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please try again.')
+        } else if (signInError.message.includes('Email not confirmed')) {
+          setError('Please verify your email before logging in.')
+        } else {
+          setError(signInError.message || 'An error occurred during login')
+        }
+        setIsLoading(false)
+        return
+      }
+      
+      // Success - user is logged in
+      if (data.user) {
+        setSuccess(true)
+        if (onLoginSuccess) {
+          // Show success message briefly before redirecting
+          setTimeout(() => {
+            onLoginSuccess()
+          }, 1500)
+        }
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
+  /**
+   * Handles form submission
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // In a real app, you would validate credentials with an API here
-    // For now, we'll just call onLoginSuccess if both fields are filled
-    if (email && password && onLoginSuccess) {
-      onLoginSuccess()
-    }
+    handleLogin()
   }
   const glassProps = {
     borderRadius: 30,
@@ -55,7 +112,8 @@ export const LoginPage = ({
                   name="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  disabled={isLoading}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your email"
                 />
               </div>
@@ -70,16 +128,32 @@ export const LoginPage = ({
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+                  disabled={isLoading}
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                   placeholder="Enter your password"
                 />
               </div>
               
+              {error && (
+                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
+                  <p className="text-red-400 text-sm text-center">{error}</p>
+                </div>
+              )}
+              
+              {success && (
+                <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
+                  <p className="text-green-400 text-sm text-center">
+                    Login successful! Redirecting...
+                  </p>
+                </div>
+              )}
+              
               <button
                 type="submit"
-                className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
+                disabled={isLoading}
+                className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
               >
-                Login
+                {isLoading ? 'Logging in...' : 'Login'}
               </button>
               
               <div className="text-center mt-4">
