@@ -172,9 +172,6 @@ export const TopBar = ({
     navGap: '60px',
   }
 
-  // Animation timing
-  const TRANSITION = 'transform 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-
   // Common glass properties
   const commonGlassProps = {
     distortionScale: -150,

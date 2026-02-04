@@ -8,6 +8,7 @@
   :root {
     --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
+
   *,
   *::before,
   *::after {
@@ -36,6 +37,7 @@
       transform: translate(-50%, 150%) scale(0.8);
       opacity: 0;
     }
+
     to {
       transform: translate(-50%, 70%) scale(1);
       opacity: 1;
@@ -43,21 +45,26 @@
   }
 
   @keyframes blob-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
       transform: translate(-50%, 70%) translateX(0) scale(1, 1);
       border-radius: 50% 40% 60% 35% / 60% 45% 55% 40%;
       opacity: 1;
     }
+
     25% {
       transform: translate(-50%, 70%) translateX(15px) scale(1.08, 0.95);
       border-radius: 55% 45% 55% 45% / 55% 50% 50% 50%;
       opacity: 0.92;
     }
+
     50% {
       transform: translate(-50%, 70%) translateX(-10px) scale(1.15, 0.92);
       border-radius: 45% 55% 45% 55% / 50% 55% 45% 55%;
       opacity: 0.85;
     }
+
     75% {
       transform: translate(-50%, 70%) translateX(8px) scale(1.08, 0.96);
       border-radius: 52% 48% 58% 42% / 58% 48% 52% 48%;
@@ -69,9 +76,11 @@
     0% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
+
     100% {
       background-position: 0% 50%;
     }
@@ -89,21 +98,19 @@
     width: 1500px;
     height: 1500px;
     border-radius: 50% 40% 60% 35% / 60% 45% 55% 40%;
-    background: radial-gradient(
-      circle,
-      rgba(255, 100, 0, 0.8) 0%,
-      rgba(255, 120, 0, 0.6) 20%,
-      rgba(255, 140, 0, 0.5) 35%,
-      rgba(200, 120, 100, 0.4) 50%,
-      rgba(150, 150, 200, 0.3) 65%,
-      rgba(100, 150, 255, 0.2) 80%,
-      rgba(50, 100, 255, 0.1) 95%,
-      transparent 100%
-    );
+    background: radial-gradient(circle,
+        rgba(255, 100, 0, 0.8) 0%,
+        rgba(255, 120, 0, 0.6) 20%,
+        rgba(255, 140, 0, 0.5) 35%,
+        rgba(200, 120, 100, 0.4) 50%,
+        rgba(150, 150, 200, 0.3) 65%,
+        rgba(100, 150, 255, 0.2) 80%,
+        rgba(50, 100, 255, 0.1) 95%,
+        transparent 100%);
     filter: blur(100px);
     bottom: 0;
     left: 50%;
-    animation: 
+    animation:
       sunrise 4s ease-in-out forwards,
       blob-pulse 6s ease-in-out 4s infinite;
     will-change: transform, opacity, border-radius;
@@ -223,6 +230,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   /* Don't apply shadcn background - we use custom grey background */
   /* body {
     @apply bg-background text-foreground;

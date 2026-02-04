@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import GlassSurface from '../components/GlassSurface'
 import { supabase } from '../lib/supabase'
 
@@ -20,6 +20,8 @@ export const SignUpPage = ({
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  const [needsEmailVerification, setNeedsEmailVerification] = useState(false)
+  const [verificationEmail, setVerificationEmail] = useState('')
 
   // Password validation rules
   const passwordChecks = {
@@ -31,6 +33,30 @@ export const SignUpPage = ({
   }
 
   const isPasswordValid = Object.values(passwordChecks).every(check => check)
+
+  /**
+   * Displays an error message in a styled error box
+   */
+  const displayError = (errorMessage: string | null) => {
+    if (!errorMessage) return null
+    return (
+      <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
+        <p className="text-red-400 text-sm text-center">{errorMessage}</p>
+      </div>
+    )
+  }
+
+  /**
+   * Displays a success message in a styled success box
+   */
+  const displaySuccess = (successMessage: string | null) => {
+    if (!successMessage) return null
+    return (
+      <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
+        <p className="text-green-400 text-sm text-center">{successMessage}</p>
+      </div>
+    )
+  }
 
   /**
    * Handles the signup form submission
@@ -51,10 +77,12 @@ export const SignUpPage = ({
     
     try {
       // Sign up with Supabase
+      const redirectUrl = `${window.location.origin}${window.location.pathname}`
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: redirectUrl,
           data: {
             first_name: firstName,
             last_name: lastName,
@@ -65,37 +93,33 @@ export const SignUpPage = ({
       
       // Handle errors
       if (signUpError) {
-        if (signUpError.message.includes('already registered')) {
-          setError('An account with this email already exists. Please login instead.')
-        } else {
-          setError(signUpError.message || 'An error occurred during signup')
-        }
+        setError(signUpError.message || 'An error occurred during signup')
         setIsLoading(false)
         return
       }
       
       // Success - account created
       if (data.user) {
-        setSuccess(true)
-        
-        // If user has a session, they're automatically logged in (email confirmation disabled)
-        // If no session, email confirmation is required
+        // If user has a session, they're automatically logged in
         if (data.session) {
-          // User is logged in - pass true to navigate to home
+          setSuccess(true)
           if (onSignUpSuccess) {
             setTimeout(() => {
-              onSignUpSuccess(true) // true = user is logged in
+              onSignUpSuccess(true)
             }, 1500)
           }
         } else {
-          // Email confirmation required - pass false to navigate to login
-          if (onSignUpSuccess) {
-            setTimeout(() => {
-              onSignUpSuccess(false) // false = email confirmation needed
-            }, 2000)
-          }
+          // Email confirmation required - show verification screen
+          setNeedsEmailVerification(true)
+          setVerificationEmail(email)
+          localStorage.setItem('pendingEmailVerification', 'true')
+          localStorage.setItem('pendingEmailVerificationEmail', email)
         }
+      } else {
+        setError('Account creation failed. Please try again.')
       }
+      
+      setIsLoading(false)
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
       setIsLoading(false)
@@ -108,6 +132,52 @@ export const SignUpPage = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     handleSignUp()
+  }
+
+  /**
+   * Listen for email verification completion
+   */
+  useEffect(() => {
+    if (!needsEmailVerification) return
+
+    // Listen for auth state changes to detect email verification
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        // Email verified and user is now signed in
+        setNeedsEmailVerification(false)
+        // Clear the pending verification flag
+        localStorage.removeItem('pendingEmailVerification')
+        localStorage.removeItem('pendingEmailVerificationEmail')
+        if (onSignUpSuccess) {
+          onSignUpSuccess(true)
+        }
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [needsEmailVerification, onSignUpSuccess])
+
+  /**
+   * Resend verification email
+   */
+  const handleResendVerification = async () => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: verificationEmail,
+      })
+      if (error) {
+        setError('Failed to resend verification email. Please try again.')
+      } else {
+        setError(null)
+        setSuccess(true)
+        setTimeout(() => setSuccess(false), 3000)
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.')
+    }
   }
 
   const glassProps = {
@@ -123,6 +193,79 @@ export const SignUpPage = ({
     blur: 7,
     width: 450,
     height: 'auto',
+  }
+
+  // Email verification screen
+  if (needsEmailVerification) {
+    return (
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+        <GlassSurface {...glassProps}>
+          <div className="p-8">
+            <div className="text-center mb-6">
+              <div className="mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-16 w-16 mx-auto text-white/70"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-white mb-4">Verify Your Email</h2>
+              <p className="text-white/70 text-sm mb-2">
+                We've sent a verification link to
+              </p>
+              <p className="text-white font-medium mb-6">{verificationEmail}</p>
+              <p className="text-white/70 text-sm mb-6">
+                Please check your email and click the verification link to continue.
+              </p>
+            </div>
+
+            {displayError(error)}
+            {displaySuccess(success ? 'Verification email sent! Please check your inbox.' : null)}
+
+            <div className="space-y-4">
+              <button
+                onClick={handleResendVerification}
+                className="w-full py-3 px-6 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-all duration-200 border border-white/20"
+              >
+                Resend Verification Email
+              </button>
+
+              <div className="text-center">
+                <p className="text-white/70 text-sm">
+                  Already verified?{' '}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Check if user is now verified
+                      supabase.auth.getSession().then(({ data: { session } }) => {
+                        if (session) {
+                          setNeedsEmailVerification(false)
+                          if (onSignUpSuccess) {
+                            onSignUpSuccess(true)
+                          }
+                        }
+                      })
+                    }}
+                    className="text-white font-semibold hover:underline"
+                  >
+                    Continue
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </GlassSurface>
+      </div>
+    )
   }
 
   return (
@@ -245,19 +388,8 @@ export const SignUpPage = ({
                 )}
               </div>
               
-              {error && (
-                <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3">
-                  <p className="text-red-400 text-sm text-center">{error}</p>
-                </div>
-              )}
-              
-              {success && (
-                <div className="bg-green-500/20 border border-green-500/50 rounded-lg p-3">
-                  <p className="text-green-400 text-sm text-center">
-                    Account created successfully! Redirecting...
-                  </p>
-                </div>
-              )}
+              {displayError(error)}
+              {displaySuccess(success ? 'Account created successfully! Redirecting...' : null)}
               
               <button
                 type="submit"
