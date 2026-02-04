@@ -21,8 +21,8 @@ interface TopBarProps {
  * A navigation bar with Sub4You brand on the left and a continuous glass surface bar
  * that starts where Sub4You ends.
  */
-export const TopBar = ({ 
-  children, 
+export const TopBar = ({
+  children,
   profileImageSrc,
   profileImageAlt = 'Profile',
   isLoggedIn = false,
@@ -165,9 +165,9 @@ export const TopBar = ({
     height: getResponsiveHeight(),
     topPadding: getResponsiveTopPadding(),
     brandText: 'Sub4You',
-    navPadding: { 
+    navPadding: {
       left: getResponsiveNavGap(), // Left padding equals gap
-      right: '24px' 
+      right: '24px'
     },
     navGap: '60px',
   }
@@ -249,7 +249,7 @@ export const TopBar = ({
     const handleClickOutside = (event: MouseEvent) => {
       const clickedInsideGlassSurface = glassSurfaceRef.current?.contains(event.target as Node)
       const clickedSearchButton = searchButtonRef.current?.contains(event.target as Node)
-      
+
       // Close if clicked outside glass surface and not on search button
       if (isSearchOpen && !clickedInsideGlassSurface && !clickedSearchButton) {
         setIsSearchOpen(false)
@@ -271,7 +271,7 @@ export const TopBar = ({
     const handleClickOutside = (event: MouseEvent) => {
       const clickedInsideDropdown = dropdownRef.current?.contains(event.target as Node)
       const clickedProfileButton = profileButtonRef.current?.contains(event.target as Node)
-      
+
       // Close if clicked outside dropdown and not on profile button
       if (isDropdownOpen && !clickedInsideDropdown && !clickedProfileButton) {
         setIsDropdownOpen(false)
@@ -312,12 +312,12 @@ export const TopBar = ({
 
   // Default content for glass bar
   const defaultContent = (
-    <div 
-      className="w-full h-full flex items-center justify-between" 
+    <div
+      className="w-full h-full flex items-center justify-between"
       style={{ paddingLeft: CONFIG.navPadding.left, paddingRight: CONFIG.navPadding.right }}
     >
       {/* Navigation buttons */}
-      <div 
+      <div
         className="flex items-center"
         style={{
           gap: getResponsiveNavGap(),
@@ -334,7 +334,7 @@ export const TopBar = ({
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
-            className="text-white hover:text-gray-200 transition-colors duration-200 font-medium text-sm whitespace-nowrap"
+            className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
             aria-label={item.label}
           >
             {item.label}
@@ -351,7 +351,7 @@ export const TopBar = ({
           transform: isSearchOpen ? 'translateX(0)' : 'translateX(100%)',
           opacity: isSearchOpen ? 1 : 0,
           pointerEvents: isSearchOpen ? 'auto' : 'none',
-          transition: isSearchOpen 
+          transition: isSearchOpen
             ? 'transform 400ms ease-in-out, opacity 200ms ease-in-out 400ms'
             : 'opacity 200ms ease-in-out, transform 400ms ease-in-out 200ms',
           willChange: 'transform, opacity'
@@ -370,9 +370,9 @@ export const TopBar = ({
       </div>
 
       {/* Search button */}
-      <button 
+      <button
         ref={searchButtonRef}
-        className="flex items-center justify-center hover:opacity-80 transition-opacity relative z-10"
+        className="flex items-center justify-center hover:opacity-80 transition-all duration-200 relative z-10 hover:scale-110"
         aria-label="Search"
         onClick={handleSearchClick}
       >
@@ -382,11 +382,11 @@ export const TopBar = ({
   )
 
   return (
-    <div 
+    <div
       className="fixed top-0 left-0 right-0 z-20 pointer-events-none px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24"
       style={{ paddingTop: `${CONFIG.topPadding}px` }}
     >
-      <div 
+      <div
         className="pointer-events-auto flex items-center w-full gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-8"
       >
         {/* Brand text */}
@@ -400,9 +400,9 @@ export const TopBar = ({
             {CONFIG.brandText}
           </GradientText>
         </div>
-        
+
         {/* Main glass bar */}
-        <div 
+        <div
           ref={glassSurfaceRef}
           className="flex-1 pointer-events-auto relative"
           style={{ minWidth: 0 }}
@@ -414,45 +414,45 @@ export const TopBar = ({
 
         {/* Profile button or Auth buttons */}
         <div className="pointer-events-auto flex items-center relative">
-          {isLoggedIn ? 
-          (
-            <>
-              <div
-                ref={profileButtonRef}
-                onClick={handleProfileClick}
-                className="cursor-pointer"
-              >
-                <GlassSurface {...circularButtonProps}>
-                  <div className="w-full h-full flex items-center justify-center hover:opacity-80 transition-opacity">
-                    {profileImageSrc ? (
-                      <img 
-                        src={profileImageSrc} 
-                        alt={profileImageAlt}
-                        className="w-full h-full object-cover rounded-full"
-                        style={{ width: `${getResponsiveProfileImageSize()}px`, height: `${getResponsiveProfileImageSize()}px` }}
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center" style={{ width: '100%', height: '100%' }}>
-                        {profileIcon}
-                      </div>
-                    )}
-                  </div>
-                </GlassSurface>
-              </div>
-              
-              {/* Dropdown menu */}
-              <div
-                ref={dropdownRef}
-                className="absolute top-full right-0 mt-2 z-30"
-                style={{
-                  marginTop: '8px',
-                  opacity: isDropdownOpen ? 1 : 0,
-                  transform: isDropdownOpen ? 'translateY(0)' : 'translateY(-10px)',
-                  pointerEvents: isDropdownOpen ? 'auto' : 'none',
-                  transition: 'opacity 150ms ease-in-out, transform 150ms ease-in-out',
-                  visibility: isDropdownOpen ? 'visible' : 'hidden'
-                }}
-              >
+          {isLoggedIn ?
+            (
+              <>
+                <div
+                  ref={profileButtonRef}
+                  onClick={handleProfileClick}
+                  className="cursor-pointer"
+                >
+                  <GlassSurface {...circularButtonProps}>
+                    <div className="w-full h-full flex items-center justify-center hover:opacity-80 transition-all duration-200 hover:scale-110">
+                      {profileImageSrc ? (
+                        <img
+                          src={profileImageSrc}
+                          alt={profileImageAlt}
+                          className="w-full h-full object-cover rounded-full"
+                          style={{ width: `${getResponsiveProfileImageSize()}px`, height: `${getResponsiveProfileImageSize()}px` }}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center" style={{ width: '100%', height: '100%' }}>
+                          {profileIcon}
+                        </div>
+                      )}
+                    </div>
+                  </GlassSurface>
+                </div>
+
+                {/* Dropdown menu */}
+                <div
+                  ref={dropdownRef}
+                  className="absolute top-full right-0 mt-2 z-30"
+                  style={{
+                    marginTop: '8px',
+                    opacity: isDropdownOpen ? 1 : 0,
+                    transform: isDropdownOpen ? 'translateY(0)' : 'translateY(-10px)',
+                    pointerEvents: isDropdownOpen ? 'auto' : 'none',
+                    transition: 'opacity 150ms ease-in-out, transform 150ms ease-in-out',
+                    visibility: isDropdownOpen ? 'visible' : 'hidden'
+                  }}
+                >
                   <GlassSurface {...dropdownProps}>
                     <div className="p-3 flex flex-col items-center gap-4">
                       <button
@@ -460,8 +460,8 @@ export const TopBar = ({
                         className="w-full flex flex-col items-center gap-2 py-2 text-white hover:opacity-80 transition-opacity duration-200"
                       >
                         {profileImageSrc ? (
-                          <img 
-                            src={profileImageSrc} 
+                          <img
+                            src={profileImageSrc}
                             alt={profileImageAlt}
                             className="object-cover rounded-full"
                             style={{ width: `${getResponsiveProfileImageSize()}px`, height: `${getResponsiveProfileImageSize()}px` }}
@@ -496,31 +496,31 @@ export const TopBar = ({
                     </div>
                   </GlassSurface>
                 </div>
-            </>
-          ) : (
-            <GlassSurface {...authButtonsProps}>
-              <div className="w-full h-full flex items-center justify-center gap-3 px-4">
-                {onSignUpClick && (
-                  <button
-                    onClick={onSignUpClick}
-                    className="text-white hover:text-gray-200 transition-colors duration-200 font-medium text-sm whitespace-nowrap"
-                    aria-label="Sign Up"
-                  >
-                    Sign Up
-                  </button>
-                )}
-                {onLoginClick && (
-                  <button
-                    onClick={onLoginClick}
-                    className="text-white hover:text-gray-200 transition-colors duration-200 font-medium text-sm whitespace-nowrap"
-                    aria-label="Login"
-                  >
-                    Login
-                  </button>
-                )}
-              </div>
-            </GlassSurface>
-          )}
+              </>
+            ) : (
+              <GlassSurface {...authButtonsProps}>
+                <div className="w-full h-full flex items-center justify-center gap-3 px-4">
+                  {onSignUpClick && (
+                    <button
+                      onClick={onSignUpClick}
+                      className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
+                      aria-label="Sign Up"
+                    >
+                      Sign Up
+                    </button>
+                  )}
+                  {onLoginClick && (
+                    <button
+                      onClick={onLoginClick}
+                      className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
+                      aria-label="Login"
+                    >
+                      Login
+                    </button>
+                  )}
+                </div>
+              </GlassSurface>
+            )}
         </div>
       </div>
     </div>
