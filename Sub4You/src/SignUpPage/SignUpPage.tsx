@@ -6,10 +6,10 @@ import { supabase } from '../lib/supabase'
  * Sign Up Page Component
  * Handles user registration with Supabase authentication.
  */
-export const SignUpPage = ({ 
+export const SignUpPage = ({
   onSignUpSuccess,
   onNavigateToLogin
-}: { 
+}: {
   onSignUpSuccess?: (isLoggedIn: boolean) => void
   onNavigateToLogin?: () => void
 }) => {
@@ -17,6 +17,7 @@ export const SignUpPage = ({
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -66,15 +67,20 @@ export const SignUpPage = ({
     // Clear previous errors
     setError(null)
     setSuccess(false)
-    
+
     // Validate form fields
-    if (!isPasswordValid || !firstName || !lastName || !email) {
+    if (!isPasswordValid || !firstName || !lastName || !email || !confirmPassword) {
       setError('Please fill in all fields and ensure password meets requirements')
       return
     }
-    
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
     setIsLoading(true)
-    
+
     try {
       // Sign up with Supabase
       const redirectUrl = `${window.location.origin}${window.location.pathname}`
@@ -90,14 +96,14 @@ export const SignUpPage = ({
           }
         }
       })
-      
+
       // Handle errors
       if (signUpError) {
         setError(signUpError.message || 'An error occurred during signup')
         setIsLoading(false)
         return
       }
-      
+
       // Success - account created
       if (data.user) {
         // If user has a session, they're automatically logged in
@@ -118,7 +124,7 @@ export const SignUpPage = ({
       } else {
         setError('Account creation failed. Please try again.')
       }
-      
+
       setIsLoading(false)
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
@@ -270,151 +276,176 @@ export const SignUpPage = ({
 
   return (
     <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
-        <GlassSurface {...glassProps}>
-          <div className="p-8">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">Sign Up</h2>
-            
-            <form 
-              className="space-y-6"
-              onSubmit={handleSubmit}
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="firstName" className="block text-white text-sm font-medium mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    disabled={isLoading}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="First name"
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="lastName" className="block text-white text-sm font-medium mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    disabled={isLoading}
-                    className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                    placeholder="Last name"
-                  />
-                </div>
-              </div>
-              
+      <GlassSurface {...glassProps}>
+        <div className="p-8">
+          <h2 className="text-3xl font-bold text-white text-center mb-8">Sign Up</h2>
+
+          <form
+            className="space-y-6"
+            onSubmit={handleSubmit}
+          >
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
-                  Email
+                <label htmlFor="firstName" className="block text-white text-sm font-medium mb-2">
+                  First Name
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   disabled={isLoading}
                   className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                  placeholder="Enter your email"
+                  placeholder="First name"
                 />
               </div>
-              
+
               <div>
-                <label htmlFor="password" className="block text-white text-sm font-medium mb-2">
-                  Password
+                <label htmlFor="lastName" className="block text-white text-sm font-medium mb-2">
+                  Last Name
                 </label>
                 <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
                   disabled={isLoading}
-                  className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border ${
-                    password && !isPasswordValid
-                      ? 'border-red-400/50'
-                      : password && isPasswordValid
-                      ? 'border-green-400/50'
-                      : 'border-white/20'
-                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
-                  placeholder="Enter your password"
+                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  placeholder="Last name"
                 />
-                
-                {password && (
-                  <div className="mt-3 space-y-1.5">
-                    <p className="text-white/80 text-xs font-medium mb-2">Password requirements:</p>
-                    <div className="space-y-1">
-                      <div className={`flex items-center text-xs ${passwordChecks.minLength ? 'text-green-400' : 'text-white/60'}`}>
-                        <span className={`mr-2 ${passwordChecks.minLength ? '✓' : '✗'}`}>
-                          {passwordChecks.minLength ? '✓' : '✗'}
-                        </span>
-                        At least 8 characters
-                      </div>
-                      <div className={`flex items-center text-xs ${passwordChecks.hasUpperCase ? 'text-green-400' : 'text-white/60'}`}>
-                        <span className={`mr-2 ${passwordChecks.hasUpperCase ? '✓' : '✗'}`}>
-                          {passwordChecks.hasUpperCase ? '✓' : '✗'}
-                        </span>
-                        One uppercase letter
-                      </div>
-                      <div className={`flex items-center text-xs ${passwordChecks.hasLowerCase ? 'text-green-400' : 'text-white/60'}`}>
-                        <span className={`mr-2 ${passwordChecks.hasLowerCase ? '✓' : '✗'}`}>
-                          {passwordChecks.hasLowerCase ? '✓' : '✗'}
-                        </span>
-                        One lowercase letter
-                      </div>
-                      <div className={`flex items-center text-xs ${passwordChecks.hasNumber ? 'text-green-400' : 'text-white/60'}`}>
-                        <span className={`mr-2 ${passwordChecks.hasNumber ? '✓' : '✗'}`}>
-                          {passwordChecks.hasNumber ? '✓' : '✗'}
-                        </span>
-                        One number
-                      </div>
-                      <div className={`flex items-center text-xs ${passwordChecks.hasSpecialChar ? 'text-green-400' : 'text-white/60'}`}>
-                        <span className={`mr-2 ${passwordChecks.hasSpecialChar ? '✓' : '✗'}`}>
-                          {passwordChecks.hasSpecialChar ? '✓' : '✗'}
-                        </span>
-                        One special character
-                      </div>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-white text-sm font-medium mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border ${password && !isPasswordValid
+                  ? 'border-red-400/50'
+                  : password && isPasswordValid
+                    ? 'border-green-400/50'
+                    : 'border-white/20'
+                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                placeholder="Enter your password"
+              />
+
+              {password && (
+                <div className="mt-3 space-y-1.5">
+                  <p className="text-white/80 text-xs font-medium mb-2">Password requirements:</p>
+                  <div className="space-y-1">
+                    <div className={`flex items-center text-xs ${passwordChecks.minLength ? 'text-green-400' : 'text-white/60'}`}>
+                      <span className={`mr-2 ${passwordChecks.minLength ? '✓' : '✗'}`}>
+                        {passwordChecks.minLength ? '✓' : '✗'}
+                      </span>
+                      At least 8 characters
+                    </div>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasUpperCase ? 'text-green-400' : 'text-white/60'}`}>
+                      <span className={`mr-2 ${passwordChecks.hasUpperCase ? '✓' : '✗'}`}>
+                        {passwordChecks.hasUpperCase ? '✓' : '✗'}
+                      </span>
+                      One uppercase letter
+                    </div>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasLowerCase ? 'text-green-400' : 'text-white/60'}`}>
+                      <span className={`mr-2 ${passwordChecks.hasLowerCase ? '✓' : '✗'}`}>
+                        {passwordChecks.hasLowerCase ? '✓' : '✗'}
+                      </span>
+                      One lowercase letter
+                    </div>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasNumber ? 'text-green-400' : 'text-white/60'}`}>
+                      <span className={`mr-2 ${passwordChecks.hasNumber ? '✓' : '✗'}`}>
+                        {passwordChecks.hasNumber ? '✓' : '✗'}
+                      </span>
+                      One number
+                    </div>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasSpecialChar ? 'text-green-400' : 'text-white/60'}`}>
+                      <span className={`mr-2 ${passwordChecks.hasSpecialChar ? '✓' : '✗'}`}>
+                        {passwordChecks.hasSpecialChar ? '✓' : '✗'}
+                      </span>
+                      One special character
                     </div>
                   </div>
-                )}
-              </div>
-              
-              {displayError(error)}
-              {displaySuccess(success ? 'Account created successfully! Redirecting...' : null)}
-              
-              <button
-                type="submit"
-                disabled={!isPasswordValid || !firstName || !lastName || !email || isLoading}
-                className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
-              >
-                {isLoading ? 'Creating account...' : 'Sign Up'}
-              </button>
-              
-              <div className="text-center mt-4">
-                <p className="text-white/70 text-sm">
-                  Already have an account?{' '}
-                  <button
-                    type="button"
-                    onClick={onNavigateToLogin}
-                    className="text-white font-semibold hover:underline"
-                  >
-                    Login
-                  </button>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-white text-sm font-medium mb-2">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                disabled={isLoading}
+                className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border ${confirmPassword && confirmPassword !== password
+                  ? 'border-red-400/50'
+                  : confirmPassword && confirmPassword === password
+                    ? 'border-green-400/50'
+                    : 'border-white/20'
+                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                placeholder="Confirm your password"
+              />
+              {confirmPassword && confirmPassword !== password && (
+                <p className="text-red-400 text-xs mt-2 ml-1">
+                  Passwords need to match
                 </p>
-              </div>
-            </form>
-          </div>
-        </GlassSurface>
-      </div>
+              )}
+            </div>
+
+            {displayError(error)}
+            {displaySuccess(success ? 'Account created successfully! Redirecting...' : null)}
+
+            <button
+              type="submit"
+              disabled={!isPasswordValid || !firstName || !lastName || !email || !confirmPassword || password !== confirmPassword || isLoading}
+              className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
+            >
+              {isLoading ? 'Creating account...' : 'Sign Up'}
+            </button>
+
+            <div className="text-center mt-4">
+              <p className="text-white/70 text-sm">
+                Already have an account?{' '}
+                <button
+                  type="button"
+                  onClick={onNavigateToLogin}
+                  className="text-white font-semibold hover:underline"
+                >
+                  Login
+                </button>
+              </p>
+            </div>
+          </form>
+        </div>
+      </GlassSurface>
+    </div>
   )
 }
 
