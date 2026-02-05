@@ -1,10 +1,12 @@
-import { StrictMode, useState, useEffect, useRef } from 'react'
+import { StrictMode, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import { App } from './App.tsx'
-import LoginPage from './LoginPage'
-import SignUpPage from './SignUpPage'
+import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
+import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
 import Layout from './components/Layout'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
+import AuthHandle from './AuthPage/AuthHandle.tsx'
 
 const MissingConfig = () => (
   <div style={{
@@ -37,18 +39,12 @@ const AppRouter = () => {
     return <MissingConfig />
   }
 
-  const [currentPage, setCurrentPage] = useState<'home' | 'login' | 'signup'>('home')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const currentPageRef = useRef(currentPage)
+  const navigate = useNavigate()
 
-  // Keep ref in sync with state
-  useEffect(() => {
-    currentPageRef.current = currentPage
-  }, [currentPage])
-
-  const navigateToHome = () => setCurrentPage('home')
-  const navigateToLogin = () => setCurrentPage('login')
-  const navigateToSignUp = () => setCurrentPage('signup')
+  const navigateToHome = () => navigate('/')
+  const navigateToLogin = () => navigate('/login')
+  const navigateToSignUp = () => navigate('/signup')
 
   // Check for existing session on app load and listen for auth changes
   useEffect(() => {
@@ -100,17 +96,13 @@ const AppRouter = () => {
 
       // Handle email verification - if user just verified their email, navigate to home
       if (event === 'SIGNED_IN' && session) {
-        const current = currentPageRef.current
-
         // Check if this is a new signup (user just verified email)
         // Check URL hash for verification tokens (Supabase adds these on redirect)
         const justVerified = checkEmailVerification()
         const hasPendingVerification = localStorage.getItem('pendingEmailVerification') === 'true'
 
-        // If user is on signup page and just verified, navigate to home
-        // OR if URL contains verification token (redirect from email), navigate to home
-        // OR if there's a pending verification flag
-        if (current === 'signup' || justVerified || hasPendingVerification) {
+        // If simple check passes, navigate to home
+        if (justVerified || hasPendingVerification) {
           // Clear the pending verification flag
           localStorage.removeItem('pendingEmailVerification')
           localStorage.removeItem('pendingEmailVerificationEmail')
@@ -120,8 +112,11 @@ const AppRouter = () => {
 
       // Only redirect to home on SIGNED_OUT event, and only if not already on login/signup pages
       if (event === 'SIGNED_OUT') {
-        const current = currentPageRef.current
-        if (current !== 'home' && current !== 'login' && current !== 'signup') {
+        // Optional: redirect to home or login page on sign out
+        // For now, we'll redirect to home
+        if (window.location.pathname !== '/' && 
+            window.location.pathname !== '/login' && 
+            window.location.pathname !== '/signup') {
           navigateToHome()
         }
       }
@@ -133,65 +128,61 @@ const AppRouter = () => {
     }
   }, []) // Empty dependency array - only run once on mount
 
-  const handleLogin = () => {
-    // Auth state change listener will automatically update isLoggedIn
-    navigateToHome()
-  }
+
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut()
       setIsLoggedIn(false)
-      navigateToHome()
+      navigate('/', { replace: true })
     } catch (error) {
       console.error('Error signing out:', error)
     }
   }
 
-  const handleSignUpSuccess = (isLoggedIn: boolean) => {
-    // This callback is called after successful signup
-    // isLoggedIn = true: user has session (email confirmation disabled) → go to home
-    // isLoggedIn = false: email confirmation required → go to login
-    if (isLoggedIn) {
-      setIsLoggedIn(true)
-      navigateToHome()
-    } else {
-      navigateToLogin()
-    }
-  }
 
-  // Render content based on current page
-  let pageContent
-  if (currentPage === 'login') {
-    pageContent = <LoginPage onNavigateToSignUp={navigateToSignUp} onLoginSuccess={handleLogin} />
-  } else if (currentPage === 'signup') {
-    pageContent = <SignUpPage onSignUpSuccess={handleSignUpSuccess} onNavigateToLogin={navigateToLogin} />
-  } else {
-    pageContent = <App />
-  }
+
+
 
   const handleProfileClick = () => {
     // Navigate to profile page (you can create a profile page later)
     console.log('Navigate to profile page')
-    // navigateToProfile() // Add this when you create a profile page
+    // navigate('/profile') // Add this when you create a profile page
   }
 
   return (
-    <Layout
-      isLoggedIn={isLoggedIn}
-      onLoginClick={navigateToLogin}
-      onSignUpClick={navigateToSignUp}
-      onHomeClick={navigateToHome}
-      onProfileClick={handleProfileClick}
-      onLogoutClick={handleLogout}
-    >
-      {pageContent}
-    </Layout>
+
+    <Routes>
+      <Route path="/" element={
+        <Layout
+          isLoggedIn={isLoggedIn}
+          onLoginClick={navigateToLogin}
+          onSignUpClick={navigateToSignUp}
+          onHomeClick={navigateToHome}
+          onProfileClick={handleProfileClick}
+          onLogoutClick={handleLogout}
+        >
+          <App />
+        </Layout>
+      } />
+      <Route path="/login" element={
+        <AuthHandle>
+          <LoginPage />
+        </AuthHandle>
+      } />
+      <Route path="/signup" element={
+        <AuthHandle>
+          <SignUpPage />
+        </AuthHandle>
+      } />
+    </Routes>
   )
 }
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AppRouter />
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
   </StrictMode>,
 )
