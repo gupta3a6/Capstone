@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react'
-import GlassSurface from '../components/GlassSurface'
-import { supabase } from '../lib/supabase'
+import { useNavigate } from 'react-router-dom'
+import GlassSurface from '../../components/GlassSurface'
+import { supabase } from '../../lib/supabase'
+import { THEME } from '../../constants/theme'
 
 /**
  * Sign Up Page Component
  * Handles user registration with Supabase authentication.
  */
-export const SignUpPage = ({
-  onSignUpSuccess,
-  onNavigateToLogin
-}: {
-  onSignUpSuccess?: (isLoggedIn: boolean) => void
-  onNavigateToLogin?: () => void
-}) => {
+export const SignUpPage = () => {
+  const navigate = useNavigate()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -23,6 +20,19 @@ export const SignUpPage = ({
   const [success, setSuccess] = useState(false)
   const [needsEmailVerification, setNeedsEmailVerification] = useState(false)
   const [verificationEmail, setVerificationEmail] = useState('')
+
+  // Check if user is already logged in and redirect if so
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        // User is already logged in, redirect to home and replace history
+        navigate('/', { replace: true })
+      }
+    }
+    
+    checkSession()
+  }, [navigate])
 
   // Password validation rules
   const passwordChecks = {
@@ -109,11 +119,9 @@ export const SignUpPage = ({
         // If user has a session, they're automatically logged in
         if (data.session) {
           setSuccess(true)
-          if (onSignUpSuccess) {
-            setTimeout(() => {
-              onSignUpSuccess(true)
-            }, 1500)
-          }
+          setTimeout(() => {
+            navigate('/')
+          }, 1500)
         } else {
           // Email confirmation required - show verification screen
           setNeedsEmailVerification(true)
@@ -154,16 +162,14 @@ export const SignUpPage = ({
         // Clear the pending verification flag
         localStorage.removeItem('pendingEmailVerification')
         localStorage.removeItem('pendingEmailVerificationEmail')
-        if (onSignUpSuccess) {
-          onSignUpSuccess(true)
-        }
+        navigate('/')
       }
     })
 
     return () => {
       subscription.unsubscribe()
     }
-  }, [needsEmailVerification, onSignUpSuccess])
+  }, [needsEmailVerification, navigate])
 
   /**
    * Resend verification email
@@ -204,14 +210,14 @@ export const SignUpPage = ({
   // Email verification screen
   if (needsEmailVerification) {
     return (
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+      <div className="relative z-10 w-full flex items-center justify-center">
         <GlassSurface {...glassProps}>
           <div className="p-8">
             <div className="text-center mb-6">
               <div className="mb-4">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-16 w-16 mx-auto text-white/70"
+                  className={`h-16 w-16 mx-auto ${THEME.light.classes.text}/70`}
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -224,12 +230,12 @@ export const SignUpPage = ({
                   />
                 </svg>
               </div>
-              <h2 className="text-3xl font-bold text-white mb-4">Verify Your Email</h2>
-              <p className="text-white/70 text-sm mb-2">
+              <h2 className={`text-3xl font-bold ${THEME.light.classes.text} mb-4`}>Verify Your Email</h2>
+              <p className={`${THEME.light.classes.text}/70 text-sm mb-2`}>
                 We've sent a verification link to
               </p>
-              <p className="text-white font-medium mb-6">{verificationEmail}</p>
-              <p className="text-white/70 text-sm mb-6">
+              <p className={`${THEME.light.classes.text} font-medium mb-6`}>{verificationEmail}</p>
+              <p className={`${THEME.light.classes.text}/70 text-sm mb-6`}>
                 Please check your email and click the verification link to continue.
               </p>
             </div>
@@ -240,13 +246,13 @@ export const SignUpPage = ({
             <div className="space-y-4">
               <button
                 onClick={handleResendVerification}
-                className="w-full py-3 px-6 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-all duration-200 border border-white/20"
+                className={`w-full py-3 px-6 rounded-lg bg-white/10 hover:bg-white/20 ${THEME.light.classes.text} font-medium transition-all duration-200 border border-white/20`}
               >
                 Resend Verification Email
               </button>
 
               <div className="text-center">
-                <p className="text-white/70 text-sm">
+                <p className={`${THEME.light.classes.text}/70 text-sm`}>
                   Already verified?{' '}
                   <button
                     type="button"
@@ -255,13 +261,11 @@ export const SignUpPage = ({
                       supabase.auth.getSession().then(({ data: { session } }) => {
                         if (session) {
                           setNeedsEmailVerification(false)
-                          if (onSignUpSuccess) {
-                            onSignUpSuccess(true)
-                          }
+                          navigate('/')
                         }
                       })
                     }}
-                    className="text-white font-semibold hover:underline"
+                    className={`${THEME.light.classes.text} font-semibold hover:underline`}
                   >
                     Continue
                   </button>
@@ -275,10 +279,10 @@ export const SignUpPage = ({
   }
 
   return (
-    <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+    <div className="relative z-10 w-full flex items-center justify-center">
       <GlassSurface {...glassProps}>
         <div className="p-8">
-          <h2 className="text-3xl font-bold text-white text-center mb-8">Sign Up</h2>
+          <h2 className={`text-3xl font-bold ${THEME.light.classes.text} text-center mb-8`}>Sign Up</h2>
 
           <form
             className="space-y-6"
@@ -286,7 +290,7 @@ export const SignUpPage = ({
           >
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-white text-sm font-medium mb-2">
+                <label htmlFor="firstName" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                   First Name
                 </label>
                 <input
@@ -296,13 +300,13 @@ export const SignUpPage = ({
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                   placeholder="First name"
                 />
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-white text-sm font-medium mb-2">
+                <label htmlFor="lastName" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                   Last Name
                 </label>
                 <input
@@ -312,14 +316,14 @@ export const SignUpPage = ({
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                   placeholder="Last name"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
+              <label htmlFor="email" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                 Email
               </label>
               <input
@@ -329,13 +333,13 @@ export const SignUpPage = ({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
-                className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                 placeholder="Enter your email"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-white text-sm font-medium mb-2">
+              <label htmlFor="password" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                 Password
               </label>
               <input
@@ -350,39 +354,39 @@ export const SignUpPage = ({
                   : password && isPasswordValid
                     ? 'border-green-400/50'
                     : 'border-white/20'
-                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                  } ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                 placeholder="Enter your password"
               />
 
               {password && (
                 <div className="mt-3 space-y-1.5">
-                  <p className="text-white/80 text-xs font-medium mb-2">Password requirements:</p>
+                  <p className={`${THEME.light.classes.text}/80 text-xs font-medium mb-2`}>Password requirements:</p>
                   <div className="space-y-1">
-                    <div className={`flex items-center text-xs ${passwordChecks.minLength ? 'text-green-400' : 'text-white/60'}`}>
+                    <div className={`flex items-center text-xs ${passwordChecks.minLength ? 'text-green-400' : `${THEME.light.classes.text}/60`}`}>
                       <span className={`mr-2 ${passwordChecks.minLength ? '✓' : '✗'}`}>
                         {passwordChecks.minLength ? '✓' : '✗'}
                       </span>
                       At least 8 characters
                     </div>
-                    <div className={`flex items-center text-xs ${passwordChecks.hasUpperCase ? 'text-green-400' : 'text-white/60'}`}>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasUpperCase ? 'text-green-400' : `${THEME.light.classes.text}/60`}`}>
                       <span className={`mr-2 ${passwordChecks.hasUpperCase ? '✓' : '✗'}`}>
                         {passwordChecks.hasUpperCase ? '✓' : '✗'}
                       </span>
                       One uppercase letter
                     </div>
-                    <div className={`flex items-center text-xs ${passwordChecks.hasLowerCase ? 'text-green-400' : 'text-white/60'}`}>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasLowerCase ? 'text-green-400' : `${THEME.light.classes.text}/60`}`}>
                       <span className={`mr-2 ${passwordChecks.hasLowerCase ? '✓' : '✗'}`}>
                         {passwordChecks.hasLowerCase ? '✓' : '✗'}
                       </span>
                       One lowercase letter
                     </div>
-                    <div className={`flex items-center text-xs ${passwordChecks.hasNumber ? 'text-green-400' : 'text-white/60'}`}>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasNumber ? 'text-green-400' : `${THEME.light.classes.text}/60`}`}>
                       <span className={`mr-2 ${passwordChecks.hasNumber ? '✓' : '✗'}`}>
                         {passwordChecks.hasNumber ? '✓' : '✗'}
                       </span>
                       One number
                     </div>
-                    <div className={`flex items-center text-xs ${passwordChecks.hasSpecialChar ? 'text-green-400' : 'text-white/60'}`}>
+                    <div className={`flex items-center text-xs ${passwordChecks.hasSpecialChar ? 'text-green-400' : `${THEME.light.classes.text}/60`}`}>
                       <span className={`mr-2 ${passwordChecks.hasSpecialChar ? '✓' : '✗'}`}>
                         {passwordChecks.hasSpecialChar ? '✓' : '✗'}
                       </span>
@@ -394,7 +398,7 @@ export const SignUpPage = ({
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-white text-sm font-medium mb-2">
+              <label htmlFor="confirmPassword" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                 Confirm Password
               </label>
               <input
@@ -409,7 +413,7 @@ export const SignUpPage = ({
                   : confirmPassword && confirmPassword === password
                     ? 'border-green-400/50'
                     : 'border-white/20'
-                  } text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
+                  } ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                 placeholder="Confirm your password"
               />
               {confirmPassword && confirmPassword !== password && (
@@ -425,18 +429,18 @@ export const SignUpPage = ({
             <button
               type="submit"
               disabled={!isPasswordValid || !firstName || !lastName || !email || !confirmPassword || password !== confirmPassword || isLoading}
-              className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
+              className={`w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed ${THEME.light.classes.text} font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30`}
             >
               {isLoading ? 'Creating account...' : 'Sign Up'}
             </button>
 
             <div className="text-center mt-4">
-              <p className="text-white/70 text-sm">
+              <p className={`${THEME.light.classes.text}/70 text-sm`}>
                 Already have an account?{' '}
                 <button
                   type="button"
-                  onClick={onNavigateToLogin}
-                  className="text-white font-semibold hover:underline"
+                  onClick={() => navigate('/login')}
+                  className={`${THEME.light.classes.text} font-semibold hover:underline`}
                 >
                   Login
                 </button>

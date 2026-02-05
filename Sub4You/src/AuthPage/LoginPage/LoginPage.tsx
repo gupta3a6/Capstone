@@ -1,23 +1,33 @@
-import { useState } from 'react'
-import GlassSurface from '../components/GlassSurface'
-import { supabase } from '../lib/supabase'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import GlassSurface from '../../components/GlassSurface'
+import { supabase } from '../../lib/supabase'
+import { THEME } from '../../constants/theme'
 
 /**
  * Login Page Component
  * Handles user authentication with Supabase.
  */
-export const LoginPage = ({ 
-  onNavigateToSignUp,
-  onLoginSuccess
-}: { 
-  onNavigateToSignUp?: () => void
-  onLoginSuccess?: () => void
-} = {}) => {
+export const LoginPage = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+  
+  // Check if user is already logged in and redirect if so
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        // User is already logged in, redirect to home and replace history
+        navigate('/', { replace: true })
+      }
+    }
+    
+    checkSession()
+  }, [navigate])
   
   /**
    * Handles the login form submission
@@ -60,12 +70,10 @@ export const LoginPage = ({
       // Success - user is logged in
       if (data.user) {
         setSuccess(true)
-        if (onLoginSuccess) {
-          // Show success message briefly before redirecting
-          setTimeout(() => {
-            onLoginSuccess()
-          }, 1500)
-        }
+        // Show success message briefly before redirecting
+        setTimeout(() => {
+          navigate('/')
+        }, 1500)
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
@@ -96,14 +104,14 @@ export const LoginPage = ({
   }
 
   return (
-    <div className="relative z-10 min-h-screen flex items-center justify-center px-8 pt-40 pb-20">
+    <div className="relative z-10 w-full flex items-center justify-center">
         <GlassSurface {...glassProps}>
           <div className="p-8">
-            <h2 className="text-3xl font-bold text-white text-center mb-8">Login</h2>
+            <h2 className={`text-3xl font-bold ${THEME.light.classes.text} text-center mb-8`}>Login</h2>
             
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="email" className="block text-white text-sm font-medium mb-2">
+                <label htmlFor="email" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                   Email
                 </label>
                 <input
@@ -113,13 +121,13 @@ export const LoginPage = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                   placeholder="Enter your email"
                 />
               </div>
               
               <div>
-                <label htmlFor="password" className="block text-white text-sm font-medium mb-2">
+                <label htmlFor="password" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
                   Password
                 </label>
                 <input
@@ -129,7 +137,7 @@ export const LoginPage = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed`}
                   placeholder="Enter your password"
                 />
               </div>
@@ -151,18 +159,18 @@ export const LoginPage = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30"
+                className={`w-full py-3 px-6 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed ${THEME.light.classes.text} font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30`}
               >
                 {isLoading ? 'Logging in...' : 'Login'}
               </button>
               
               <div className="text-center mt-4">
-                <p className="text-white/70 text-sm">
+                <p className={`${THEME.light.classes.text}/70 text-sm`}>
                   Don't have an account?{' '}
                   <button
                     type="button"
-                    onClick={onNavigateToSignUp}
-                    className="text-white font-semibold hover:underline"
+                    onClick={() => navigate('/signup')}
+                    className={`${THEME.light.classes.text} font-semibold hover:underline`}
                   >
                     Sign up!
                   </button>

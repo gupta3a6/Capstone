@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react'
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import GlassSurface from './GlassSurface'
 import { CgProfile, CgSearch } from 'react-icons/cg'
 import GradientText from './GradientText'
+import { THEME } from '../constants/theme'
 
 interface TopBarProps {
   children?: ReactNode
@@ -236,11 +238,21 @@ export const TopBar = ({
     setSearchQuery('')
   }
 
+  const navigate = useNavigate()
+  const location = useLocation()
+
   const handleNavClick = (path: string) => {
+    // If we're already on this page, do nothing to prevent duplicate history
+    if (path === location.pathname) {
+      return
+    }
+
     console.log(`Navigate to: ${path}`)
     setIsSearchOpen(false)
     if (path === '/' && onHomeClick) {
       onHomeClick()
+    } else {
+      navigate(path)
     }
   }
 
@@ -295,6 +307,9 @@ export const TopBar = ({
     setIsDropdownOpen(false)
     if (onProfileClick) {
       onProfileClick()
+    } else {
+      // Default behavior if no prop provided
+      navigate('/profile')
     }
   }
 
@@ -307,8 +322,8 @@ export const TopBar = ({
 
   // Icons with responsive sizing
   const profileIconSize = getResponsiveProfileIconSize()
-  const profileIcon = <CgProfile className="text-white" style={{ width: `${profileIconSize}px`, height: `${profileIconSize}px` }} />
-  const searchIcon = <CgSearch className="text-white" style={{ width: '24px', height: '24px' }} />
+  const profileIcon = <CgProfile className={THEME.light.classes.text} style={{ width: `${profileIconSize}px`, height: `${profileIconSize}px` }} />
+  const searchIcon = <CgSearch className={THEME.light.classes.text} style={{ width: '24px', height: '24px' }} />
 
   // Default content for glass bar
   const defaultContent = (
@@ -334,7 +349,7 @@ export const TopBar = ({
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
-            className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
+            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
             aria-label={item.label}
           >
             {item.label}
@@ -362,8 +377,8 @@ export const TopBar = ({
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full bg-transparent text-white placeholder-gray-400 outline-none text-sm font-medium"
-          style={{ caretColor: 'white' }}
+          className={`w-full bg-transparent ${THEME.light.classes.text} placeholder-gray-500 outline-none text-sm font-medium`}
+          style={{ caretColor: THEME.light.text }}
           autoFocus={isSearchOpen}
           onKeyDown={(e) => e.key === 'Escape' && handleEscape()}
         />
@@ -471,7 +486,7 @@ export const TopBar = ({
                             {profileIcon}
                           </div>
                         )}
-                        <span className="text-white font-medium text-xs">Profile</span>
+                        <span className={`${THEME.light.classes.text} font-medium text-xs`}>Profile</span>
                       </button>
                       <button
                         onClick={handleLogoutClick}
@@ -491,7 +506,7 @@ export const TopBar = ({
                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                           />
                         </svg>
-                        <span className="text-white font-medium text-xs">Logout</span>
+                        <span className={`${THEME.light.classes.text} font-medium text-xs`}>Logout</span>
                       </button>
                     </div>
                   </GlassSurface>
@@ -500,24 +515,23 @@ export const TopBar = ({
             ) : (
               <GlassSurface {...authButtonsProps}>
                 <div className="w-full h-full flex items-center justify-center gap-3 px-4">
-                  {onSignUpClick && (
-                    <button
-                      onClick={onSignUpClick}
-                      className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
-                      aria-label="Sign Up"
-                    >
-                      Sign Up
-                    </button>
-                  )}
-                  {onLoginClick && (
-                    <button
-                      onClick={onLoginClick}
-                      className="text-white hover:text-gray-200 transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110"
-                      aria-label="Login"
-                    >
-                      Login
-                    </button>
-                  )}
+                  {/* Sign Up Button */}
+                  <button
+                    onClick={() => onSignUpClick ? onSignUpClick() : navigate('/signup')}
+                    className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
+                    aria-label="Sign Up"
+                  >
+                    Sign Up
+                  </button>
+                  
+                  {/* Login Button */}
+                  <button
+                    onClick={() => onLoginClick ? onLoginClick() : navigate('/login')}
+                    className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
+                    aria-label="Login"
+                  >
+                    Login
+                  </button>
                 </div>
               </GlassSurface>
             )}
