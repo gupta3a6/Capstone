@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import GlassSurface from '../../components/GlassSurface'
 import { supabase } from '../../lib/supabase'
-import { THEME } from '../../constants/theme'
+import { THEME } from '@/constants/theme'
 
 /**
  * Sign Up Page Component
