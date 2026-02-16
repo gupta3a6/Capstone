@@ -7,6 +7,7 @@ import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
 import Layout from './components/Layout'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
 import AuthHandle from './AuthPage/AuthHandle.tsx'
+import { LandingPage } from './UserTypeSelection/LandingPage.tsx'
 
 const MissingConfig = () => (
   <div style={{
@@ -141,9 +142,6 @@ const AppRouter = () => {
   }
 
 
-
-
-
   const handleProfileClick = () => {
     // Navigate to profile page (you can create a profile page later)
     console.log('Navigate to profile page')
@@ -152,30 +150,32 @@ const AppRouter = () => {
 
   return (
 
-    <Routes>
-      <Route path="/" element={
-        <Layout
-          isLoggedIn={isLoggedIn}
-          onLoginClick={navigateToLogin}
-          onSignUpClick={navigateToSignUp}
-          onHomeClick={navigateToHome}
-          onProfileClick={handleProfileClick}
-          onLogoutClick={handleLogout}
-        >
-          <App />
-        </Layout>
-      } />
-      <Route path="/login" element={
-        <AuthHandle>
-          <LoginPage />
-        </AuthHandle>
-      } />
-      <Route path="/signup" element={
-        <AuthHandle>
-          <SignUpPage />
-        </AuthHandle>
-      } />
-    </Routes>
+    // <Routes>
+    //   <Route path="/" element={
+    //     <Layout
+    //       isLoggedIn={isLoggedIn}
+    //       onLoginClick={navigateToLogin}
+    //       onSignUpClick={navigateToSignUp}
+    //       onHomeClick={navigateToHome}
+    //       onProfileClick={handleProfileClick}
+    //       onLogoutClick={handleLogout}
+    //     >
+    //       <App />
+    //     </Layout>
+    //   } />
+    //   <Route path="/login" element={
+    //     <AuthHandle>
+    //       <LoginPage />
+    //     </AuthHandle>
+    //   } />
+    //   <Route path="/signup" element={
+    //     <AuthHandle>
+    //       <SignUpPage />
+    //     </AuthHandle>
+    //   } />
+    // </Routes>
+
+    <LandingPage />
   )
 }
 
