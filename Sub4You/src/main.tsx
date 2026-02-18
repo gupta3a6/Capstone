@@ -1,13 +1,8 @@
 import { StrictMode, useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom'
 import { App } from './App.tsx'
-import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
-import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
-import Layout from './components/Layout'
 import { supabase, isSupabaseConfigured } from './lib/supabase'
-import AuthHandle from './AuthPage/AuthHandle.tsx'
-import { LandingPage } from './UserTypeSelection/LandingPage.tsx'
 
 const MissingConfig = () => (
   <div style={{
@@ -43,9 +38,8 @@ const AppRouter = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const navigate = useNavigate()
 
-  const navigateToHome = () => navigate('/')
-  const navigateToLogin = () => navigate('/login')
-  const navigateToSignUp = () => navigate('/signup')
+  const navigateToHome = () => navigate('/home')
+
 
   // Check for existing session on app load and listen for auth changes
   useEffect(() => {
@@ -130,52 +124,18 @@ const AppRouter = () => {
   }, []) // Empty dependency array - only run once on mount
 
 
-
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut()
       setIsLoggedIn(false)
-      navigate('/', { replace: true })
+      navigate('/home', { replace: true })
     } catch (error) {
       console.error('Error signing out:', error)
     }
   }
 
-
-  const handleProfileClick = () => {
-    // Navigate to profile page (you can create a profile page later)
-    console.log('Navigate to profile page')
-    // navigate('/profile') // Add this when you create a profile page
-  }
-
   return (
-
-    // <Routes>
-    //   <Route path="/" element={
-    //     <Layout
-    //       isLoggedIn={isLoggedIn}
-    //       onLoginClick={navigateToLogin}
-    //       onSignUpClick={navigateToSignUp}
-    //       onHomeClick={navigateToHome}
-    //       onProfileClick={handleProfileClick}
-    //       onLogoutClick={handleLogout}
-    //     >
-    //       <App />
-    //     </Layout>
-    //   } />
-    //   <Route path="/login" element={
-    //     <AuthHandle>
-    //       <LoginPage />
-    //     </AuthHandle>
-    //   } />
-    //   <Route path="/signup" element={
-    //     <AuthHandle>
-    //       <SignUpPage />
-    //     </AuthHandle>
-    //   } />
-    // </Routes>
-
-    <LandingPage />
+    <App isLoggedIn={isLoggedIn} onLogoutClick={handleLogout} />
   )
 }
 

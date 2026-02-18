@@ -218,7 +218,7 @@ export const TopBar = ({
 
   // Navigation items
   const navItems = [
-    { label: 'Home', path: '/' },
+    { label: 'Home', path: '/home' },
     { label: 'Messages', path: '/messages' },
     { label: 'Saved', path: '/saved' },
     { label: 'Matches', path: '/matches' },
@@ -398,7 +398,7 @@ export const TopBar = ({
 
   return (
     <div
-      className="fixed top-0 left-0 right-0 z-20 pointer-events-none px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 2xl:px-24"
+      className="w-full z-20 pointer-events-none px-4 sm:px-6 md:px-8 lg:px-12"
       style={{ paddingTop: `${CONFIG.topPadding}px` }}
     >
       <div

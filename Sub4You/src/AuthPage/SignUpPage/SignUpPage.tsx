@@ -162,7 +162,7 @@ export const SignUpPage = () => {
         // Clear the pending verification flag
         localStorage.removeItem('pendingEmailVerification')
         localStorage.removeItem('pendingEmailVerificationEmail')
-        navigate('/')
+        navigate('/home')
       }
     })
 

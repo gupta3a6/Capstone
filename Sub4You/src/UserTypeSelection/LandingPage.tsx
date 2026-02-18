@@ -1,9 +1,9 @@
-import React from 'react'
 import PageBackground from '@/components/PageBackground'
 import HouseShowingImage from '@/assets/HouseShowing-image1.jpeg'
 import RoomForSublease from '@/assets/RoomForSublease.jpg'
 import GlassSurface from '@/components/GlassSurface'
 import GradientText from '@/components/GradientText'
+import { useNavigate } from 'react-router-dom'
 // import { THEME } from '@/constants/theme'
 
 
@@ -23,13 +23,16 @@ export const LandingPage = () => {
         height: 'auto',
         borderRadius: 50,
     }
+    const navigate = useNavigate()
 
     
 
   return  (
     <PageBackground>
         <div className='flex flex-col items-center justify-center h-screen'>
-            <div className=' absolute top-10 z-20 '>
+            <div 
+                className=' absolute top-10 z-20'
+                onClick={() => navigate('/')}>
                 <GradientText
                         colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                         animationSpeed={15}
@@ -50,7 +53,9 @@ export const LandingPage = () => {
                             }}
                     />
                     <p className='absolute top-[75%] text-2xl sm:text-5xl font-bold z-10 text-white w-full text-center'>Looking for a Room?</p>
-                    <button className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'>
+                    <button 
+                        className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'
+                        onClick={() => navigate('/home')}>
                         <GlassSurface {...glassBarProps}>
                             <p className='text-xl sm:text-3xl mx-5 font-bold text-white w-full text-center'>Find Rooms</p>
                         </GlassSurface>
@@ -67,7 +72,10 @@ export const LandingPage = () => {
                             }}
                     />
                     <p className='absolute top-[75%] text-2xl sm:text-5xl font-bold z-10 text-white w-full text-center'>Renting out a Room?</p>
-                    <button className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'>
+                    <button
+                        className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'
+                        onClick={() => navigate('/home')}
+                    >
                         <GlassSurface {...glassBarProps}>
                             <p className='text-xl sm:text-3xl mx-5 font-bold text-white w-full text-center'>List your room</p>
                         </GlassSurface>

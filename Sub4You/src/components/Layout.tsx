@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
+import { Outlet } from 'react-router-dom'
 import PageBackground from './PageBackground'
 import TopBar from './TopBar'
 
 interface LayoutProps {
-  children: ReactNode
+  children?: ReactNode
   isLoggedIn?: boolean
   profileImageSrc?: string
   profileImageAlt?: string
@@ -16,8 +17,8 @@ interface LayoutProps {
 
 /**
  * Layout Component
- * Provides a consistent layout with PageBackground and TopBar that stays fixed.
- * Only the children content changes when navigating.
+ * Provides a consistent layout with PageBackground and TopBar.
+ * Uses flex column to ensure content flows naturally below the TopBar.
  */
 export const Layout = ({
   children,
@@ -32,17 +33,23 @@ export const Layout = ({
 }: LayoutProps) => {
   return (
     <PageBackground>
-      <TopBar
-        isLoggedIn={isLoggedIn}
-        profileImageSrc={profileImageSrc}
-        profileImageAlt={profileImageAlt}
-        onLoginClick={onLoginClick}
-        onSignUpClick={onSignUpClick}
-        onHomeClick={onHomeClick}
-        onProfileClick={onProfileClick}
-        onLogoutClick={onLogoutClick}
-      />
-      {children}
+      <div className="flex flex-col min-h-screen">
+        <div className="sticky top-0 z-50">
+          <TopBar
+            isLoggedIn={isLoggedIn}
+            profileImageSrc={profileImageSrc}
+            profileImageAlt={profileImageAlt}
+            onLoginClick={onLoginClick}
+            onSignUpClick={onSignUpClick}
+            onHomeClick={onHomeClick}
+            onProfileClick={onProfileClick}
+            onLogoutClick={onLogoutClick}
+          />
+        </div>
+        <div className="">
+          {children || <Outlet />}
+        </div>
+      </div>
     </PageBackground>
   )
 }

@@ -16,7 +16,7 @@ export const AuthHandle = ({ children }: AuthHandleProps) => {
             <div className="min-h-screen flex flex-col relative z-10">
                 {/* Logo Section - Responsive scaling and spacing */}
                 <div 
-                    onClick={() => navigate('/')}                                
+                    onClick={() => navigate('/home')}                                
                     className="w-full flex justify-center pt-6 pb-2 sm:pt-10 sm:pb-6 cursor-pointer"
                 >
                     <GradientText
