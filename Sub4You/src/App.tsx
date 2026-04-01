@@ -1,5 +1,6 @@
 import Layout from "./components/Layout";
-import Home from "./Seeker/HomePage";
+import SeekerHome from "./Seeker/HomePage/SeekerHome";
+import ListerHome from "./Lister/ListerHome";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
 import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
@@ -23,7 +24,8 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
 
     {/* Main App Routes - Accessible to everyone with Layout */}
     <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} />}>
-      <Route path="/home" element={<Home />} />
+      <Route path="/seeker/home" element={<SeekerHome />} />
+      <Route path="/lister/home" element={<ListerHome />} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
 

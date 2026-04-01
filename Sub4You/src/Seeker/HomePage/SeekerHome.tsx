@@ -3,7 +3,7 @@ import { PropertyCard } from '../../components/PropertyCard'
 import HouseShowingImage from '../../assets/HouseShowing-image1.jpeg'
 import RoomForSubleaseImage from '../../assets/RoomForSublease.jpg'
 
-export const Home = () => {
+export const SeekerHome = () => {
   const exampleproperties = [
     {
       id: 1,
@@ -120,4 +120,4 @@ export const Home = () => {
   )
 }
 
-export default Home
+export default SeekerHome

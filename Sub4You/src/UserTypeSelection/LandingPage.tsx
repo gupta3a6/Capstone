@@ -55,7 +55,7 @@ export const LandingPage = () => {
                     <p className='absolute top-[75%] text-2xl sm:text-5xl font-bold z-10 text-white w-full text-center'>Looking for a Room?</p>
                     <button 
                         className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'
-                        onClick={() => navigate('/home')}>
+                        onClick={() => navigate('/seeker/home')}>
                         <GlassSurface {...glassBarProps}>
                             <p className='text-xl sm:text-3xl mx-5 font-bold text-white w-full text-center'>Find Rooms</p>
                         </GlassSurface>
@@ -74,7 +74,7 @@ export const LandingPage = () => {
                     <p className='absolute top-[75%] text-2xl sm:text-5xl font-bold z-10 text-white w-full text-center'>Renting out a Room?</p>
                     <button
                         className='absolute top-[85%] pt-5 text-xl sm:text-3xl font-bold z-10 text-white text-center'
-                        onClick={() => navigate('/home')}
+                        onClick={() => navigate('/lister/home')}
                     >
                         <GlassSurface {...glassBarProps}>
                             <p className='text-xl sm:text-3xl mx-5 font-bold text-white w-full text-center'>List your room</p>
