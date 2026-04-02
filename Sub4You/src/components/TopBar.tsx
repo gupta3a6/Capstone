@@ -254,7 +254,7 @@ export const TopBar = ({
     { label: 'Messages', path: '/messages' },
     { label: 'Saved', path: '/saved' },
     { label: 'Matches', path: '/matches' },
-    { label: 'Support', path: '/help' },
+    { label: 'Support', path: '/support' },
   ]
 
   // Event handlers
