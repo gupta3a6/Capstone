@@ -1,6 +1,7 @@
 import Layout from "./components/Layout";
-import SeekerHome from "./Seeker/HomePage/SeekerHome";
-import ListerHome from "./Lister/ListerHome";
+import SeekerHome from "./Seeker/SeekerHome/SeekerHome";
+import ListerHome from "./Lister/ListerHome/ListerHome";
+import SeekerCreateProfile from "./Seeker/SeekerHome/seeker-profile/SeekerCreateProfile";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
 import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
@@ -17,7 +18,7 @@ interface AppProps {
  * This is the main landing page content of the Sub4You website.
  */
 export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
-  
+
   <Routes>
     {/* Landing Page - Public Root */}
     <Route path="/" element={<LandingPage />} />
@@ -26,6 +27,7 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
     <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} />}>
       <Route path="/seeker/home" element={<SeekerHome />} />
       <Route path="/lister/home" element={<ListerHome />} />
+      <Route path="/seeker/profile" element={<SeekerCreateProfile />} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
 

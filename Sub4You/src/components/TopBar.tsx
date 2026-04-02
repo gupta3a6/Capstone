@@ -44,6 +44,38 @@ export const TopBar = ({
   const profileButtonRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const [localProfileImage, setLocalProfileImage] = useState<string | undefined>(profileImageSrc)
+
+  useEffect(() => {
+    setLocalProfileImage(profileImageSrc)
+  }, [profileImageSrc])
+
+  useEffect(() => {
+    const loadProfileImage = () => {
+      const saved = localStorage.getItem('sub4you_seeker_profile')
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          if (parsed.photoPreview) {
+            setLocalProfileImage(parsed.photoPreview)
+          }
+        } catch (e) {
+          console.error('Error parsing profile image', e)
+        }
+      }
+    }
+
+    if (isLoggedIn) {
+      loadProfileImage()
+      window.addEventListener('profileUpdated', loadProfileImage)
+      window.addEventListener('storage', loadProfileImage)
+      return () => {
+        window.removeEventListener('profileUpdated', loadProfileImage)
+        window.removeEventListener('storage', loadProfileImage)
+      }
+    }
+  }, [isLoggedIn])
+
   // Responsive height calculation based on screen size
   const getResponsiveHeight = () => {
     switch (screenSize) {
@@ -309,7 +341,7 @@ export const TopBar = ({
       onProfileClick()
     } else {
       // Default behavior if no prop provided
-      navigate('/profile')
+      navigate('/seeker/profile')
     }
   }
 
@@ -439,9 +471,9 @@ export const TopBar = ({
                 >
                   <GlassSurface {...circularButtonProps}>
                     <div className="w-full h-full flex items-center justify-center hover:opacity-80 transition-all duration-200 hover:scale-110">
-                      {profileImageSrc ? (
+                      {localProfileImage ? (
                         <img
-                          src={profileImageSrc}
+                          src={localProfileImage}
                           alt={profileImageAlt}
                           className="w-full h-full object-cover rounded-full"
                           style={{ width: `${getResponsiveProfileImageSize()}px`, height: `${getResponsiveProfileImageSize()}px` }}
@@ -474,9 +506,9 @@ export const TopBar = ({
                         onClick={handleProfilePageClick}
                         className="w-full flex flex-col items-center gap-2 py-2 text-white hover:opacity-80 transition-opacity duration-200"
                       >
-                        {profileImageSrc ? (
+                        {localProfileImage ? (
                           <img
-                            src={profileImageSrc}
+                            src={localProfileImage}
                             alt={profileImageAlt}
                             className="object-cover rounded-full"
                             style={{ width: `${getResponsiveProfileImageSize()}px`, height: `${getResponsiveProfileImageSize()}px` }}
@@ -523,7 +555,7 @@ export const TopBar = ({
                   >
                     Sign Up
                   </button>
-                  
+
                   {/* Login Button */}
                   <button
                     onClick={() => onLoginClick ? onLoginClick() : navigate('/login')}
