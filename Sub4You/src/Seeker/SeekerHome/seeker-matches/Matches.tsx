@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { THEME } from '../../../constants/theme';
 
 interface MatchRequest {
@@ -42,6 +43,7 @@ const INITIAL_REQUESTS: MatchRequest[] = [
 ];
 
 export const Matches = () => {
+  const navigate = useNavigate();
   const [requests, setRequests] = useState<MatchRequest[]>(INITIAL_REQUESTS);
   const [selectedListing, setSelectedListing] = useState<MatchRequest | null>(null);
 
@@ -55,6 +57,14 @@ export const Matches = () => {
     setRequests(current =>
       current.map(req => (req.id === id ? { ...req, status: action } : req))
     );
+
+    if (action === 'approved') {
+      setTimeout(() => {
+        if (window.confirm('Would you like to send a message to the lister now?')) {
+          navigate('/seeker/messages');
+        }
+      }, 50);
+    }
   };
 
   const gradientText = {

@@ -300,6 +300,13 @@ export const TopBar = ({
         finalPath = '/seeker/matches';
       }
     }
+    if (path === '/messages') {
+      if (location.pathname.includes('/lister')) {
+        finalPath = '/lister/messages';
+      } else {
+        finalPath = '/seeker/messages';
+      }
+    }
 
     // If we're already on this page, do nothing to prevent duplicate history
     if (finalPath === location.pathname) {
