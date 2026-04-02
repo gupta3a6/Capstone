@@ -45,10 +45,28 @@ export const TopBar = ({
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const [localProfileImage, setLocalProfileImage] = useState<string | undefined>(profileImageSrc)
+  const [unreadMatchesCount, setUnreadMatchesCount] = useState<number>(0)
 
   useEffect(() => {
     setLocalProfileImage(profileImageSrc)
   }, [profileImageSrc])
+
+  useEffect(() => {
+    const loadMatchesCount = () => {
+      const saved = localStorage.getItem('sub4you_pending_matches')
+      if (saved !== null) {
+        setUnreadMatchesCount(parseInt(saved, 10))
+      } else {
+        setUnreadMatchesCount(2) // Default to initial mock amount
+      }
+    }
+
+    loadMatchesCount()
+    window.addEventListener('matchesUpdated', loadMatchesCount)
+    return () => {
+      window.removeEventListener('matchesUpdated', loadMatchesCount)
+    }
+  }, [])
 
   useEffect(() => {
     const loadProfileImage = () => {
@@ -394,10 +412,15 @@ export const TopBar = ({
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
-            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
+            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110 relative`}
             aria-label={item.label}
           >
             {item.label}
+            {item.label === 'Matches' && unreadMatchesCount > 0 && !location.pathname.includes('/lister') && (
+              <span className="absolute -top-2.5 -right-3.5 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold rounded-full z-10 w-[18px] h-[18px] flex items-center justify-center shadow-md border border-white/20 px-1 animation-pulse overflow-hidden">
+                {unreadMatchesCount}
+              </span>
+            )}
           </button>
         ))}
       </div>
