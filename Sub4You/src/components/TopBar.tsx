@@ -274,17 +274,26 @@ export const TopBar = ({
   const location = useLocation()
 
   const handleNavClick = (path: string) => {
+    let finalPath = path;
+    if (path === '/matches') {
+      if (location.pathname.includes('/lister')) {
+        finalPath = '/lister/matches';
+      } else {
+        finalPath = '/seeker/matches';
+      }
+    }
+
     // If we're already on this page, do nothing to prevent duplicate history
-    if (path === location.pathname) {
+    if (finalPath === location.pathname) {
       return
     }
 
-    console.log(`Navigate to: ${path}`)
+    console.log(`Navigate to: ${finalPath}`)
     setIsSearchOpen(false)
-    if (path === '/' && onHomeClick) {
+    if (finalPath === '/' && onHomeClick) {
       onHomeClick()
     } else {
-      navigate(path)
+      navigate(finalPath)
     }
   }
 
@@ -341,7 +350,11 @@ export const TopBar = ({
       onProfileClick()
     } else {
       // Default behavior if no prop provided
-      navigate('/seeker/profile')
+      if (location.pathname.includes('/lister')) {
+        navigate('/lister/profile')
+      } else {
+        navigate('/seeker/profile')
+      }
     }
   }
 
