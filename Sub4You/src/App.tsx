@@ -2,6 +2,7 @@ import Layout from "./components/Layout";
 import SeekerHome from "./Seeker/SeekerHome/SeekerHome";
 import ListerHome from "./Lister/ListerHome/ListerHome";
 import SeekerCreateProfile from "./Seeker/SeekerHome/seeker-profile/SeekerCreateProfile";
+import Support from "./Seeker/SeekerHome/support/Support";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
 import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
@@ -28,6 +29,7 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/seeker/home" element={<SeekerHome />} />
       <Route path="/lister/home" element={<ListerHome />} />
       <Route path="/seeker/profile" element={<SeekerCreateProfile />} />
+      <Route path="/support" element={<Support />} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
 
