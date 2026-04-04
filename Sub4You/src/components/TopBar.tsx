@@ -282,6 +282,9 @@ export const TopBar = ({
     if (path === '/messages') {
       finalPath = location.pathname.includes('/lister') ? '/lister/messages' : '/seeker/messages';
     }
+    if (path === '/saved') {
+      finalPath = location.pathname.includes('/lister') ? '/lister/saved' : '/seeker/saved';
+    }
     if (path === '/home') {
       finalPath = location.pathname.includes('/lister') ? '/lister/home' : '/seeker/home';
     }

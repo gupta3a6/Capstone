@@ -5,6 +5,7 @@ import SeekerCreateProfile from "./Seeker/SeekerHome/seeker-profile/SeekerCreate
 import Support from "./Seeker/SeekerHome/support/Support";
 import Matches from "./Seeker/SeekerHome/seeker-matches/Matches";
 import Messages from "./Seeker/SeekerHome/seeker-messages/Messages";
+import Saved from "./Seeker/SeekerHome/seeker-saved/Saved";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
 import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
@@ -35,6 +36,7 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/lister/matches" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Matches (Coming Soon)</div>} />
       <Route path="/seeker/messages" element={<Messages />} />
       <Route path="/lister/messages" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Messages (Coming Soon)</div>} />
+      <Route path="/seeker/saved" element={<Saved />} />
       <Route path="/support" element={<Support />} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
