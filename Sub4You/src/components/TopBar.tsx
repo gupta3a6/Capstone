@@ -242,9 +242,10 @@ export const TopBar = ({
 
   const dropdownProps = {
     ...commonGlassProps,
-    width: CONFIG.height,
+    width: 'auto',
     height: 'auto',
     borderRadius: getResponsiveDropdownBorderRadius(),
+    style: { minWidth: '120px' }
   }
 
   // Navigation items
@@ -532,8 +533,35 @@ export const TopBar = ({
                             {profileIcon}
                           </div>
                         )}
-                        <span className={`${THEME.light.classes.text} font-medium text-xs`}>Profile</span>
+                        <span className={`${THEME.light.classes.text} font-medium text-xs text-center whitespace-nowrap`}>My Profile</span>
                       </button>
+
+                      {location.pathname.includes('/lister') && (
+                        <button
+                          onClick={() => {
+                            setIsDropdownOpen(false)
+                            navigate('/lister/mylistings') // Placeholder route
+                          }}
+                          className="w-full flex flex-col items-center gap-2 py-2 text-white hover:opacity-80 transition-opacity duration-200"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            style={{ width: `${getResponsiveDropdownIconSize()}px`, height: `${getResponsiveDropdownIconSize()}px` }}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M4 6h16M4 12h16m-7 6h7"
+                            />
+                          </svg>
+                          <span className={`${THEME.light.classes.text} font-medium text-xs text-center whitespace-nowrap`}>My Listings</span>
+                        </button>
+                      )}
+
                       <button
                         onClick={handleLogoutClick}
                         className="w-full flex flex-col items-center gap-2 py-2 text-white hover:opacity-80 transition-opacity duration-200"
