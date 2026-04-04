@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import GlassSurface from './GlassSurface'
 import { CgProfile, CgSearch } from 'react-icons/cg'
-import GradientText from './GradientText'
 import { THEME } from '../constants/theme'
 
 interface TopBarProps {
@@ -451,16 +450,16 @@ export const TopBar = ({
       <div
         className="pointer-events-auto flex items-center w-full gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 2xl:gap-8"
       >
-        {/* Brand text */}
-        <div className="whitespace-nowrap pointer-events-auto flex items-center">
-          <GradientText
-            colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-            animationSpeed={15}
-            showBorder={false}
-            className="text-4xl font-bold"
-          >
-            {CONFIG.brandText}
-          </GradientText>
+        {/* Brand Logo */}
+        <div 
+          className="whitespace-nowrap pointer-events-auto flex items-center cursor-pointer hover:scale-105 transition-transform duration-300"
+          onClick={() => navigate('/')}
+        >
+          <img 
+            src="/logo.png" 
+            alt="Sub4You Logo" 
+            className="h-8 sm:h-10 md:h-12 lg:h-14 w-auto object-contain drop-shadow-md" 
+          />
         </div>
 
         {/* Main glass bar */}

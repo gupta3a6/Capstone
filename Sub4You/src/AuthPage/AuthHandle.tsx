@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackground from "../components/PageBackground";
-import GradientText from "../components/GradientText";
 import '../App.css'
 
 interface AuthHandleProps {
@@ -19,14 +18,11 @@ export const AuthHandle = ({ children }: AuthHandleProps) => {
                     onClick={() => navigate('/home')}                                
                     className="w-full flex justify-center pt-6 pb-2 sm:pt-10 sm:pb-6 cursor-pointer"
                 >
-                    <GradientText
-                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                        animationSpeed={15}
-                        showBorder={false}
-                        className="text-4xl sm:text-5xl md:text-6xl font-bold transition-all duration-300 transform"
-                    >
-                        {'Sub4You'}
-                    </GradientText>
+                    <img 
+                        src="/logo.png" 
+                        alt="Sub4You Logo" 
+                        className="h-14 sm:h-16 md:h-20 w-auto object-contain drop-shadow-md transition-all duration-300 transform hover:scale-105" 
+                    />
                 </div>
 
                 {/* Content Section - Flex grow to fill space and center content */}
