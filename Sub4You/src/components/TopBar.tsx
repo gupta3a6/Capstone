@@ -45,28 +45,10 @@ export const TopBar = ({
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const [localProfileImage, setLocalProfileImage] = useState<string | undefined>(profileImageSrc)
-  const [unreadMatchesCount, setUnreadMatchesCount] = useState<number>(0)
 
   useEffect(() => {
     setLocalProfileImage(profileImageSrc)
   }, [profileImageSrc])
-
-  useEffect(() => {
-    const loadMatchesCount = () => {
-      const saved = localStorage.getItem('sub4you_pending_matches')
-      if (saved !== null) {
-        setUnreadMatchesCount(parseInt(saved, 10))
-      } else {
-        setUnreadMatchesCount(2) // Default to initial mock amount
-      }
-    }
-
-    loadMatchesCount()
-    window.addEventListener('matchesUpdated', loadMatchesCount)
-    return () => {
-      window.removeEventListener('matchesUpdated', loadMatchesCount)
-    }
-  }, [])
 
   useEffect(() => {
     const loadProfileImage = () => {
@@ -293,19 +275,15 @@ export const TopBar = ({
 
   const handleNavClick = (path: string) => {
     let finalPath = path;
+
     if (path === '/matches') {
-      if (location.pathname.includes('/lister')) {
-        finalPath = '/lister/matches';
-      } else {
-        finalPath = '/seeker/matches';
-      }
+      finalPath = location.pathname.includes('/lister') ? '/lister/matches' : '/seeker/matches';
     }
     if (path === '/messages') {
-      if (location.pathname.includes('/lister')) {
-        finalPath = '/lister/messages';
-      } else {
-        finalPath = '/seeker/messages';
-      }
+      finalPath = location.pathname.includes('/lister') ? '/lister/messages' : '/seeker/messages';
+    }
+    if (path === '/home') {
+      finalPath = location.pathname.includes('/lister') ? '/lister/home' : '/seeker/home';
     }
 
     // If we're already on this page, do nothing to prevent duplicate history
@@ -375,11 +353,7 @@ export const TopBar = ({
       onProfileClick()
     } else {
       // Default behavior if no prop provided
-      if (location.pathname.includes('/lister')) {
-        navigate('/lister/profile')
-      } else {
-        navigate('/seeker/profile')
-      }
+      navigate('/seeker/profile')
     }
   }
 
@@ -419,15 +393,10 @@ export const TopBar = ({
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
-            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110 relative`}
+            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
             aria-label={item.label}
           >
             {item.label}
-            {item.label === 'Matches' && unreadMatchesCount > 0 && !location.pathname.includes('/lister') && (
-              <span className="absolute -top-2.5 -right-3.5 bg-red-500 text-white text-[10px] sm:text-[11px] font-bold rounded-full z-10 w-[18px] h-[18px] flex items-center justify-center shadow-md border border-white/20 px-1 animation-pulse overflow-hidden">
-                {unreadMatchesCount}
-              </span>
-            )}
           </button>
         ))}
       </div>

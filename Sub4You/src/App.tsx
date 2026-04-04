@@ -36,7 +36,6 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/seeker/messages" element={<Messages />} />
       <Route path="/lister/messages" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Messages (Coming Soon)</div>} />
       <Route path="/support" element={<Support />} />
-      <Route path="/lister/profile" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Profile (Coming Soon)</div>} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
 

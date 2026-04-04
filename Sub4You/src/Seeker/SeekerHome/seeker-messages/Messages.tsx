@@ -61,6 +61,7 @@ const MOCK_THREADS = [
 export const Messages = () => {
   const [activeThread, setActiveThread] = useState(MOCK_THREADS[0]);
   const [inputText, setInputText] = useState("");
+  const [showListingDetails, setShowListingDetails] = useState(true);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,9 +72,9 @@ export const Messages = () => {
 
   return (
     <div className={`h-[calc(100vh-80px)] max-w-[1600px] mx-auto flex flex-col p-4 sm:p-6 ${THEME.light.classes.text}`}>
-      
+
       <div className="flex-1 w-full bg-white/10 backdrop-blur-lg rounded-[2rem] border border-white/20 shadow-xl overflow-hidden flex">
-        
+
         {/* LEFT COLUMN: Inbox */}
         <div className="w-[320px] shrink-0 border-r border-black/10 flex flex-col bg-transparent">
           <div className="p-6 border-b border-black/10">
@@ -83,17 +84,17 @@ export const Messages = () => {
               <button className="px-4 py-1.5 rounded-full text-black hover:bg-white/20 border border-transparent text-sm font-bold transition-colors">Unread</button>
             </div>
           </div>
-          
+
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {MOCK_THREADS.map(thread => (
-              <div 
+              <div
                 key={thread.id}
                 onClick={() => setActiveThread(thread)}
                 className={`p-4 mx-2 my-2 rounded-2xl cursor-pointer transition-all ${activeThread.id === thread.id ? 'bg-white/30 shadow-sm border border-white/40' : 'hover:bg-white/10 border border-transparent'}`}
               >
                 <div className="flex gap-3">
                   <div className="relative">
-                    <img src={thread.avatar} alt={thread.name} className="w-12 h-12 rounded-full object-cover border border-white/30 shadow-sm"/>
+                    <img src={thread.avatar} alt={thread.name} className="w-12 h-12 rounded-full object-cover border border-white/30 shadow-sm" />
                     {thread.unread && <div className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -116,14 +117,20 @@ export const Messages = () => {
           {/* Active Chat Header */}
           <div className="h-20 border-b border-black/10 flex items-center justify-between px-6 bg-white/5 shrink-0 backdrop-blur-sm">
             <div className="flex items-center gap-3">
-              <img src={activeThread.avatar} alt={activeThread.name} className="w-10 h-10 rounded-full object-cover border border-white/30"/>
+              <img src={activeThread.avatar} alt={activeThread.name} className="w-10 h-10 rounded-full object-cover border border-white/30" />
               <div>
                 <h2 className="font-extrabold text-lg text-black">{activeThread.name}</h2>
                 <p className="text-xs font-bold text-black/50 uppercase">Active now</p>
               </div>
             </div>
-            <button className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-colors">
-              <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+            <button 
+              onClick={() => setShowListingDetails(!showListingDetails)}
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${showListingDetails ? 'bg-black/10 hover:bg-black/20' : 'bg-white/20 hover:bg-white/40'}`}
+              title="Toggle Details"
+            >
+              <svg className="w-5 h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             </button>
           </div>
 
@@ -133,10 +140,10 @@ export const Messages = () => {
             {MOCK_MESSAGES.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                 {msg.sender === 'them' && (
-                  <img src={activeThread.avatar} alt="Sender" className="w-8 h-8 rounded-full object-cover mr-2 self-end mb-1 shadow-sm border border-white/20"/>
+                  <img src={activeThread.avatar} alt="Sender" className="w-8 h-8 rounded-full object-cover mr-2 self-end mb-1 shadow-sm border border-white/20" />
                 )}
                 <div className="flex flex-col">
-                  <div 
+                  <div
                     className={`px-5 py-3 rounded-2xl max-w-[80%] shadow-sm ${msg.sender === 'me' ? 'bg-black text-white rounded-br-sm ml-auto border border-black/50' : 'bg-white/20 backdrop-blur-md text-black border border-white/30 rounded-bl-sm'}`}
                   >
                     <p className="text-[15px] font-medium leading-relaxed">{msg.text}</p>
@@ -153,14 +160,14 @@ export const Messages = () => {
               <button type="button" className="p-2 text-black/50 hover:text-black transition-colors rounded-full hover:bg-black/5">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               </button>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Write a message..."
                 className="flex-1 bg-transparent px-3 py-2 outline-none text-black placeholder-black/50 font-medium"
               />
-              <button 
+              <button
                 type="submit"
                 disabled={!inputText.trim()}
                 className="p-2 bg-black text-white rounded-full disabled:opacity-30 disabled:cursor-not-allowed hover:scale-105 transition-transform border border-transparent"
@@ -172,17 +179,27 @@ export const Messages = () => {
         </div>
 
         {/* RIGHT COLUMN: Listing Details */}
-        <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar hidden lg:flex backdrop-blur-sm">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-extrabold text-black">Listing Details</h2>
-          </div>
-          
+        {showListingDetails && (
+          <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar hidden lg:flex backdrop-blur-sm">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-extrabold text-black">Listing Details</h2>
+              <button 
+                onClick={() => setShowListingDetails(false)}
+                className="p-1.5 rounded-full hover:bg-black/10 text-black/40 hover:text-black transition-colors"
+                title="Close Details"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
           <div className="bg-white/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/30 shadow-sm custom-hover-scale transition-transform duration-300">
-            <img src={activeThread.listing.image} alt="Property" className="w-full h-48 object-cover"/>
+            <img src={activeThread.listing.image} alt="Property" className="w-full h-48 object-cover" />
             <div className="p-5">
               <h3 className="font-extrabold text-xl text-black mb-1">{activeThread.listing.name}</h3>
               <p className="text-sm font-semibold text-black/60 mb-4">Hosted by {activeThread.listing.host}</p>
-              
+
               <div className="border-t border-black/10 pt-4 mb-4">
                 <p className="text-xs uppercase font-extrabold tracking-wider text-black/50 mb-1">Rent</p>
                 <p className="text-lg font-black text-black">{activeThread.listing.rent}<span className="text-sm font-semibold text-black/50">/mo</span></p>
@@ -203,6 +220,7 @@ export const Messages = () => {
             </div>
           </div>
         </div>
+        )}
 
       </div>
     </div>

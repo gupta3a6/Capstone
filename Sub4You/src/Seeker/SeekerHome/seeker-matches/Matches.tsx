@@ -75,7 +75,7 @@ export const Matches = () => {
 
   return (
     <div className={`min-h-[calc(100vh-80px)] py-8 px-4 sm:px-6 max-w-6xl mx-auto flex flex-col ${THEME.light.classes.text}`}>
-      
+
       {/* Header */}
       <div className="mb-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4">
         <div>
@@ -95,7 +95,7 @@ export const Matches = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {requests.map((req) => (
-            <div key={req.id} 
+            <div key={req.id}
               className="flex flex-col rounded-3xl overflow-hidden hover:scale-[1.02] transition-all duration-300 shadow-xl cursor-pointer"
               style={{
                 background: 'rgba(255, 255, 255, 0.1)',
@@ -104,18 +104,18 @@ export const Matches = () => {
                 border: '1px solid rgba(255, 255, 255, 0.6)'
               }}
             >
-              
+
               {/* Top Image */}
               <div className="h-40 w-full relative shrink-0">
-                <img 
-                  src={req.propertyImage} 
+                <img
+                  src={req.propertyImage}
                   alt={req.propertyName}
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                 {req.status !== 'pending' && (
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm z-20">
-                    <span className="px-4 py-1.5 rounded-full text-sm font-bold shadow-sm" style={req.status === 'approved' ? {backgroundColor: 'rgba(34, 197, 94, 0.3)', color: '#4ade80', border: '1px solid rgba(74, 222, 128, 0.5)'} : {backgroundColor: 'rgba(239, 68, 68, 0.3)', color: '#f87171', border: '1px solid rgba(248, 113, 113, 0.5)'}}>
+                    <span className="px-4 py-1.5 rounded-full text-sm font-bold shadow-sm" style={req.status === 'approved' ? { backgroundColor: 'rgba(34, 197, 94, 0.3)', color: '#4ade80', border: '1px solid rgba(74, 222, 128, 0.5)' } : { backgroundColor: 'rgba(239, 68, 68, 0.3)', color: '#f87171', border: '1px solid rgba(248, 113, 113, 0.5)' }}>
                       {req.status === 'approved' ? 'Accepted' : 'Declined'}
                     </span>
                   </div>
@@ -125,8 +125,8 @@ export const Matches = () => {
               {/* Bottom Card Content */}
               <div className="relative p-5 pt-8 flex-1 flex flex-col z-20">
                 <div className="absolute -top-7 right-4 p-1 rounded-full shadow-md" style={{ background: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)' }}>
-                  <img 
-                    src={req.listerAvatar} 
+                  <img
+                    src={req.listerAvatar}
                     alt={req.listerName}
                     className="w-12 h-12 rounded-full object-cover border border-white/20"
                   />
@@ -146,8 +146,8 @@ export const Matches = () => {
                     <p className={`text-sm font-extrabold ${THEME.light.classes.text}`}>{req.listerName}</p>
                   </div>
                   <div className="text-right">
-                     <p className={`text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-50 ${THEME.light.classes.text}`}>Rent</p>
-                     <p className={`text-lg font-black ${THEME.light.classes.text}`}>${req.rent}<span className={`text-[10px] font-semibold opacity-70 ${THEME.light.classes.text}`}>/mo</span></p>
+                    <p className={`text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-50 ${THEME.light.classes.text}`}>Rent</p>
+                    <p className={`text-lg font-black ${THEME.light.classes.text}`}>${req.rent}<span className={`text-[10px] font-semibold opacity-70 ${THEME.light.classes.text}`}>/mo</span></p>
                   </div>
                 </div>
 
@@ -169,8 +169,8 @@ export const Matches = () => {
                       </button>
                     </div>
                   )}
-                  
-                  <button 
+
+                  <button
                     className={`w-full py-2.5 rounded-lg text-sm font-bold opacity-80 hover:opacity-100 transition-colors flex items-center justify-center gap-1.5 ${THEME.light.classes.text}`}
                     style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }}
                     onClick={(e) => { e.stopPropagation(); setSelectedListing(req); }}
@@ -189,14 +189,14 @@ export const Matches = () => {
       {selectedListing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedListing(null)} />
-          
+
           <div className="relative rounded-[2rem] w-full max-w-xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]" style={{ background: 'rgba(25, 25, 25, 0.85)', backdropFilter: 'blur(50px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-            
+
             <div className="h-40 sm:h-48 relative shrink-0">
               <img src={selectedListing.propertyImage} className="w-full h-full object-cover" alt="Property" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              
-              <button 
+
+              <button
                 onClick={() => setSelectedListing(null)}
                 className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-colors border border-white/20"
               >
@@ -209,13 +209,13 @@ export const Matches = () => {
             </div>
 
             <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col">
-              
+
               {/* Lister mini-profile */}
               <div className="flex items-center gap-3 p-3 rounded-xl mb-6" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                 <img src={selectedListing.listerAvatar} className="w-12 h-12 rounded-full border border-white/20 object-cover" alt="Lister" />
                 <div>
-                   <p className="text-xs font-semibold uppercase tracking-wider mb-0.5 opacity-50 text-white">Lister</p>
-                   <p className="text-lg font-bold text-white">{selectedListing.listerName}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider mb-0.5 opacity-50 text-white">Lister</p>
+                  <p className="text-lg font-bold text-white">{selectedListing.listerName}</p>
                 </div>
               </div>
 
@@ -240,9 +240,9 @@ export const Matches = () => {
                   ))}
                 </div>
               </div>
-              
+
             </div>
-            
+
           </div>
         </div>
       )}
