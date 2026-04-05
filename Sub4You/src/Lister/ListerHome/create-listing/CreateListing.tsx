@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { FiUploadCloud, FiX } from 'react-icons/fi'
 import { THEME } from '../../../constants/theme'
 import { supabase } from '../../../lib/supabase'
@@ -14,6 +14,8 @@ const AMENITIES_OPTIONS = [
 
 export const CreateListing = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const editId = searchParams.get('id')
   
   // Form State
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([])
@@ -55,8 +57,56 @@ export const CreateListing = () => {
 
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasProfile, setHasProfile] = useState(true)
 
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    // Check if lister profile is completed
+    const profileStr = localStorage.getItem('sub4you_lister_profile')
+    let profileExists = false
+    if (profileStr) {
+      try {
+        const profile = JSON.parse(profileStr)
+        if (profile.setupComplete) profileExists = true
+      } catch (e) {}
+    }
+    setHasProfile(profileExists)
+
+    if (editId) {
+      const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+      if (savedArr) {
+        try {
+          const arr = JSON.parse(savedArr)
+          const target = arr.find((l: any) => l.id === editId)
+          if (target) {
+            setPhotoPreviews(target.photoPreviews || [])
+            setListingTitle(target.listingTitle || '')
+            setAddress(target.address || '')
+            setRent(target.rent || '')
+            setUtilities(target.utilities || '')
+            setPropertyType(target.propertyType || '')
+            setBeds(target.beds || '')
+            setBaths(target.baths || '')
+            setBathroomType(target.bathroomType || '')
+            setSqft(target.sqft || '')
+            setGenderPref(target.genderPref || '')
+            setCommuteType(target.commuteType || 'walkable')
+            setCommuteMinutes(target.commuteMinutes || '')
+            setMoveInType(target.moveInType || 'semester')
+            setMoveInSemesters(target.moveInSemesters || [])
+            setMoveInDate(target.moveInDate || '')
+            setMoveOutDate(target.moveOutDate || '')
+            setLeaseDuration(target.leaseDuration || '')
+            setDescription(target.description || '')
+            setAmenities(target.amenities || [])
+          }
+        } catch (e) {
+          console.error('Failed to parse listings for edit mode', e)
+        }
+      }
+    }
+  }, [editId])
 
   const handleAmenityToggle = (option: string) => {
     setAmenities(prev => 
@@ -99,6 +149,24 @@ export const CreateListing = () => {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
+    if (!hasProfile) {
+      setError('Error: Please fill out your lister profile before creating a listing.')
+      return
+    }
+
+    let isMoveInValid = false;
+    if (moveInType === 'semester') {
+      isMoveInValid = moveInSemesters.length > 0;
+    } else {
+      isMoveInValid = !!moveInDate && !!moveOutDate;
+    }
+
+    if (!listingTitle || !rent || !propertyType || !beds || !baths || !isMoveInValid) {
+      setError('Please fill out all required fields: Listing Title, Monthly rent, Property type, Bedrooms, Bathrooms, and Desired move in timeline.')
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -115,15 +183,28 @@ export const CreateListing = () => {
       }
 
       const listingData = { 
+        id: editId || Date.now().toString(),
         photoPreviews, listingTitle, address, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
         commuteType, commuteMinutes, moveInType, moveInSemesters, moveInDate, moveOutDate,
         leaseDuration, description, amenities 
       }
-      localStorage.setItem('sub4you_persisted_listing', JSON.stringify(listingData))
+      
+      const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+      let arr = savedArr ? JSON.parse(savedArr) : []
+      
+      if (editId) {
+         const idx = arr.findIndex((l: any) => l.id === editId)
+         if (idx >= 0) arr[idx] = listingData
+         else arr.push(listingData)
+      } else {
+         arr.push(listingData)
+      }
+      
+      localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(arr))
 
       setTimeout(() => {
         setIsLoading(false)
-        navigate('/lister/home')
+        navigate('/lister/mylistings')
       }, 800)
     } catch (err) {
       setError('Failed to save listing')
@@ -134,7 +215,7 @@ export const CreateListing = () => {
   return (
     <div className="relative z-10 w-full flex flex-col items-center justify-center py-10 px-4">
       <div className="w-full max-w-4xl mb-6 ml-4">
-        <h1 className="text-4xl font-extrabold text-white drop-shadow-md">Create a Listing</h1>
+        <h1 className="text-4xl font-extrabold text-white drop-shadow-md">{editId ? 'Edit Listing' : 'Create a Listing'}</h1>
         <p className="text-white/80 font-medium text-lg mt-1">Provide details and photos for your property</p>
       </div>
 
@@ -189,7 +270,7 @@ export const CreateListing = () => {
                 <h3 className={`text-xl font-medium ${THEME.light.classes.text} mb-6`}>Basic Details</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-6 mb-6">
                   <div className="sm:col-span-3">
-                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Listing Title / Name</label>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Listing Title / Name <span className="text-red-400">*</span></label>
                     <input
                       type="text" value={listingTitle} onChange={(e) => setListingTitle(e.target.value)}
                       className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all`}
@@ -205,7 +286,7 @@ export const CreateListing = () => {
                     />
                   </div>
                   <div>
-                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Monthly Rent ($)</label>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Monthly Rent ($) <span className="text-red-400">*</span></label>
                     <input
                       type="number" value={rent} onChange={(e) => setRent(e.target.value)} min={0}
                       className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all`}
@@ -221,7 +302,7 @@ export const CreateListing = () => {
                     />
                   </div>
                   <div>
-                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Property Type</label>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Property Type <span className="text-red-400">*</span></label>
                     <div className="relative">
                       <div 
                         className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} cursor-pointer flex justify-between items-center transition-all ${!propertyType ? 'text-white/50' : ''}`}
@@ -258,7 +339,7 @@ export const CreateListing = () => {
                   {/* Bedrooms with Info tooltip */}
                   <div className="relative flex flex-col">
                     <label className={`flex items-center gap-2 ${THEME.light.classes.text} text-sm font-medium mb-1`}>
-                      Bedrooms
+                      Bedrooms <span className="text-red-400">*</span>
                       <div className="relative flex items-center justify-center">
                         <button 
                           type="button"
@@ -286,7 +367,7 @@ export const CreateListing = () => {
                   </div>
 
                   <div className="flex flex-col">
-                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-1`}>Bathrooms</label>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-1`}>Bathrooms <span className="text-red-400">*</span></label>
                     <span className="text-xs text-white/60 mb-2 truncate">(total accessible)</span>
                     <input
                       type="number" value={baths} onChange={(e) => setBaths(e.target.value)} min={0} step="0.5"
@@ -410,7 +491,7 @@ export const CreateListing = () => {
                 <h3 className={`text-xl font-medium ${THEME.light.classes.text} mb-4`}>Availability</h3>
                 <div>
                   <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-3`}>
-                    Desired Move-in timeline
+                    Desired Move-in timeline <span className="text-red-400">*</span>
                   </label>
                   <div className="flex flex-col sm:flex-row gap-4 mb-4">
                     <label className="flex items-center gap-3 cursor-pointer">
@@ -504,7 +585,7 @@ export const CreateListing = () => {
                         <>
                           <div className="fixed inset-0 z-40" onClick={() => setIsLeaseDropdownOpen(false)} />
                           <div className="absolute top-full left-0 right-0 mt-2 p-2 rounded-lg bg-white shadow-xl z-50 flex flex-col gap-1 max-h-60 overflow-y-auto">
-                            {['Fall Semester', 'Spring Semester', 'Summer', 'Fall & Spring (Academic Year)', 'Full Calendar Year'].map((duration) => (
+                            {['4 Months', '8 Months', '1 Year', 'Other'].map((duration) => (
                               <div 
                                 key={duration} 
                                 className={`flex items-center p-2.5 rounded-md hover:bg-gray-100 cursor-pointer transition-colors ${leaseDuration === duration ? 'bg-gray-50 font-medium text-[#00A6E4]' : 'text-gray-900'}`}
@@ -573,10 +654,12 @@ export const CreateListing = () => {
               
               <div className="pt-8 flex justify-end gap-3">
                 <button
-                  type="submit" disabled={isLoading}
-                  className={`w-full sm:w-auto px-8 py-3 rounded-lg bg-white/20 hover:bg-white/30 disabled:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed ${THEME.light.classes.text} font-semibold transition-all duration-200 backdrop-blur-sm border border-white/30`}
+                  type="submit" disabled={isLoading || !hasProfile}
+                  className={`w-full sm:w-auto px-8 py-3 rounded-lg ${!hasProfile ? 'bg-red-500/50 hover:bg-red-500/60 border-red-500/50' : 'bg-white/20 hover:bg-white/30 border-white/30'} disabled:opacity-50 disabled:cursor-not-allowed ${THEME.light.classes.text} font-semibold transition-all duration-200 backdrop-blur-sm border`}
                 >
-                  {isLoading ? 'Publishing...' : 'Create Listing'}
+                  {!hasProfile 
+                    ? 'Error: Fill out your profile first' 
+                    : (isLoading ? 'Publishing...' : (editId ? 'Save Changes' : 'Create Listing'))}
                 </button>
               </div>
 

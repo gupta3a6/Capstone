@@ -1,10 +1,21 @@
+import { useEffect, useState } from 'react'
 import PageBackground from '../../components/PageBackground'
 import { useNavigate } from 'react-router-dom'
 import { Carousel } from '../../components/Carousel'
 import { SeekerCard } from '../../components/SeekerCard'
+import SeekerViewProfile from '../../Seeker/SeekerViewProfile/SeekerViewProfile'
 
 export const ListerHome = () => {
   const navigate = useNavigate()
+  const [selectedProfileId, setSelectedProfileId] = useState<string | number | null>(null)
+
+  useEffect(() => {
+    const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+    const hasListings = savedArr ? JSON.parse(savedArr).length > 0 : false
+    if (!hasListings) {
+      navigate('/lister/createlisting')
+    }
+  }, [navigate])
 
   // Dummy Seeker Data mimicking Seeker Profile Form elements
   const exampleSeekers = [
@@ -59,6 +70,7 @@ export const ListerHome = () => {
           renderItem={(seeker) => (
             <SeekerCard
               key={seeker.id}
+              id={seeker.id}
               name={seeker.name}
               age={seeker.age}
               gender={seeker.gender}
@@ -66,7 +78,7 @@ export const ListerHome = () => {
               budget={seeker.budget}
               timeline={seeker.timeline}
               imageSrc={seeker.image}
-              onClick={() => navigate(`/seeker/profile?id=${seeker.id}`)}
+              onClick={() => setSelectedProfileId(seeker.id)}
             />
           )}
         />
@@ -79,6 +91,7 @@ export const ListerHome = () => {
             renderItem={(seeker) => (
               <SeekerCard
                 key={seeker.id}
+                id={seeker.id}
                 name={seeker.name}
                 age={seeker.age}
                 gender={seeker.gender}
@@ -86,13 +99,21 @@ export const ListerHome = () => {
                 budget={seeker.budget}
                 timeline={seeker.timeline}
                 imageSrc={seeker.image}
-                onClick={() => navigate(`/seeker/profile?id=${seeker.id}`)}
+                onClick={() => setSelectedProfileId(seeker.id)}
               />
             )}
           />
         </div>
 
       </div>
+
+      {/* Render Pop-up Modal */}
+      {selectedProfileId !== null && (
+        <SeekerViewProfile 
+          profileId={selectedProfileId} 
+          onClose={() => setSelectedProfileId(null)} 
+        />
+      )}
     </PageBackground>
   )
 }

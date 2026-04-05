@@ -24,14 +24,16 @@ export const LandingPage = () => {
     const navigate = useNavigate()
 
     const handleListerClick = async () => {
-        // Check local storage mock data for an existing listing
-        const existingListing = localStorage.getItem('sub4you_persisted_listing');
+        // Check local storage mock array for existing listings
+        const listingsJson = localStorage.getItem('sub4you_lister_listings_array');
+        const listings = listingsJson ? JSON.parse(listingsJson) : [];
+        const hasExistingListing = listings.length > 0;
         
         // Check if user is authenticated
         const { data: { session } } = await supabase.auth.getSession();
         
-        if (!session || !existingListing) {
-            // Not signed in OR don't have a listing yet -> Create Listing Page
+        if (!session || !hasExistingListing) {
+            // Not signed in OR don't have an active listing yet -> Create Listing Page
             navigate('/lister/createlisting');
         } else {
             // Signed in AND has a listing -> Dashboard

@@ -22,9 +22,11 @@ export const SeekerCreateProfile = () => {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [age, setAge] = useState('')
   const [gender, setGender] = useState('')
+  const [university, setUniversity] = useState('')
   const [major, setMajor] = useState('')
   const [year, setYear] = useState('')
   const [bio, setBio] = useState('')
+  const [instagram, setInstagram] = useState('')
   const [minBudget, setMinBudget] = useState(500)
   const [maxBudget, setMaxBudget] = useState(1500)
   const [commuteType, setCommuteType] = useState('walkable')
@@ -51,9 +53,11 @@ export const SeekerCreateProfile = () => {
         if (data.photoPreview) setPhotoPreview(data.photoPreview)
         if (data.age) setAge(data.age)
         if (data.gender) setGender(data.gender)
+        if (data.university) setUniversity(data.university)
         if (data.major) setMajor(data.major)
         if (data.year) setYear(data.year)
         if (data.bio) setBio(data.bio)
+        if (data.instagram) setInstagram(data.instagram)
         if (data.minBudget !== undefined) setMinBudget(data.minBudget)
         if (data.maxBudget !== undefined) setMaxBudget(data.maxBudget)
         if (data.commuteType) setCommuteType(data.commuteType)
@@ -108,6 +112,18 @@ export const SeekerCreateProfile = () => {
     e.preventDefault()
     setError(null)
     
+    let isMoveInValid = false;
+    if (moveInType === 'semester') {
+      isMoveInValid = moveInSemesters.length > 0;
+    } else {
+      isMoveInValid = !!moveInDate && !!moveOutDate;
+    }
+
+    if (!photoPreview || !age || !gender || !isMoveInValid) {
+      setError('Please fill out all required fields: Profile Photo, Age, Gender, and Desired Move-in.')
+      return
+    }
+
     setIsLoading(true)
 
     try {
@@ -115,9 +131,11 @@ export const SeekerCreateProfile = () => {
         photoPreview,
         age,
         gender,
+        university,
         major,
         year,
         bio,
+        instagram,
         minBudget,
         maxBudget,
         commuteType,
@@ -162,7 +180,7 @@ export const SeekerCreateProfile = () => {
             <form className="space-y-10" onSubmit={handleSave}>
               {/* Profile Photo Section */}
               <div>
-                <h3 className={`text-lg font-medium ${THEME.light.classes.text} mb-4`}>Profile Photo</h3>
+                <h3 className={`text-lg font-medium ${THEME.light.classes.text} mb-4`}>Profile Photo <span className="text-red-400">*</span></h3>
                 <div className="flex items-center gap-6">
                   <div 
                     className="relative group w-24 h-24 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 cursor-pointer hover:bg-white/20 transition-colors"
@@ -200,7 +218,7 @@ export const SeekerCreateProfile = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 mb-6">
                   <div>
                     <label htmlFor="age" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
-                      Age
+                      Age <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
@@ -215,7 +233,7 @@ export const SeekerCreateProfile = () => {
                   </div>
                   <div>
                     <label htmlFor="gender" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
-                      Gender
+                      Gender <span className="text-red-400">*</span>
                     </label>
                     <div className="relative">
                       <div 
@@ -253,6 +271,19 @@ export const SeekerCreateProfile = () => {
                         </>
                       )}
                     </div>
+                  </div>
+                  <div>
+                    <label htmlFor="university" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
+                      University Name
+                    </label>
+                    <input
+                      type="text"
+                      id="university"
+                      value={university}
+                      onChange={(e) => setUniversity(e.target.value)}
+                      className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all`}
+                      placeholder="e.g. State University"
+                    />
                   </div>
                   <div>
                     <label htmlFor="major" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
@@ -328,6 +359,22 @@ export const SeekerCreateProfile = () => {
                     <span className={`${THEME.light.classes.text}/60 text-xs`}>{bio.length}/500 characters</span>
                   </div>
                 </div>
+                <div className="mt-6">
+                  <label htmlFor="instagram" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
+                    Instagram Handle
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 font-medium">@</span>
+                    <input
+                      type="text"
+                      id="instagram"
+                      value={instagram}
+                      onChange={(e) => setInstagram(e.target.value)}
+                      className={`w-full pl-9 pr-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all`}
+                      placeholder="username"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Room Preferences Section */}
@@ -337,7 +384,7 @@ export const SeekerCreateProfile = () => {
                   {/* Budget */}
                   <div>
                     <div className="flex justify-between mb-2">
-                       <label className={`block ${THEME.light.classes.text} text-sm font-medium`}>Budget Range ($/month)</label>
+                       <label className={`block ${THEME.light.classes.text} text-sm font-medium`}>Budget Range ($/month) <span className="text-red-400">*</span></label>
                        <span className={`text-sm ${THEME.light.classes.text}`}>${minBudget} - ${maxBudget}</span>
                     </div>
                     <div className="relative h-2 bg-white/20 rounded-full mt-4 flex items-center">
@@ -400,7 +447,7 @@ export const SeekerCreateProfile = () => {
                   {/* Move-in */}
                   <div>
                     <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-3`}>
-                      Desired Move-in
+                      Desired Move-in <span className="text-red-400">*</span>
                     </label>
                     <div className="flex flex-col sm:flex-row gap-4 mb-4">
                       <label className="flex items-center gap-3 cursor-pointer">

@@ -2,7 +2,11 @@ import Layout from "./components/Layout";
 import SeekerHome from "./Seeker/SeekerHome/SeekerHome";
 import ListerHome from "./Lister/ListerHome/ListerHome";
 import SeekerCreateProfile from "./Seeker/SeekerHome/seeker-profile/SeekerCreateProfile";
+import ListerCreateProfile from "./Lister/ListerHome/lister-createprofile/ListerCreateProfile";
 import CreateListing from "./Lister/ListerHome/create-listing/CreateListing";
+import MyListings from "./Lister/ListerHome/mylistings/MyListings";
+import ListerMatches from "./Lister/ListerHome/lister-matches/ListerMatches";
+import ListerMessages from "./Lister/ListerHome/lister-messages/ListerMessages";
 import Support from "./Seeker/SeekerHome/support/Support";
 import Matches from "./Seeker/SeekerHome/seeker-matches/Matches";
 import Messages from "./Seeker/SeekerHome/seeker-messages/Messages";
@@ -33,11 +37,13 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/seeker/home" element={<SeekerHome />} />
       <Route path="/lister/home" element={<ListerHome />} />
       <Route path="/lister/createlisting" element={<CreateListing />} />
+      <Route path="/lister/mylistings" element={<MyListings />} />
+      <Route path="/lister/profile" element={<ListerCreateProfile />} />
       <Route path="/seeker/profile" element={<SeekerCreateProfile />} />
       <Route path="/seeker/matches" element={<Matches />} />
-      <Route path="/lister/matches" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Matches (Coming Soon)</div>} />
+      <Route path="/lister/matches" element={<ListerMatches />} />
       <Route path="/seeker/messages" element={<Messages />} />
-      <Route path="/lister/messages" element={<div className="min-h-[calc(100vh-80px)] flex items-center justify-center text-3xl font-extrabold text-[#00A6E4]">Lister Messages (Coming Soon)</div>} />
+      <Route path="/lister/messages" element={<ListerMessages />} />
       <Route path="/seeker/saved" element={<Saved />} />
       <Route path="/support" element={<Support />} />
       {/* Add other main app pages here that need the TopBar */}

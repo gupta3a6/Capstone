@@ -24,6 +24,12 @@ const MOCK_THREADS = [
       image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=80",
       availableFrom: "Jan 1, 2026",
       rent: "$850",
+    },
+    hostProfile: {
+      bio: "22 y/o Grad student. Love to keep common spaces super clean and host board game nights!",
+      avatar: "https://i.pravatar.cc/150?1",
+      hobbies: "Board Games, Hiking",
+      role: "Student"
     }
   },
   {
@@ -39,6 +45,12 @@ const MOCK_THREADS = [
       image: "https://images.unsplash.com/photo-1502672260266-1c1ea2a5098c?w=500&q=80",
       availableFrom: "Feb 1, 2026",
       rent: "$1100",
+    },
+    hostProfile: {
+      bio: "Working professional. Looking for someone quiet to take over the remainder of the lease.",
+      avatar: "https://i.pravatar.cc/150?2",
+      hobbies: "Coffee, Reading, Yoga",
+      role: "Professional"
     }
   },
   {
@@ -54,6 +66,12 @@ const MOCK_THREADS = [
       image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500&q=80",
       availableFrom: "Immediately",
       rent: "$950",
+    },
+    hostProfile: {
+      bio: "Big foodie and very social! I have a super sweet golden retriever named Max.",
+      avatar: "https://i.pravatar.cc/150?3",
+      hobbies: "Cooking, Volleyball",
+      role: "Student"
     }
   }
 ];
@@ -62,6 +80,9 @@ export const Messages = () => {
   const [activeThread, setActiveThread] = useState(MOCK_THREADS[0]);
   const [inputText, setInputText] = useState("");
   const [showListingDetails, setShowListingDetails] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeListerProfile, setActiveListerProfile] = useState<any>(null);
+  const [activeListingDetails, setActiveListingDetails] = useState<any>(null);
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,6 +100,18 @@ export const Messages = () => {
         <div className="w-[320px] shrink-0 border-r border-black/10 flex flex-col bg-transparent">
           <div className="p-6 border-b border-black/10">
             <h1 className="text-2xl font-extrabold text-black mb-4">Messages</h1>
+            <div className="relative mb-4">
+               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                 <svg className="w-4 h-4 text-black/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+               </div>
+               <input
+                 type="text"
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 placeholder="Search messages..."
+                 className="w-full bg-black/5 border border-black/10 rounded-xl py-2 pl-9 pr-4 text-sm text-black placeholder-black/50 outline-none focus:ring-2 focus:ring-black/20 focus:bg-white/50 transition-all font-medium"
+               />
+            </div>
             <div className="flex gap-2">
               <button className="px-4 py-1.5 rounded-full bg-black text-white text-sm font-bold shadow-sm border border-black">All</button>
               <button className="px-4 py-1.5 rounded-full text-black hover:bg-white/20 border border-transparent text-sm font-bold transition-colors">Unread</button>
@@ -86,7 +119,7 @@ export const Messages = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
-            {MOCK_THREADS.map(thread => (
+            {MOCK_THREADS.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase())).map(thread => (
               <div
                 key={thread.id}
                 onClick={() => setActiveThread(thread)}
@@ -180,7 +213,7 @@ export const Messages = () => {
 
         {/* RIGHT COLUMN: Listing Details */}
         {showListingDetails && (
-          <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar hidden lg:flex backdrop-blur-sm">
+          <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar backdrop-blur-sm">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-extrabold text-black">Listing Details</h2>
               <button 
@@ -194,13 +227,12 @@ export const Messages = () => {
               </button>
             </div>
 
-          <div className="bg-white/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/30 shadow-sm custom-hover-scale transition-transform duration-300">
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/30 shadow-sm custom-hover-scale transition-transform duration-300 mb-6">
             <img src={activeThread.listing.image} alt="Property" className="w-full h-48 object-cover" />
             <div className="p-5">
               <h3 className="font-extrabold text-xl text-black mb-1">{activeThread.listing.name}</h3>
-              <p className="text-sm font-semibold text-black/60 mb-4">Hosted by {activeThread.listing.host}</p>
 
-              <div className="border-t border-black/10 pt-4 mb-4">
+              <div className="border-t border-black/10 pt-4 mb-4 mt-4">
                 <p className="text-xs uppercase font-extrabold tracking-wider text-black/50 mb-1">Rent</p>
                 <p className="text-lg font-black text-black">{activeThread.listing.rent}<span className="text-sm font-semibold text-black/50">/mo</span></p>
               </div>
@@ -214,15 +246,153 @@ export const Messages = () => {
                 </div>
               </div>
 
-              <button className="w-full py-3 bg-white/40 hover:bg-white/60 text-black font-extrabold rounded-xl border border-white/40 shadow-sm transition-colors cursor-pointer text-sm">
-                View Full Listing
+              <button 
+                onClick={() => setActiveListingDetails(activeThread)}
+                className="w-full py-3 bg-white/40 hover:bg-white/60 text-black font-extrabold rounded-xl border border-white/40 shadow-sm transition-colors cursor-pointer text-sm"
+              >
+                View Listing Details
               </button>
             </div>
           </div>
+          
+          {/* Host Profile Injection */}
+          <div className="flex items-center justify-between mb-4">
+               <h2 className="text-[15px] uppercase tracking-wider font-extrabold text-black/50">Lister Profile</h2>
+          </div>
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-5 border border-white/30 shadow-sm">
+               <div className="flex items-center gap-4 mb-4">
+                    <img src={activeThread.hostProfile.avatar} alt="host avatar" className="w-12 h-12 rounded-full border border-white/40 object-cover shadow-sm" />
+                    <div>
+                         <h3 className="font-extrabold text-lg text-black">{activeThread.listing.host}</h3>
+                         <p className="text-xs font-bold text-[#00A6E4] uppercase uppercase tracking-wider">{activeThread.hostProfile.role}</p>
+                    </div>
+               </div>
+               
+               <p className="text-sm font-medium text-black leading-relaxed mb-4">"{activeThread.hostProfile.bio}"</p>
+               
+               <div className="border-t border-black/10 pt-3 mb-5">
+                    <p className="text-[10px] uppercase font-extrabold tracking-wider text-black/50 mb-1">Interests</p>
+                    <p className="text-xs font-bold text-black">{activeThread.hostProfile.hobbies}</p>
+               </div>
+
+              <button 
+                onClick={() => setActiveListerProfile(activeThread)}
+                className="w-full py-3 bg-white/40 hover:bg-white/60 text-black font-extrabold rounded-xl border border-white/40 shadow-sm transition-colors cursor-pointer text-sm"
+              >
+                View Lister Profile
+              </button>
+          </div>
+          
         </div>
         )}
 
       </div>
+      
+      {/* Isolated Lister Profile Modal matching SeekerViewProfile aesthetics */}
+      {activeListerProfile && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/20 backdrop-blur-sm overflow-y-auto" onClick={() => setActiveListerProfile(null)}>
+          <div 
+            className="relative w-full max-w-[1100px] my-auto bg-white/40 rounded-[32px] p-6 sm:p-12 border border-white/60 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)] flex flex-col md:flex-row gap-12" 
+            onClick={(e) => e.stopPropagation()}
+            style={{ backdropFilter: 'blur(60px)', WebkitBackdropFilter: 'blur(60px)' }}
+          >
+            <button 
+              onClick={() => setActiveListerProfile(null)}
+              className="absolute top-6 right-6 z-50 flex items-center justify-center w-12 h-12 bg-black/5 hover:bg-black/10 border border-black/10 rounded-full text-gray-800 transition-all shadow-sm group"
+            >
+              <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            {/* Left Col: Image */}
+            <div className="w-full md:w-[35%] shrink-0 flex flex-col gap-6">
+              <img 
+                src={activeListerProfile.hostProfile.avatar} 
+                alt="Lister" 
+                className="w-full aspect-[4/5] object-cover rounded-[24px] shadow-2xl border border-black/5" 
+              />
+            </div>
+
+            {/* Right Col: Details */}
+            <div className="w-full md:w-[65%] flex flex-col pt-2">
+              <div className="flex justify-between items-start mb-2 pr-12">
+                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
+                  {activeListerProfile.listing.host}
+                </h1>
+              </div>
+              
+              <p className="text-xl text-[#00A6E4] font-bold tracking-widest uppercase mb-10 flex items-center gap-2">
+                {activeListerProfile.hostProfile.role}
+              </p>
+
+              <div className="w-full h-px bg-gradient-to-r from-black/10 to-transparent mb-10" />
+
+              <div className="mb-10 lg:mb-auto">
+                <p className="text-xs uppercase tracking-widest text-black mb-3 font-bold">About Me</p>
+                <p className="text-lg leading-relaxed text-gray-800 opacity-90 font-light pr-4">
+                  {activeListerProfile.hostProfile.bio}
+                </p>
+              </div>
+
+              <div className="mt-auto">
+                <p className="text-xs uppercase tracking-widest text-black mb-3 font-bold">Hobbies & Interests</p>
+                <div className="flex flex-wrap gap-2.5">
+                    <span className="px-5 py-2.5 rounded-xl bg-black/5 hover:bg-black/10 transition-colors border border-black/10 text-gray-800 text-[13px] font-medium tracking-wide">
+                      {activeListerProfile.hostProfile.hobbies}
+                    </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Isolated Property Listing Modal */}
+      {activeListingDetails && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/40 backdrop-blur-md overflow-y-auto" onClick={() => setActiveListingDetails(null)}>
+          <div 
+            className="relative w-full max-w-[1100px] my-auto bg-white rounded-[32px] overflow-hidden shadow-2xl flex flex-col md:flex-row" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setActiveListingDetails(null)}
+              className="absolute top-6 right-6 z-50 flex items-center justify-center w-12 h-12 bg-white/20 hover:bg-white/40 backdrop-blur-md border border-white/50 rounded-full text-black transition-all shadow-lg group"
+            >
+              <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+
+            <div className="w-full md:w-[50%] h-[500px] md:h-auto shrink-0 relative bg-black">
+              <img src={activeListingDetails.listing.image} alt="Property" className="w-full h-full object-cover opacity-90" />
+            </div>
+
+            <div className="w-full md:w-[50%] p-10 sm:p-14 flex flex-col bg-slate-50">
+              <h2 className="text-4xl font-black text-gray-900 mb-2">{activeListingDetails.listing.name}</h2>
+              <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-10">Hosted by {activeListingDetails.listing.host}</p>
+
+              <div className="grid grid-cols-2 gap-8 mb-10 border-t border-gray-200 pt-10">
+                <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Rent</p>
+                  <p className="text-3xl font-black text-gray-900">{activeListingDetails.listing.rent}<span className="text-base font-medium opacity-50">/mo</span></p>
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Move In</p>
+                  <p className="text-xl font-bold text-gray-800 pt-1">{activeListingDetails.listing.availableFrom}</p>
+                </div>
+              </div>
+
+              <div className="mt-auto pt-10">
+                <button 
+                   onClick={() => setActiveListingDetails(null)}
+                   className="w-full py-4 bg-black text-white rounded-xl font-bold text-lg hover:bg-gray-800 transition-colors shadow-xl"
+                >
+                   Close Listing
+                </button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

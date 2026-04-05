@@ -116,6 +116,11 @@ export const SignUpPage = () => {
 
       // Success - account created
       if (data.user) {
+        // Purge the local mockup environment cache so new users truly start 100% fresh!
+        localStorage.removeItem('sub4you_seeker_profile')
+        localStorage.removeItem('sub4you_lister_profile')
+        localStorage.removeItem('sub4you_lister_listings_array')
+
         // If user has a session, they're automatically logged in
         if (data.session) {
           setSuccess(true)

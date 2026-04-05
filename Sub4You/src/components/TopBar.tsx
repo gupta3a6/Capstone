@@ -248,14 +248,26 @@ export const TopBar = ({
     style: { minWidth: '120px' }
   }
 
-  // Navigation items
-  const navItems = [
-    { label: 'Home', path: '/home' },
-    { label: 'Messages', path: '/messages' },
-    { label: 'Saved', path: '/saved' },
-    { label: 'Matches', path: '/matches' },
-    { label: 'Support', path: '/support' },
-  ]
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isLister = location.pathname.includes('/lister')
+
+  // Conditional Navigation Arrays strictly separating Lister outbox tools from Seeker tools
+  const navItems = isLister
+    ? [
+        { label: 'Home', path: '/lister/home' },
+        { label: 'My Listings', path: '/lister/mylistings' },
+        { label: 'Messages', path: '/lister/messages' },
+        { label: 'Matches', path: '/lister/matches' },
+        { label: 'Support', path: '/support' },
+      ]
+    : [
+        { label: 'Home', path: '/seeker/home' },
+        { label: 'Messages', path: '/seeker/messages' },
+        { label: 'Saved', path: '/seeker/saved' },
+        { label: 'Matches', path: '/seeker/matches' },
+        { label: 'Support', path: '/support' },
+      ]
 
   // Event handlers
   const handleSearchClick = () => {
@@ -270,36 +282,18 @@ export const TopBar = ({
     setSearchQuery('')
   }
 
-  const navigate = useNavigate()
-  const location = useLocation()
-
   const handleNavClick = (path: string) => {
-    let finalPath = path;
-
-    if (path === '/matches') {
-      finalPath = location.pathname.includes('/lister') ? '/lister/matches' : '/seeker/matches';
-    }
-    if (path === '/messages') {
-      finalPath = location.pathname.includes('/lister') ? '/lister/messages' : '/seeker/messages';
-    }
-    if (path === '/saved') {
-      finalPath = location.pathname.includes('/lister') ? '/lister/saved' : '/seeker/saved';
-    }
-    if (path === '/home') {
-      finalPath = location.pathname.includes('/lister') ? '/lister/home' : '/seeker/home';
-    }
-
     // If we're already on this page, do nothing to prevent duplicate history
-    if (finalPath === location.pathname) {
+    if (path === location.pathname) {
       return
     }
 
-    console.log(`Navigate to: ${finalPath}`)
+    console.log(`Navigate to: ${path}`)
     setIsSearchOpen(false)
-    if (finalPath === '/' && onHomeClick) {
+    if (path === '/' && onHomeClick) {
       onHomeClick()
     } else {
-      navigate(finalPath)
+      navigate(path)
     }
   }
 
@@ -356,7 +350,11 @@ export const TopBar = ({
       onProfileClick()
     } else {
       // Default behavior if no prop provided
-      navigate('/seeker/profile')
+      if (location.pathname.includes('/lister')) {
+        navigate('/lister/profile')
+      } else {
+        navigate('/seeker/profile')
+      }
     }
   }
 
