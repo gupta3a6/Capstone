@@ -42,6 +42,10 @@ export const SeekerCreateProfile = () => {
   const [leaseDuration, setLeaseDuration] = useState('')
   const [lifestyle, setLifestyle] = useState<string[]>([])
   
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [zipcode, setZipcode] = useState('')
+  
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -68,6 +72,9 @@ export const SeekerCreateProfile = () => {
         if (data.moveOutDate) setMoveOutDate(data.moveOutDate)
         if (data.leaseDuration) setLeaseDuration(data.leaseDuration)
         if (data.lifestyle) setLifestyle(data.lifestyle)
+        if (data.city) setCity(data.city)
+        if (data.state) setState(data.state)
+        if (data.zipcode) setZipcode(data.zipcode)
       } catch (err) {
         console.error('Error loading profile', err)
       }
@@ -119,8 +126,8 @@ export const SeekerCreateProfile = () => {
       isMoveInValid = !!moveInDate && !!moveOutDate;
     }
 
-    if (!photoPreview || !age || !gender || !university || !isMoveInValid) {
-      setError('Please fill out all required fields: Profile Photo, Age, Gender, University Name, and Desired Move-in.')
+    if (!photoPreview || !age || !gender || !university || !city || !state || !isMoveInValid) {
+      setError('Please fill out all required fields: Profile Photo, Age, Gender, University Name, City, State, and Desired Move-in.')
       return
     }
 
@@ -146,6 +153,9 @@ export const SeekerCreateProfile = () => {
         moveOutDate,
         leaseDuration,
         lifestyle,
+        city,
+        state,
+        zipcode,
         setupComplete: true
       }
 
@@ -381,6 +391,41 @@ export const SeekerCreateProfile = () => {
               <div>
                 <h3 className={`text-xl font-medium ${THEME.light.classes.text} mb-6`}>Room Preferences</h3>
                 <div className="space-y-6">
+                  
+                  {/* Location Preferences */}
+                  <div className="grid grid-cols-1 sm:grid-cols-6 gap-4">
+                    <div className="sm:col-span-3">
+                      <label htmlFor="city" className={`block ${THEME.light.classes.text} text-sm font-medium mb-1.5`}>
+                        City <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="text" id="city" value={city} onChange={(e) => setCity(e.target.value)} required
+                        className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all`}
+                        placeholder="e.g. Cincinnati"
+                      />
+                    </div>
+                    <div className="sm:col-span-1">
+                      <label htmlFor="state" className={`block ${THEME.light.classes.text} text-sm font-medium mb-1.5`}>
+                        State <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        type="text" id="state" value={state} onChange={(e) => setState(e.target.value)} required
+                        className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all`}
+                        placeholder="OH"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="zipcode" className={`block ${THEME.light.classes.text} text-sm font-medium mb-1.5`}>
+                        Zipcode
+                      </label>
+                      <input
+                        type="text" id="zipcode" value={zipcode} onChange={(e) => setZipcode(e.target.value)}
+                        className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent transition-all`}
+                        placeholder="Optional"
+                      />
+                    </div>
+                  </div>
+
                   {/* Budget */}
                   <div>
                     <div className="flex justify-between mb-2">

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
+import { FiFilter } from 'react-icons/fi'
 import { Carousel } from '../../components/Carousel'
 import { PropertyCard } from '../../components/PropertyCard'
 import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
+import { SeekerFilter } from './seeker-filter/SeekerFilter'
 import HouseShowingImage from '../../assets/HouseShowing-image1.jpeg'
 import RoomForSubleaseImage from '../../assets/RoomForSublease.jpg'
 
@@ -14,6 +16,10 @@ export const SeekerHome = () => {
   // Realtime Search Mapping Pipeline
   const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {};
   const activeSearch = searchQuery?.trim().toLowerCase() || '';
+
+  // Advanced Filtering Pipeline
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState<any>(null);
 
   useEffect(() => {
     const fetchSavedState = () => {
@@ -240,27 +246,109 @@ export const SeekerHome = () => {
       })
     : exampleproperties;
 
+  let finalResults = searchResults;
+
+  if (appliedFilters) {
+    finalResults = finalResults.filter(p => {
+       let ok = true;
+       // We'll run a standard check across bound active properties for native filtering map
+       const rentVal = typeof p.rent === 'string' ? parseInt(p.rent.replace(/\D/g, ''), 10) : p.rent;
+       if (rentVal > appliedFilters.maxRent || rentVal < appliedFilters.minRent) ok = false;
+       if (appliedFilters.beds && p.bedrooms && Number(p.bedrooms) !== Number(appliedFilters.beds)) ok = false;
+       if (appliedFilters.baths && p.baths && Number(p.baths) !== Number(appliedFilters.baths)) ok = false;
+       if (appliedFilters.commuteType && p.commuteType && p.commuteType !== appliedFilters.commuteType) ok = false;
+       if (appliedFilters.propertyType && p.propertyType && p.propertyType !== appliedFilters.propertyType) ok = false;
+       if (appliedFilters.genderPref && p.genderPref && p.genderPref !== appliedFilters.genderPref) ok = false;
+       
+       if (appliedFilters.amenities && appliedFilters.amenities.length > 0) {
+         if (!p.amenities) ok = false;
+         else {
+           for (const am of appliedFilters.amenities) {
+             if (!p.amenities.includes(am)) ok = false;
+           }
+         }
+       }
+       return ok;
+    });
+  }
+
+  // Identify visible pills
+  const renderFilterPills = () => {
+    if (!appliedFilters) return null;
+    
+    const pills = [];
+    if (appliedFilters.city) pills.push(`City: ${appliedFilters.city}`);
+    if (appliedFilters.minRent > 0 || appliedFilters.maxRent < 3000) pills.push(`$${appliedFilters.minRent} - $${appliedFilters.maxRent}`);
+    if (appliedFilters.beds) pills.push(`${appliedFilters.beds} Beds`);
+    if (appliedFilters.propertyType) pills.push(`${appliedFilters.propertyType}`);
+    if (appliedFilters.amenities && appliedFilters.amenities.length > 0) pills.push(`${appliedFilters.amenities.length} Amenities`);
+
+    return (
+      <div className="flex flex-wrap gap-2 items-center">
+        {pills.map((p, i) => (
+          <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black text-white text-xs font-medium">
+             {p}
+          </div>
+        ))}
+        {pills.length > 0 && (
+          <button 
+            onClick={() => setAppliedFilters(null)}
+            className="text-xs text-black/60 hover:text-black font-semibold underline underline-offset-2 ml-2"
+          >
+            Clear All
+          </button>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
-      {activeSearch ? (
-        <div className="w-full mx-auto px-4 sm:px-8 lg:px-12 py-10 max-w-[1400px] pb-24 z-10 relative">
+      {isFilterOpen && (
+        <SeekerFilter 
+           initialFilters={appliedFilters}
+           onClose={() => setIsFilterOpen(false)} 
+           onApply={(filters) => { 
+             setAppliedFilters(filters); 
+             setIsFilterOpen(false); 
+           }} 
+        />
+      )}
+
+      {/* Persistent Filters Bar */}
+      <div className="w-full px-4 sm:px-8 lg:px-12 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
+         <div className="flex-1 w-full sm:w-auto flex justify-start">
+            {renderFilterPills()}
+         </div>
+         <button 
+           onClick={() => setIsFilterOpen(true)} 
+           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
+         >
+            <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
+         </button>
+      </div>
+
+      {activeSearch || appliedFilters ? (
+        <div className="w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
             <div>
               <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
-                Search Results ({searchResults.length})
+                Search Results ({finalResults.length})
               </h1>
-              <p className="text-black/80 font-medium mt-2">
-                Results matching "{searchQuery}"
-              </p>
+              {activeSearch && (
+                <p className="text-black/80 font-medium mt-2">
+                  Results matching "{searchQuery}"
+                </p>
+              )}
             </div>
           </div>
-          {searchResults.length === 0 ? (
+          {finalResults.length === 0 ? (
             <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
               <p className="text-xl text-black/50 font-semibold">No properties matched your search.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {searchResults.map((property) => (
+              {finalResults.map((property) => (
                 <PropertyCard
                   key={property.id}
                   name={property.name}
@@ -282,8 +370,9 @@ export const SeekerHome = () => {
           )}
         </div>
       ) : (
-        <>
-          <Carousel
+        <div className="w-full mx-auto pb-24 z-10 relative">
+          <div className="-mt-6">
+            <Carousel
             items={exampleproperties}
             itemsPerPage={4}
             title="Featured Listings in Cincinnati"
@@ -354,7 +443,8 @@ export const SeekerHome = () => {
           />
         )}
           />
-        </>
+          </div>
+        </div>
       )}
       
       {selectedProperty && (

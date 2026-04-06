@@ -25,35 +25,35 @@ export const ListerHome = () => {
   const exampleSeekers = [
     {
       id: 1, name: 'Alice Smith', age: 20, gender: 'F', major: 'Computer Science', university: 'University of Cincinnati', year: 'Junior',
-      budget: '800', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=5'
+      budget: '800', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=5', city: 'Cincinnati', state: 'OH', zipcode: '45219'
     },
     {
       id: 2, name: 'Jason Lee', age: 22, gender: 'M', major: 'Business Administration', university: 'University of Cincinnati', year: 'Senior',
-      budget: '1,000', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=11'
+      budget: '1,000', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=11', city: 'Cincinnati', state: 'OH', zipcode: '45220'
     },
     {
       id: 3, name: 'Sarah Jenkins', age: 19, gender: 'F', university: 'Xavier University',
-      budget: '750', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=1'
+      budget: '750', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=1', city: 'Norwood', state: 'OH', zipcode: '45212'
     },
     {
       id: 4, name: 'Michael Chen', age: 21, gender: 'M', major: 'Engineering', university: 'University of Cincinnati', year: 'Sophomore',
-      budget: '950', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=59'
+      budget: '950', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=59', city: 'Cincinnati', state: 'OH', zipcode: '45219'
     },
     {
       id: 5, name: 'Emma Davis', age: 20, gender: 'F', major: 'Psychology',
-      budget: '850', timeline: 'Spring 2027', image: 'https://i.pravatar.cc/300?img=9'
+      budget: '850', timeline: 'Spring 2027', image: 'https://i.pravatar.cc/300?img=9', city: 'Columbus', state: 'OH', zipcode: '43210'
     },
     {
       id: 6, name: 'David Wilson', age: 23, gender: 'M', major: 'Law',
-      budget: '1,200', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=60'
+      budget: '1,200', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=60', city: 'Cincinnati', state: 'OH', zipcode: '45221'
     },
     {
       id: 7, name: 'Chloe Brown', age: 21, gender: 'F', major: 'Marketing',
-      budget: '900', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=43'
+      budget: '900', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=43', city: 'Dayton', state: 'OH', zipcode: '45469'
     },
     {
       id: 8, name: 'Ryan Taylor', age: 20, gender: 'M', major: 'Architecture',
-      budget: '1,100', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=53'
+      budget: '1,100', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=53', city: 'Cincinnati', state: 'OH', zipcode: '45220'
     }
   ]
 
@@ -65,7 +65,10 @@ export const ListerHome = () => {
           (s.major && s.major.toLowerCase().includes(term)) ||
           (s.university && s.university.toLowerCase().includes(term)) ||
           s.timeline.toLowerCase().includes(term) ||
-          s.budget.includes(term)
+          s.budget.includes(term) ||
+          ((s as any).city && (s as any).city.toLowerCase().includes(term)) ||
+          ((s as any).state && (s as any).state.toLowerCase().includes(term)) ||
+          ((s as any).zipcode && (s as any).zipcode.includes(term))
         );
       })
     : exampleSeekers;
