@@ -67,8 +67,8 @@ export const ListerCreateProfile = () => {
     e.preventDefault()
     setError(null)
 
-    if (!photoPreview || !age || !gender) {
-      setError('Please fill out all required fields: Profile Photo, Age, and Gender.')
+    if (!photoPreview || !age || !gender || !university) {
+      setError('Please fill out all required fields: Profile Photo, Age, Gender, and University Name.')
       return
     }
     
@@ -219,7 +219,7 @@ export const ListerCreateProfile = () => {
                   </div>
                   <div>
                     <label htmlFor="university" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
-                      University Name
+                      University Name <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"

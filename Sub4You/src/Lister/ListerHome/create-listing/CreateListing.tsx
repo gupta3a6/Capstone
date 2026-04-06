@@ -23,6 +23,9 @@ export const CreateListing = () => {
   // Basic
   const [listingTitle, setListingTitle] = useState('')
   const [address, setAddress] = useState('')
+  const [city, setCity] = useState('')
+  const [stateCode, setStateCode] = useState('')
+  const [zipcode, setZipcode] = useState('')
   const [rent, setRent] = useState('')
   const [utilities, setUtilities] = useState('')
   const [propertyType, setPropertyType] = useState('')
@@ -83,6 +86,9 @@ export const CreateListing = () => {
             setPhotoPreviews(target.photoPreviews || [])
             setListingTitle(target.listingTitle || '')
             setAddress(target.address || '')
+            setCity(target.city || '')
+            setStateCode(target.stateCode || '')
+            setZipcode(target.zipcode || '')
             setRent(target.rent || '')
             setUtilities(target.utilities || '')
             setPropertyType(target.propertyType || '')
@@ -162,8 +168,8 @@ export const CreateListing = () => {
       isMoveInValid = !!moveInDate && !!moveOutDate;
     }
 
-    if (!listingTitle || !rent || !propertyType || !beds || !baths || !isMoveInValid) {
-      setError('Please fill out all required fields: Listing Title, Monthly rent, Property type, Bedrooms, Bathrooms, and Desired move in timeline.')
+    if (!listingTitle || !city || !stateCode || !zipcode || !rent || !propertyType || !beds || !baths || !isMoveInValid) {
+      setError('Please fill out all required fields: Listing Title, City, State, Zipcode, Monthly rent, Property type, Bedrooms, Bathrooms, and Desired move in timeline.')
       return
     }
 
@@ -184,7 +190,7 @@ export const CreateListing = () => {
 
       const listingData = { 
         id: editId || Date.now().toString(),
-        photoPreviews, listingTitle, address, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
+        photoPreviews, listingTitle, address, city, stateCode, zipcode, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
         commuteType, commuteMinutes, moveInType, moveInSemesters, moveInDate, moveOutDate,
         leaseDuration, description, amenities 
       }
@@ -283,6 +289,30 @@ export const CreateListing = () => {
                       type="text" value={address} onChange={(e) => setAddress(e.target.value)}
                       className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all`}
                       placeholder="e.g. 123 College Ave, Apt 4"
+                    />
+                  </div>
+                  <div>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>City <span className="text-red-400">*</span></label>
+                    <input
+                      type="text" value={city} onChange={(e) => setCity(e.target.value)}
+                      className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all`}
+                      placeholder="e.g. Cincinnati"
+                    />
+                  </div>
+                  <div>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>State <span className="text-red-400">*</span></label>
+                    <input
+                      type="text" value={stateCode} onChange={(e) => setStateCode(e.target.value)} maxLength={2}
+                      className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all uppercase`}
+                      placeholder="e.g. OH"
+                    />
+                  </div>
+                  <div>
+                    <label className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>Zipcode <span className="text-red-400">*</span></label>
+                    <input
+                      type="text" value={zipcode} onChange={(e) => setZipcode(e.target.value)} maxLength={10}
+                      className={`w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${THEME.light.classes.text} placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition-all`}
+                      placeholder="e.g. 45219"
                     />
                   </div>
                   <div>

@@ -7,7 +7,8 @@ import CreateListing from "./Lister/ListerHome/create-listing/CreateListing";
 import MyListings from "./Lister/ListerHome/mylistings/MyListings";
 import ListerMatches from "./Lister/ListerHome/lister-matches/ListerMatches";
 import ListerMessages from "./Lister/ListerHome/lister-messages/ListerMessages";
-import Support from "./Seeker/SeekerHome/support/Support";
+import ListerSupport from "./Lister/ListerHome/lister-support/ListerSupport";
+import Support from "./Seeker/SeekerHome/seeker-support/Support";
 import Matches from "./Seeker/SeekerHome/seeker-matches/Matches";
 import Messages from "./Seeker/SeekerHome/seeker-messages/Messages";
 import Saved from "./Seeker/SeekerHome/seeker-saved/Saved";
@@ -45,7 +46,8 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/seeker/messages" element={<Messages />} />
       <Route path="/lister/messages" element={<ListerMessages />} />
       <Route path="/seeker/saved" element={<Saved />} />
-      <Route path="/support" element={<Support />} />
+      <Route path="/seeker/support" element={<Support />} />
+      <Route path="/lister/support" element={<ListerSupport />} />
       {/* Add other main app pages here that need the TopBar */}
     </Route>
 

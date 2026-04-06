@@ -7,6 +7,9 @@ interface SeekerPropertyDetailsProps {
     id: number | string;
     title: string;
     address: string;
+    city: string;
+    state: string;
+    zipcode: string;
     rent: string | number;
     subleasePeriod: string;
     bedrooms: number;
@@ -85,7 +88,10 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
         <div className="mb-8 pt-4">
           <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2 tracking-tight">{property.title}</h1>
           <div className="flex justify-between flex-wrap gap-4 items-center">
-             <p className="text-[16px] text-gray-800 underline font-medium underline-offset-4 decoration-black/30 hover:decoration-black transition-colors cursor-pointer">{property.address}</p>
+             <div className="text-[16px] text-gray-800 font-medium leading-snug cursor-pointer">
+               <span className="underline underline-offset-4 decoration-black/30 hover:decoration-black transition-colors">{property.address}</span><br />
+               <span className="underline underline-offset-4 decoration-black/30 hover:decoration-black transition-colors">{property.city}, {property.state} {property.zipcode}</span>
+             </div>
              <div className="flex gap-4 pr-12">
                 <button 
                   onClick={() => {

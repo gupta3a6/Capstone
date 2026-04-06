@@ -15,6 +15,8 @@ interface TopBarProps {
   onHomeClick?: () => void
   onProfileClick?: () => void
   onLogoutClick?: () => void
+  searchQuery?: string
+  onSearchChange?: (query: string) => void
 }
 
 /**
@@ -31,10 +33,11 @@ export const TopBar = ({
   onSignUpClick,
   onHomeClick,
   onProfileClick,
-  onLogoutClick
+  onLogoutClick,
+  searchQuery = '',
+  onSearchChange
 }: TopBarProps = {}) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [screenSize, setScreenSize] = useState<'sm' | 'md' | 'lg' | 'xl' | '2xl'>('sm')
   const searchContainerRef = useRef<HTMLDivElement>(null)
@@ -259,27 +262,29 @@ export const TopBar = ({
         { label: 'My Listings', path: '/lister/mylistings' },
         { label: 'Messages', path: '/lister/messages' },
         { label: 'Matches', path: '/lister/matches' },
-        { label: 'Support', path: '/support' },
+        { label: 'Support', path: '/lister/support' },
       ]
     : [
         { label: 'Home', path: '/seeker/home' },
         { label: 'Messages', path: '/seeker/messages' },
         { label: 'Saved', path: '/seeker/saved' },
         { label: 'Matches', path: '/seeker/matches' },
-        { label: 'Support', path: '/support' },
+        { label: 'Support', path: '/seeker/support' },
       ]
 
   // Event handlers
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen)
-    if (isSearchOpen) {
-      setSearchQuery('')
+    if (isSearchOpen && onSearchChange) {
+      onSearchChange('')
     }
   }
 
   const handleEscape = () => {
     setIsSearchOpen(false)
-    setSearchQuery('')
+    if (onSearchChange) {
+      onSearchChange('')
+    }
   }
 
   const handleNavClick = (path: string) => {
@@ -306,7 +311,9 @@ export const TopBar = ({
       // Close if clicked outside glass surface and not on search button
       if (isSearchOpen && !clickedInsideGlassSurface && !clickedSearchButton) {
         setIsSearchOpen(false)
-        setSearchQuery('')
+        if (onSearchChange) {
+          onSearchChange('')
+        }
       }
     }
 
@@ -421,7 +428,7 @@ export const TopBar = ({
           type="text"
           placeholder="Search..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
           className={`w-full bg-transparent ${THEME.light.classes.text} placeholder-gray-500 outline-none text-sm font-medium`}
           style={{ caretColor: THEME.light.text }}
           autoFocus={isSearchOpen}

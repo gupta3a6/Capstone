@@ -163,7 +163,9 @@ export const ListerMatches = () => {
 
                   <div className="absolute bottom-4 left-4 z-20">
                     <h2 className="text-xl font-extrabold text-white drop-shadow-md">{seeker.name}, {seeker.age}</h2>
-                    <p className="text-sm font-medium text-white opacity-80">{seeker.major} at {seeker.university}</p>
+                    <p className="text-sm font-medium text-white opacity-80">
+                      {seeker.major && seeker.year ? `${seeker.university} • ${seeker.major}, ${seeker.year}` : seeker.university}
+                    </p>
                   </div>
                 </div>
 
@@ -191,9 +193,9 @@ export const ListerMatches = () => {
                     {status === 'accepted' && (
                        <button
                          onClick={(e) => handleMessageSeeker(e, seeker.id)}
-                         className="w-full py-2 rounded-lg text-sm font-extrabold text-white bg-[#00A6E4] hover:bg-[#0092c9] border border-transparent transition-colors uppercase tracking-wider shadow-lg"
+                         className="w-full py-2 rounded-lg text-sm font-medium text-white bg-black hover:bg-[#10b981] transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg shadow-sm"
                        >
-                         Send a message
+                         Send a Message
                        </button>
                     )}
                     {status === 'declined' && (

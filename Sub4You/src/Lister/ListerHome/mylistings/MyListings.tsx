@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PageBackground from '../../../components/PageBackground'
+
 import { PropertyCard } from '../../../components/PropertyCard'
 import RoomForSubleaseImage from '../../../assets/RoomForSublease.jpg'
 
@@ -40,7 +40,7 @@ export const MyListings = () => {
   }
 
   return (
-    <PageBackground>
+    <>
       <div className="w-full min-h-screen pt-10 pb-24 px-8 max-w-[1400px] mx-auto z-10 relative">
         
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -90,6 +90,10 @@ export const MyListings = () => {
                        subleasePeriod={timeStr}
                        bedrooms={parseInt(item.beds) || 0}
                        location={item.address || 'Unknown Location'}
+                       address={item.address}
+                       city={item.city}
+                       state={item.stateCode}
+                       zipcode={item.zipcode}
                      />
                    </div>
                    
@@ -116,7 +120,7 @@ export const MyListings = () => {
           </div>
         )}
       </div>
-    </PageBackground>
+    </>
   )
 }
 

@@ -9,6 +9,10 @@ interface PropertyCardProps {
   subleasePeriod: string
   bedrooms: number
   location?: string
+  address?: string
+  city?: string
+  state?: string
+  zipcode?: string
   onClick?: () => void
   isSaved?: boolean
   onSaveClick?: (e: React.MouseEvent) => void
@@ -25,6 +29,10 @@ export const PropertyCard = ({
   subleasePeriod,
   bedrooms,
   location = 'University Dist.',
+  address,
+  city,
+  state,
+  zipcode,
   onClick,
   isSaved = false,
   onSaveClick
@@ -71,11 +79,13 @@ export const PropertyCard = ({
       {/* Content */}
       <div className="p-5">
         <div className="flex justify-between items-start mb-2">
-          <div>
+          <div className="w-full">
             <h3 className={`text-xl font-bold ${THEME.light.classes.text} mb-1 line-clamp-1`}>{name}</h3>
-            <p className={`${THEME.light.classes.text} opacity-60 text-sm flex items-center gap-1`}>
-              <IoLocationOutline />
-              {location}
+            <p className={`${THEME.light.classes.text} opacity-60 text-sm flex items-center gap-1.5`}>
+              <IoLocationOutline className="shrink-0" />
+              <span className="truncate">
+                {address ? address : (city && state && zipcode ? `${city}, ${state} ${zipcode}` : location)}
+              </span>
             </p>
           </div>
         </div>

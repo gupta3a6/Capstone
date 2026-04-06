@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
-import { Outlet } from 'react-router-dom'
+import { useState, type ReactNode } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import PageBackground from './PageBackground'
 import TopBar from './TopBar'
 
@@ -31,8 +31,12 @@ export const Layout = ({
   onProfileClick,
   onLogoutClick,
 }: LayoutProps) => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const location = useLocation()
+  const isLister = location.pathname.startsWith('/lister')
+
   return (
-    <PageBackground>
+    <PageBackground isLister={isLister}>
       <div className="flex flex-col min-h-screen">
         <div className="sticky top-0 z-50">
           <TopBar
@@ -44,10 +48,12 @@ export const Layout = ({
             onHomeClick={onHomeClick}
             onProfileClick={onProfileClick}
             onLogoutClick={onLogoutClick}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
         </div>
         <div className="">
-          {children || <Outlet />}
+          {children || <Outlet context={{ searchQuery }} />}
         </div>
       </div>
     </PageBackground>

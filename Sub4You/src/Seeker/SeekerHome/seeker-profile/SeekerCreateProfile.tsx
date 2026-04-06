@@ -119,8 +119,8 @@ export const SeekerCreateProfile = () => {
       isMoveInValid = !!moveInDate && !!moveOutDate;
     }
 
-    if (!photoPreview || !age || !gender || !isMoveInValid) {
-      setError('Please fill out all required fields: Profile Photo, Age, Gender, and Desired Move-in.')
+    if (!photoPreview || !age || !gender || !university || !isMoveInValid) {
+      setError('Please fill out all required fields: Profile Photo, Age, Gender, University Name, and Desired Move-in.')
       return
     }
 
@@ -274,7 +274,7 @@ export const SeekerCreateProfile = () => {
                   </div>
                   <div>
                     <label htmlFor="university" className={`block ${THEME.light.classes.text} text-sm font-medium mb-2`}>
-                      University Name
+                      University Name <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"

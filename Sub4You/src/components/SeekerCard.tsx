@@ -8,7 +8,9 @@ interface SeekerCardProps {
   name: string
   age: number
   gender: string
-  major: string
+  major?: string
+  university?: string
+  year?: string
   budget: string
   timeline: string
   onClick?: () => void
@@ -25,6 +27,8 @@ export const SeekerCard = ({
   age,
   gender,
   major,
+  university = 'University of Cincinnati',
+  year,
   budget,
   timeline,
   onClick
@@ -88,8 +92,10 @@ export const SeekerCard = ({
               {name}, {age} <span className="opacity-60 text-sm font-semibold">({gender})</span>
             </h3>
             <p className={`${THEME.light.classes.text} opacity-80 pl-1 mt-1.5 text-sm flex items-center gap-2 font-medium`}>
-              <IoSchoolOutline size={16} />
-              {major}
+              <IoSchoolOutline size={16} className="shrink-0" />
+              <span className="truncate">
+                 {major && year ? `${university} • ${major}, ${year}` : university}
+              </span>
             </p>
           </div>
         </div>
@@ -112,7 +118,7 @@ export const SeekerCard = ({
             ) : (
               <button 
                 onClick={handleMatch}
-                className={`w-full py-2 bg-[#00A6E4] hover:bg-[#00A6E4]/90 border-transparent rounded-lg font-medium text-sm transition-colors text-white shadow-sm`}
+                className={`w-full py-2 bg-black hover:bg-[#10b981] border-transparent rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg text-white shadow-sm`}
               >
                 Send Match Request
               </button>

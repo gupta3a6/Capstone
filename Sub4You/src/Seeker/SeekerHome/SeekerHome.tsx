@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { Carousel } from '../../components/Carousel'
 import { PropertyCard } from '../../components/PropertyCard'
 import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
@@ -10,6 +10,10 @@ export const SeekerHome = () => {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [savedPropertyIds, setSavedPropertyIds] = useState<string[]>([]);
   const navigate = useNavigate();
+  
+  // Realtime Search Mapping Pipeline
+  const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {};
+  const activeSearch = searchQuery?.trim().toLowerCase() || '';
 
   useEffect(() => {
     const fetchSavedState = () => {
@@ -219,9 +223,91 @@ export const SeekerHome = () => {
     }
   ]
 
+  const searchResults = activeSearch
+    ? exampleproperties.filter(p => {
+        const term = activeSearch;
+        return (
+          (p.name && p.name.toLowerCase().includes(term)) ||
+          (p.title && p.title.toLowerCase().includes(term)) ||
+          (p.location && p.location.toLowerCase().includes(term)) ||
+          (p.address && p.address.toLowerCase().includes(term)) ||
+          (p.subleasePeriod && p.subleasePeriod.toLowerCase().includes(term)) ||
+          (p.rent && p.rent.includes(term)) ||
+          ((p as any).city && (p as any).city.toLowerCase().includes(term)) ||
+          ((p as any).state && (p as any).state.toLowerCase().includes(term)) ||
+          ((p as any).zipcode && (p as any).zipcode.includes(term))
+        );
+      })
+    : exampleproperties;
+
   return (
     <>
-      <Carousel
+      {activeSearch ? (
+        <div className="w-full mx-auto px-4 sm:px-8 lg:px-12 py-10 max-w-[1400px] pb-24 z-10 relative">
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+            <div>
+              <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
+                Search Results ({searchResults.length})
+              </h1>
+              <p className="text-black/80 font-medium mt-2">
+                Results matching "{searchQuery}"
+              </p>
+            </div>
+          </div>
+          {searchResults.length === 0 ? (
+            <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
+              <p className="text-xl text-black/50 font-semibold">No properties matched your search.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {searchResults.map((property) => (
+                <PropertyCard
+                  key={property.id}
+                  name={property.name}
+                  rent={property.rent}
+                  subleasePeriod={property.subleasePeriod}
+                  bedrooms={property.bedrooms}
+                  location={property.location}
+                  address={property.address}
+                  city={(property as any).city}
+                  state={(property as any).state}
+                  zipcode={(property as any).zipcode}
+                  imageSrc={property.image}
+                  isSaved={savedPropertyIds.includes(property.id.toString())}
+                  onSaveClick={(e) => handlePropertyCardSave(property, e)}
+                  onClick={() => setSelectedProperty(property)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <>
+          <Carousel
+            items={exampleproperties}
+            itemsPerPage={4}
+            title="Featured Listings in Cincinnati"
+            renderItem={(property) => (
+              <PropertyCard
+                key={property.id}
+                name={property.name}
+                rent={property.rent}
+                subleasePeriod={property.subleasePeriod}
+                bedrooms={property.bedrooms}
+                location={property.location}
+                address={property.address}
+                city={(property as any).city}
+                state={(property as any).state}
+                zipcode={(property as any).zipcode}
+                imageSrc={property.image}
+                isSaved={savedPropertyIds.includes(property.id.toString())}
+                onSaveClick={(e) => handlePropertyCardSave(property, e)}
+                onClick={() => setSelectedProperty(property)}
+              />
+            )}
+          />
+
+          <Carousel
         items={exampleproperties}
         itemsPerPage={4}
         title="Featured Listings in Cincinnati"
@@ -233,6 +319,10 @@ export const SeekerHome = () => {
             subleasePeriod={property.subleasePeriod}
             bedrooms={property.bedrooms}
             location={property.location}
+            address={property.address}
+            city={(property as any).city}
+            state={(property as any).state}
+            zipcode={(property as any).zipcode}
             imageSrc={property.image}
             isSaved={savedPropertyIds.includes(property.id.toString())}
             onSaveClick={(e) => handlePropertyCardSave(property, e)}
@@ -253,17 +343,23 @@ export const SeekerHome = () => {
             subleasePeriod={property.subleasePeriod}
             bedrooms={property.bedrooms}
             location={property.location}
+            address={property.address}
+            city={(property as any).city}
+            state={(property as any).state}
+            zipcode={(property as any).zipcode}
             imageSrc={property.image}
             isSaved={savedPropertyIds.includes(property.id.toString())}
             onSaveClick={(e) => handlePropertyCardSave(property, e)}
             onClick={() => setSelectedProperty(property)}
           />
         )}
-      />
+          />
+        </>
+      )}
       
       {selectedProperty && (
         <SeekerPropertyDetails 
-          property={selectedProperty} 
+          property={{ ...selectedProperty, city: 'Cincinnati', state: 'OH', zipcode: '45219' }} 
           onClose={() => setSelectedProperty(null)}
           onSendMessage={() => {
              setSelectedProperty(null);
