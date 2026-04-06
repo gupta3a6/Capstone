@@ -162,11 +162,11 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
                   </p>
                   <div className="mt-4 inline-flex px-4 py-2 rounded-xl bg-black/5 border border-black/10">
                      <p className="text-[13px] font-extrabold uppercase tracking-widest text-black">
-                       Gender Pref: {property.genderPref}
+                       Gender Pref: {property.genderPref || 'Any'}
                      </p>
                   </div>
                </div>
-               <img src={property.hostAvatar} alt="Host Avatar" className="w-16 h-16 rounded-full object-cover border border-white/60 shadow-md" />
+               <img src={property.hostAvatar || 'https://i.pravatar.cc/150'} alt="Host Avatar" className="w-16 h-16 rounded-full object-cover border border-white/60 shadow-md" />
              </div>
              
              {/* Dynamic Commute Info Box */}
@@ -184,7 +184,7 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
              <div className="py-8 border-b border-black/10">
                 <h2 className="text-2xl font-extrabold text-gray-900 mb-5">About this place</h2>
                 <div className="text-[17px] leading-relaxed text-gray-800 font-medium whitespace-pre-wrap opacity-80">
-                  {property.description}
+                  {property.description || 'No description available for this property.'}
                 </div>
              </div>
 
@@ -192,7 +192,7 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
              <div className="py-8">
                 <h2 className="text-2xl font-extrabold text-gray-900 mb-6">What this place offers</h2>
                 <div className="grid grid-cols-2 gap-y-6 gap-x-8">
-                  {property.amenities.map((amenity, idx) => (
+                  {(property.amenities || []).map((amenity, idx) => (
                      <div key={idx} className="flex items-center gap-4 text-gray-800 text-[17px] font-medium opacity-90">
                         <FiCheckCircle size={22} className="text-black" />
                         {amenity}
@@ -206,12 +206,12 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
                 <h2 className="text-2xl font-extrabold text-gray-900 mb-6">Meet your Lister</h2>
                 <div className="flex flex-col md:flex-row gap-8 items-start bg-white/30 backdrop-blur-md rounded-[32px] p-8 border border-white/60 shadow-sm">
                    <div className="flex flex-col items-center shrink-0 w-full sm:w-48">
-                      <img src={property.hostAvatar} alt={property.hostName} className="w-28 h-28 rounded-full object-cover shadow-lg mb-4 border-2 border-white/60" />
-                      <h3 className="text-xl font-extrabold text-gray-900 text-center">{property.hostName}</h3>
+                      <img src={property.hostAvatar || 'https://i.pravatar.cc/150'} alt={property.hostName || 'Lister'} className="w-28 h-28 rounded-full object-cover shadow-lg mb-4 border-2 border-white/60" />
+                      <h3 className="text-xl font-extrabold text-gray-900 text-center">{property.hostName || 'Sublister'}</h3>
                       <p className="text-sm font-medium text-gray-600 mt-1">Joined 2026</p>
                    </div>
                    <div className="flex-1">
-                      <h4 className="font-extrabold text-gray-900 mb-2">About {property.hostName.split(' ')[0]}</h4>
+                      <h4 className="font-extrabold text-gray-900 mb-2">About {(property.hostName || 'them').split(' ')[0]}</h4>
                       <p className="text-[16px] leading-relaxed text-gray-800 opacity-80 mb-6">
                         Hi! I am looking for a respectful and clean subtenant to take over my place for the specified lease duration. Feel free to send me a message directly if you have any questions or want to secure the unit!
                       </p>

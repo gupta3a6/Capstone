@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import { FiFilter } from 'react-icons/fi'
+import { FiFilter, FiMap, FiList } from 'react-icons/fi'
 import { Carousel } from '../../components/Carousel'
 import { PropertyCard } from '../../components/PropertyCard'
 import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
 import { SeekerFilter } from './seeker-filter/SeekerFilter'
+import { SeekerMap } from './SeekerMap'
 import HouseShowingImage from '../../assets/HouseShowing-image1.jpeg'
 import RoomForSubleaseImage from '../../assets/RoomForSublease.jpg'
 
@@ -20,6 +21,7 @@ export const SeekerHome = () => {
   // Advanced Filtering Pipeline
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<any>(null);
+  const [isMapView, setIsMapView] = useState(false);
 
   useEffect(() => {
     const fetchSavedState = () => {
@@ -97,6 +99,7 @@ export const SeekerHome = () => {
       ],
       hostName: 'David K.',
       hostAvatar: 'https://i.pravatar.cc/150?u=12',
+      lat: 39.1000, lng: -84.5100
     },
     {
       id: 2,
@@ -128,6 +131,7 @@ export const SeekerHome = () => {
       ],
       hostName: 'Sarah Jenkins',
       hostAvatar: 'https://i.pravatar.cc/150?u=42',
+      lat: 39.1320, lng: -84.5150
     },
     {
       id: 3,
@@ -159,6 +163,7 @@ export const SeekerHome = () => {
       ],
       hostName: 'Alex Mercer',
       hostAvatar: 'https://i.pravatar.cc/150?u=9',
+      lat: 39.2500, lng: -84.6000
     },
     {
       id: 4,
@@ -167,7 +172,8 @@ export const SeekerHome = () => {
       subleasePeriod: 'Sep - Dec 2026',
       bedrooms: 4,
       location: 'Capitol Hill',
-      image: RoomForSubleaseImage
+      image: RoomForSubleaseImage,
+      lat: 39.1350, lng: -84.5200
     },
     {
       id: 5,
@@ -199,6 +205,7 @@ export const SeekerHome = () => {
       ],
       hostName: 'Emily & Mike',
       hostAvatar: 'https://i.pravatar.cc/150?u=18',
+      lat: 39.1380, lng: -84.4440
     },
     {
       id: 6,
@@ -207,7 +214,8 @@ export const SeekerHome = () => {
       subleasePeriod: 'May - Aug 2026',
       bedrooms: 1,
       location: 'Over-the-Rhine',
-      image: HouseShowingImage
+      image: HouseShowingImage,
+      lat: 39.1100, lng: -84.5150
     },
     {
       id: 7,
@@ -216,7 +224,8 @@ export const SeekerHome = () => {
       subleasePeriod: 'Jun - Dec 2026',
       bedrooms: 1,
       location: 'Downtown',
-      image: RoomForSubleaseImage
+      image: RoomForSubleaseImage,
+      lat: 39.1050, lng: -84.5120
     },
     {
       id: 8,
@@ -225,7 +234,8 @@ export const SeekerHome = () => {
       subleasePeriod: 'Sep - May 2027',
       bedrooms: 2,
       location: 'University District',
-      image: HouseShowingImage
+      image: HouseShowingImage,
+      lat: 39.1300, lng: -84.5180
     }
   ]
 
@@ -328,46 +338,56 @@ export const SeekerHome = () => {
          </button>
       </div>
 
-      {activeSearch || appliedFilters ? (
-        <div className="w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative">
-          <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
-            <div>
-              <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
-                Search Results ({finalResults.length})
-              </h1>
-              {activeSearch && (
-                <p className="text-black/80 font-medium mt-2">
-                  Results matching "{searchQuery}"
-                </p>
-              )}
+      {activeSearch || appliedFilters || isMapView ? (
+        <div className={`w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative ${isMapView ? 'flex gap-6 max-h-[calc(100vh-140px)]' : ''}`}>
+          
+          <div className={`${isMapView ? 'w-full lg:w-[60%] overflow-y-auto custom-scrollbar pr-2 pb-10' : 'w-full'}`}>
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+              <div>
+                <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
+                  {(activeSearch || appliedFilters) ? `Search Results (${finalResults.length})` : `All Properties (${finalResults.length})`}
+                </h1>
+                {activeSearch && (
+                  <p className="text-black/80 font-medium mt-2">
+                    Results matching "{searchQuery}"
+                  </p>
+                )}
+              </div>
             </div>
+            {finalResults.length === 0 ? (
+              <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
+                <p className="text-xl text-black/50 font-semibold">No properties matched your criteria.</p>
+              </div>
+            ) : (
+              <div className={`grid grid-cols-1 sm:grid-cols-2 ${isMapView ? 'xl:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'} gap-6`}>
+                {finalResults.map((property) => (
+                  <PropertyCard
+                    key={property.id}
+                    name={property.name}
+                    rent={property.rent}
+                    subleasePeriod={property.subleasePeriod}
+                    bedrooms={property.bedrooms}
+                    location={property.location}
+                    address={property.address}
+                    city={(property as any).city}
+                    state={(property as any).state}
+                    zipcode={(property as any).zipcode}
+                    imageSrc={property.image}
+                    isSaved={savedPropertyIds.includes(property.id.toString())}
+                    onSaveClick={(e) => handlePropertyCardSave(property, e)}
+                    onClick={() => setSelectedProperty(property)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-          {finalResults.length === 0 ? (
-            <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
-              <p className="text-xl text-black/50 font-semibold">No properties matched your search.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {finalResults.map((property) => (
-                <PropertyCard
-                  key={property.id}
-                  name={property.name}
-                  rent={property.rent}
-                  subleasePeriod={property.subleasePeriod}
-                  bedrooms={property.bedrooms}
-                  location={property.location}
-                  address={property.address}
-                  city={(property as any).city}
-                  state={(property as any).state}
-                  zipcode={(property as any).zipcode}
-                  imageSrc={property.image}
-                  isSaved={savedPropertyIds.includes(property.id.toString())}
-                  onSaveClick={(e) => handlePropertyCardSave(property, e)}
-                  onClick={() => setSelectedProperty(property)}
-                />
-              ))}
+
+          {isMapView && (
+            <div className="hidden lg:block w-[40%] flex-shrink-0 h-[calc(100vh-140px)] sticky top-[10px] z-0">
+               <SeekerMap properties={finalResults} onMarkerClick={setSelectedProperty} />
             </div>
           )}
+
         </div>
       ) : (
         <div className="w-full mx-auto pb-24 z-10 relative">
@@ -447,6 +467,20 @@ export const SeekerHome = () => {
         </div>
       )}
       
+      {/* Floating Map Toggle Button (Always Available) */}
+      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[90]">
+         <button 
+           onClick={() => setIsMapView(!isMapView)}
+           className="bg-black text-white hover:scale-105 active:scale-95 transition-all shadow-2xl px-6 py-3.5 rounded-full font-bold flex items-center gap-3"
+         >
+           {isMapView ? (
+             <>Show List <FiList size={20}/></>
+           ) : (
+             <>Show Map <FiMap size={20}/></>
+           )}
+         </button>
+      </div>
+
       {selectedProperty && (
         <SeekerPropertyDetails 
           property={{ ...selectedProperty, city: 'Cincinnati', state: 'OH', zipcode: '45219' }} 
