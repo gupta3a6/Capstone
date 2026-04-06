@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { THEME } from '../../../constants/theme';
+import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
 
 interface SavedProperty {
   id: string;
@@ -14,53 +16,42 @@ interface SavedProperty {
   availableFrom: string;
 }
 
-const MOCK_SAVED_PROPERTIES: SavedProperty[] = [
-  {
-    id: 'save_1',
-    listerName: 'David Kim',
-    listerAvatar: 'https://i.pravatar.cc/150?img=12',
-    propertyName: 'Modern High-Rise Room',
-    propertyImage: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
-    rent: 1100,
-    location: '789 Skyline Blvd',
-    roomSpecs: 'Private Bedroom & Bath in 2B2B',
-    amenities: ['In-unit Washer/Dryer', 'Gym', 'Rooftop Pool'],
-    availableFrom: 'Sept 1, 2026',
-  },
-  {
-    id: 'save_2',
-    listerName: 'Emily Chen',
-    listerAvatar: 'https://i.pravatar.cc/150?img=5',
-    propertyName: 'Cozy Campus Studio',
-    propertyImage: 'https://images.unsplash.com/photo-1502672260266-1c1ea2a5098c?w=800&q=80',
-    rent: 850,
-    location: '101 College Ave',
-    roomSpecs: 'Entire Studio',
-    amenities: ['Furnished', 'High-speed Wi-Fi', 'Close to Transit'],
-    availableFrom: 'Immediately',
-  },
-  {
-    id: 'save_3',
-    listerName: 'Marcus Johnson',
-    listerAvatar: 'https://i.pravatar.cc/150?img=60',
-    propertyName: 'Spacious House Share',
-    propertyImage: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80',
-    rent: 600,
-    location: '55 Maple Street',
-    roomSpecs: '1 Room in 4B2B House',
-    amenities: ['Backyard', 'Driveway Parking', 'Pet Friendly'],
-    availableFrom: 'Aug 15, 2026',
-  }
-];
+const MOCK_SAVED_PROPERTIES: SavedProperty[] = [];
 
 export const Saved = () => {
   const [savedData, setSavedData] = useState<SavedProperty[]>(MOCK_SAVED_PROPERTIES);
   const [selectedListing, setSelectedListing] = useState<SavedProperty | null>(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const currentSaved = localStorage.getItem('sub4you_saved_properties');
+    if (currentSaved) {
+      try {
+        const parsed = JSON.parse(currentSaved);
+        const combined = [...MOCK_SAVED_PROPERTIES];
+        parsed.forEach((p: SavedProperty) => {
+          if (!combined.find(x => x.id === p.id)) {
+            combined.push(p);
+          }
+        });
+        setSavedData(combined);
+      } catch (e) {}
+    }
+  }, []);
 
   const handleUnsave = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (window.confirm("Are you sure you want to remove from saved?")) {
       setSavedData(current => current.filter(item => item.id !== id));
+      
+      const currentSavedStr = localStorage.getItem('sub4you_saved_properties');
+      if (currentSavedStr) {
+        try {
+          const parsedArr = JSON.parse(currentSavedStr);
+          const filteredArr = parsedArr.filter((item: SavedProperty) => item.id.toString() !== id.toString());
+          localStorage.setItem('sub4you_saved_properties', JSON.stringify(filteredArr));
+        } catch (e) {}
+      }
       return true;
     }
     return false;
@@ -160,110 +151,41 @@ export const Saved = () => {
 
       {/* Modern Listing Details Modal */}
       {selectedListing && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedListing(null)} />
-          
-          <div className="relative rounded-[2rem] w-full max-w-xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]" style={{ background: 'rgba(25, 25, 25, 0.85)', backdropFilter: 'blur(50px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-            
-            <div className="h-48 sm:h-56 relative shrink-0">
-              <img src={selectedListing.propertyImage} className="w-full h-full object-cover" alt="Property" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              
-              <button 
-                onClick={() => setSelectedListing(null)}
-                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-colors border border-white/20 z-20"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-              </button>
-
-              <button
-                onClick={(e) => {
-                  const wasRemoved = handleUnsave(selectedListing.id, e);
-                  if (wasRemoved) {
-                    setSelectedListing(null);
-                  }
-                }}
-                className="absolute top-4 left-4 z-20 p-2.5 rounded-full bg-black/40 hover:bg-black/60 backdrop-blur-md transition-colors border border-white/20 shadow-sm"
-                aria-label="Remove from Saved"
-              >
-                <svg className="w-5 h-5 text-pink-500 drop-shadow-md" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-              </button>
-
-              <div className="absolute bottom-5 left-6 right-6">
-                <div className="flex justify-between items-end">
-                  <div>
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-bold shadow-sm inline-block mb-2">
-                       Available {selectedListing.availableFrom}
-                    </span>
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white drop-shadow-md leading-tight">{selectedListing.propertyName}</h2>
-                  </div>
-                  <div className="text-right pb-1">
-                    <p className="text-sm font-bold uppercase tracking-wider text-white/70 mb-0.5">Rent</p>
-                    <p className="text-2xl font-black text-white leading-none">${selectedListing.rent}<span className="text-sm font-semibold text-white/70">/mo</span></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-6">
-
-              {/* Specs & Location */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <div className="p-2 rounded-full bg-white/10 shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider opacity-50 text-white mb-0.5">Layout</p>
-                    <p className="text-sm font-bold text-white leading-snug">{selectedListing.roomSpecs}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3 p-4 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <div className="p-2 rounded-full bg-white/10 shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider opacity-50 text-white mb-0.5">Location</p>
-                    <p className="text-sm font-bold text-white leading-snug">{selectedListing.location}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Amenities */}
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider mb-3 text-white/50">Amenities</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedListing.amenities.map((item, idx) => (
-                    <span key={idx} className="px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-sm flex items-center gap-1.5" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00A6E4]"></span>
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Lister Profile Row */}
-              <div className="flex items-center justify-between p-4 rounded-2xl mt-2" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.15)' }}>
-                <div className="flex items-center gap-3">
-                  <img src={selectedListing.listerAvatar} className="w-12 h-12 rounded-full border-2 border-white/20 object-cover shadow-md" alt="Lister" />
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/50 mb-0.5">Listed By</p>
-                    <p className="text-base font-extrabold text-white">{selectedListing.listerName}</p>
-                  </div>
-                </div>
-                <button 
-                  className="px-6 py-3 rounded-xl text-black font-extrabold text-sm shadow-lg hover:scale-105 transition-transform"
-                  style={{ background: 'linear-gradient(135deg, #00A6E4 0%, #40ffaa 100%)' }}
-                  onClick={() => alert("Connecting to messages...")}
-                >
-                  Contact
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
+        <SeekerPropertyDetails
+          property={{
+            id: selectedListing.id,
+            title: selectedListing.propertyName,
+            address: selectedListing.location,
+            rent: selectedListing.rent,
+            subleasePeriod: 'Duration Negotiable',
+            bedrooms: 1,
+            baths: 1,
+            propertyType: 'Sublease Unit',
+            sqft: '~500',
+            genderPref: 'Any',
+            commuteType: 'walk',
+            commuteMinutes: '10',
+            moveInDate: selectedListing.availableFrom,
+            moveOutDate: 'Flexible',
+            utilities: '0',
+            description: "No specific description provided.",
+            amenities: selectedListing.amenities || ['High-Speed WiFi', 'Utilities Included'],
+            images: [
+              selectedListing.propertyImage,
+              'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80',
+              'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
+              'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80',
+              'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'
+            ],
+            hostName: selectedListing.listerName,
+            hostAvatar: selectedListing.listerAvatar
+          }}
+          onClose={() => setSelectedListing(null)}
+          onSendMessage={() => {
+             setSelectedListing(null);
+             navigate('/seeker/messages', { state: { createThreadWith: selectedListing.listerName, property: selectedListing } });
+          }}
+        />
       )}
     </div>
   );

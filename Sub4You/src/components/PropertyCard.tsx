@@ -1,5 +1,6 @@
 import { THEME } from '../constants/theme'
 import { IoLocationOutline, IoHomeOutline  } from "react-icons/io5";
+import { FiHeart } from 'react-icons/fi';
 
 interface PropertyCardProps {
   imageSrc: string
@@ -9,6 +10,8 @@ interface PropertyCardProps {
   bedrooms: number
   location?: string
   onClick?: () => void
+  isSaved?: boolean
+  onSaveClick?: (e: React.MouseEvent) => void
 }
 
 /**
@@ -22,7 +25,9 @@ export const PropertyCard = ({
   subleasePeriod,
   bedrooms,
   location = 'University Dist.',
-  onClick
+  onClick,
+  isSaved = false,
+  onSaveClick
 }: PropertyCardProps) => {
   return (
     <div 
@@ -43,6 +48,19 @@ export const PropertyCard = ({
           alt={name}
           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
+        
+        {/* Save Heart Button */}
+        {onSaveClick && (
+          <button
+            onClick={onSaveClick}
+            className={`absolute top-4 right-4 z-20 p-2.5 rounded-full backdrop-blur-md transition-colors shadow-sm ${
+              isSaved ? 'bg-white/90 border border-transparent' : 'bg-black/20 hover:bg-black/40 border border-white/40'
+            }`}
+          >
+            <FiHeart size={20} className={`transition-colors ${isSaved ? 'text-pink-500 fill-pink-500' : 'text-white'}`} />
+          </button>
+        )}
+
         <div className="absolute bottom-4 left-4 z-20">
           <span className="inline-block px-3 py-1 rounded-full bg-white/90 text-xs font-bold text-black backdrop-blur-sm">
             ${rent}/mo

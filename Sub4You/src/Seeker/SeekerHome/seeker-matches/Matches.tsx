@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { THEME } from '../../../constants/theme';
+import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
 
 interface MatchRequest {
   id: string;
@@ -67,11 +68,7 @@ export const Matches = () => {
     }
   };
 
-  const gradientText = {
-    background: 'linear-gradient(135deg, #00A6E4 0%, #40ffaa 100%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-  }
+
 
   return (
     <div className={`min-h-[calc(100vh-80px)] py-8 px-4 sm:px-6 max-w-6xl mx-auto flex flex-col ${THEME.light.classes.text}`}>
@@ -187,64 +184,41 @@ export const Matches = () => {
 
       {/* Modern Listing Details Modal */}
       {selectedListing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 opacity-100 transition-opacity">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSelectedListing(null)} />
-
-          <div className="relative rounded-[2rem] w-full max-w-xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]" style={{ background: 'rgba(25, 25, 25, 0.85)', backdropFilter: 'blur(50px)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-
-            <div className="h-40 sm:h-48 relative shrink-0">
-              <img src={selectedListing.propertyImage} className="w-full h-full object-cover" alt="Property" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-              <button
-                onClick={() => setSelectedListing(null)}
-                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-colors border border-white/20"
-              >
-                ✕
-              </button>
-
-              <div className="absolute bottom-4 left-6">
-                <h2 className="text-2xl font-extrabold text-white drop-shadow-md">{selectedListing.propertyName}</h2>
-              </div>
-            </div>
-
-            <div className="p-6 overflow-y-auto custom-scrollbar flex flex-col">
-
-              {/* Lister mini-profile */}
-              <div className="flex items-center gap-3 p-3 rounded-xl mb-6" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <img src={selectedListing.listerAvatar} className="w-12 h-12 rounded-full border border-white/20 object-cover" alt="Lister" />
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider mb-0.5 opacity-50 text-white">Lister</p>
-                  <p className="text-lg font-bold text-white">{selectedListing.listerName}</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                <div className="p-4 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <p className="text-xs font-bold mb-1 uppercase tracking-wider opacity-50 text-white">Rent</p>
-                  <p className="text-xl font-black text-white" style={gradientText}>${selectedListing.rent}<span className="text-sm font-semibold opacity-70 text-white" style={{ WebkitTextFillColor: 'initial' }}>/mo</span></p>
-                </div>
-                <div className="p-4 rounded-xl" style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                  <p className="text-xs font-bold mb-1 uppercase tracking-wider opacity-50 text-white">Specs</p>
-                  <p className="text-sm font-bold text-white">{selectedListing.roomSpecs}</p>
-                </div>
-              </div>
-
-              <div className="mb-2">
-                <h3 className="text-xs font-bold uppercase tracking-wider mb-3 opacity-50 text-white">Included Amenities</h3>
-                <div className="flex flex-wrap gap-2">
-                  {selectedListing.amenities.map((item, idx) => (
-                    <span key={idx} className="px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-sm" style={{ background: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)' }}>
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
+        <SeekerPropertyDetails
+          property={{
+            id: selectedListing.id,
+            title: selectedListing.propertyName,
+            address: selectedListing.location,
+            rent: selectedListing.rent,
+            subleasePeriod: 'Duration Negotiable',
+            bedrooms: 1,
+            baths: 1,
+            propertyType: 'Sublease Unit',
+            sqft: '~500',
+            genderPref: 'Any',
+            commuteType: 'walk',
+            commuteMinutes: '10',
+            moveInDate: 'Flexible', // MatchRequest lacks availableFrom
+            moveOutDate: 'Flexible',
+            utilities: '0',
+            description: "No specific description provided.",
+            amenities: selectedListing.amenities || ['High-Speed WiFi', 'Utilities Included'],
+            images: [
+              selectedListing.propertyImage,
+              'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80',
+              'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
+              'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80',
+              'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80'
+            ],
+            hostName: selectedListing.listerName,
+            hostAvatar: selectedListing.listerAvatar
+          }}
+          onClose={() => setSelectedListing(null)}
+          onSendMessage={() => {
+             setSelectedListing(null);
+             navigate('/seeker/messages', { state: { createThreadWith: selectedListing.listerName, property: selectedListing } });
+          }}
+        />
       )}
     </div>
   );
