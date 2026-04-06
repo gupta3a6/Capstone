@@ -261,7 +261,7 @@ export const SignUpPage = () => {
                       supabase.auth.getSession().then(({ data: { session } }) => {
                         if (session) {
                           setNeedsEmailVerification(false)
-                          navigate('/')
+                          navigate('/seeker/Home')
                         }
                       })
                     }}

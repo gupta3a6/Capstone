@@ -40,7 +40,7 @@ export const LandingPage = () => {
                         className="text-5xl font-bold"
                 >
                         {'Sub4You'}
-            </GradientText>
+                </GradientText>
             </div>
             <div className='flex items-center w-full h-screen relative'>
                 <div className='flex flex-col items-center w-full h-screen relative overflow-hidden'>

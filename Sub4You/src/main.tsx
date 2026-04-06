@@ -128,7 +128,7 @@ const AppRouter = () => {
     try {
       await supabase.auth.signOut()
       setIsLoggedIn(false)
-      navigate('/home', { replace: true })
+      navigate('/', { replace: true })
     } catch (error) {
       console.error('Error signing out:', error)
     }

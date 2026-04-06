@@ -6,8 +6,14 @@ import { CgProfile, CgSearch } from 'react-icons/cg'
 import GradientText from './GradientText'
 import { THEME } from '../constants/theme'
 
+export interface NavItem {
+  label: string
+  path: string
+}
+
 interface TopBarProps {
   children?: ReactNode
+  navItems?: NavItem[]
   profileImageSrc?: string
   profileImageAlt?: string
   isLoggedIn?: boolean
@@ -25,6 +31,7 @@ interface TopBarProps {
  */
 export const TopBar = ({
   children,
+  navItems,
   profileImageSrc,
   profileImageAlt = 'Profile',
   isLoggedIn = false,
@@ -182,7 +189,7 @@ export const TopBar = ({
     blueOffset: 25,
     brightness: 60,
     opacity: 0.93,
-    mixBlendMode: 'screen' as const,
+    mixBlendMode: 'difference' as const,
     saturation: 1,
     blur: 7,
   }
@@ -216,8 +223,8 @@ export const TopBar = ({
     borderRadius: getResponsiveDropdownBorderRadius(),
   }
 
-  // Navigation items
-  const navItems = [
+  // Default navigation items if none provided
+  const defaultNavItems = [
     { label: 'Home', path: '/home' },
     { label: 'Messages', path: '/messages' },
     { label: 'Saved', path: '/saved' },
@@ -225,6 +232,7 @@ export const TopBar = ({
     { label: 'Support', path: '/help' },
   ]
 
+  const displayNavItems = navItems || defaultNavItems
   // Event handlers
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen)
@@ -345,7 +353,7 @@ export const TopBar = ({
           willChange: 'transform, opacity'
         }}
       >
-        {navItems.map((item) => (
+        {displayNavItems.map((item) => (
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
