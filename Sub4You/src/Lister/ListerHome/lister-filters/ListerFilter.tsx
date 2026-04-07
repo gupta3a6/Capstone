@@ -118,7 +118,7 @@ export const ListerFilter: React.FC<ListerFilterProps> = ({ onClose, onApply, in
         </div>
 
         {/* Scrollable Form Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-10 custom-scrollbar flex-1 pb-16">
+        <div className="p-6 sm:p-8 overflow-y-auto space-y-10 custom-scrollbar flex-1 pb-28 sm:pb-32">
           
           {/* Candidate Profile Details */}
           <section>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
 
@@ -19,6 +20,8 @@ interface SavedProperty {
 const MOCK_SAVED_PROPERTIES: SavedProperty[] = [];
 
 export const Saved = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Your Saved Places" message="Log in to view and manage your saved listings." />;
   const [savedData, setSavedData] = useState<SavedProperty[]>(MOCK_SAVED_PROPERTIES);
   const [selectedListing, setSelectedListing] = useState<SavedProperty | null>(null);
   const navigate = useNavigate();

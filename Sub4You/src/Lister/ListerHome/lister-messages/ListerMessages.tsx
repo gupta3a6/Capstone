@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useOutletContext } from 'react-router-dom';
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import SeekerViewProfile from '../../../Seeker/SeekerViewProfile/SeekerViewProfile';
 
@@ -67,6 +68,8 @@ const MOCK_THREADS = [
 ];
 
 export const ListerMessages = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to potential subleasers." />;
   const location = useLocation();
   
   // Conditionally initialize active thread based on incoming payload from ListerMatches
@@ -215,7 +218,7 @@ export const ListerMessages = () => {
         {showSeekerDetails && (
           <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar backdrop-blur-sm">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-extrabold text-black">Seeker Facts</h2>
+              <h2 className="text-xl font-extrabold text-black">About {activeThread.seeker.name}</h2>
               <button 
                 onClick={() => setShowSeekerDetails(false)}
                 className="p-1.5 rounded-full hover:bg-black/10 text-black/40 hover:text-black transition-colors"

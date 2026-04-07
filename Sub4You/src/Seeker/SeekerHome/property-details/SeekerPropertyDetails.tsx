@@ -216,20 +216,7 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
                         Hi! I am looking for a respectful and clean subtenant to take over my place for the specified lease duration. Feel free to send me a message directly if you have any questions or want to secure the unit!
                       </p>
                       
-                      <div className="space-y-3 pt-5 border-t border-black/10">
-                         <div className="flex items-center gap-4">
-                            <span className="font-medium text-gray-600 w-32">Speaks</span>
-                            <span className="font-bold text-gray-900">English</span>
-                         </div>
-                         <div className="flex items-center gap-4">
-                            <span className="font-medium text-gray-600 w-32">Response Rate</span>
-                            <span className="font-bold text-gray-900">100%</span>
-                         </div>
-                         <div className="flex items-center gap-4">
-                            <span className="font-medium text-gray-600 w-32">Response Time</span>
-                            <span className="font-bold text-gray-900">Within an hour</span>
-                         </div>
-                      </div>
+
                       
                       <button 
                         onClick={onSendMessage}
