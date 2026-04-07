@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import SeekerViewProfile from '../../../Seeker/SeekerViewProfile/SeekerViewProfile';
 
@@ -63,6 +64,8 @@ const MOCK_SEEKERS_SYNC = [
 ];
 
 export const ListerMatches = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Find Subleasers" message="Log in to view students matched with your listing." />;
   const navigate = useNavigate();
   const [sentMatches, setSentMatches] = useState<Record<string, string>>({});
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);

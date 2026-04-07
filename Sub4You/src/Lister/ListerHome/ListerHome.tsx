@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import { FiFilter } from 'react-icons/fi'
+import { FiFilter, FiHome } from 'react-icons/fi'
 import { Carousel } from '../../components/Carousel'
 import { SeekerCard } from '../../components/SeekerCard'
 import SeekerViewProfile from '../../Seeker/SeekerViewProfile/SeekerViewProfile'
@@ -12,20 +12,19 @@ export const ListerHome = () => {
   const [selectedProfileId, setSelectedProfileId] = useState<string | number | null>(null)
   
   // Connect cleanly into the Layout routing orchestrator to intercept global search text natively
-  const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {}
+  const { searchQuery, isLoggedIn } = useOutletContext<{ searchQuery?: string, isLoggedIn?: boolean }>() || {}
   const activeSearch = searchQuery?.trim().toLowerCase() || ''
 
   // Advanced Filtering Pipeline
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<any>(null);
+  
+  const [hasListings, setHasListings] = useState(false);
 
   useEffect(() => {
     const savedArr = localStorage.getItem('sub4you_lister_listings_array')
-    const hasListings = savedArr ? JSON.parse(savedArr).length > 0 : false
-    if (!hasListings) {
-      navigate('/lister/createlisting')
-    }
-  }, [navigate])
+    setHasListings(savedArr ? JSON.parse(savedArr).length > 0 : false)
+  }, [])
 
   // Dummy Seeker Data mimicking Seeker Profile Form elements
   const exampleSeekers = [
@@ -144,17 +143,19 @@ export const ListerHome = () => {
       )}
 
       {/* Persistent Filters Bar */}
-      <div className="w-full px-8 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10 max-w-[1400px] mx-auto">
-         <div className="flex-1 w-full sm:w-auto flex justify-start">
-            {renderFilterPills()}
-         </div>
-         <button 
-           onClick={() => setIsFilterOpen(true)} 
-           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
-         >
-            <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
-         </button>
-      </div>
+      {isLoggedIn && hasListings && (
+        <div className="w-full px-8 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10 max-w-[1400px] mx-auto">
+           <div className="flex-1 w-full sm:w-auto flex justify-start">
+              {renderFilterPills()}
+           </div>
+           <button 
+             onClick={() => setIsFilterOpen(true)} 
+             className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
+           >
+              <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
+           </button>
+        </div>
+      )}
 
       <div className="w-full min-h-screen pt-4 pb-24 px-8 max-w-[1400px] mx-auto z-10 relative">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
@@ -168,32 +169,47 @@ export const ListerHome = () => {
           </div>
         </div>
 
-        {activeSearch || appliedFilters ? (
-          finalResults.length === 0 ? (
-            <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
-              <p className="text-xl text-black/50 font-semibold">No students matched your search criteria.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {finalResults.map((seeker) => (
-                <SeekerCard
-                  key={seeker.id}
-                  id={seeker.id}
-                  name={seeker.name}
-                  age={seeker.age}
-                  gender={seeker.gender}
-                  major={(seeker as any).major}
-                  university={(seeker as any).university}
-                  year={(seeker as any).year}
-                  budget={seeker.budget}
-                  timeline={seeker.timeline}
-                  imageSrc={seeker.image}
-                  onClick={() => setSelectedProfileId(seeker.id)}
-                />
-              ))}
-            </div>
-          )
+        {(!isLoggedIn || !hasListings) ? (
+          <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white/40 backdrop-blur-md rounded-[32px] border border-white/60 shadow-sm mt-10">
+             <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center mb-6">
+                <FiHome size={40} className="text-black/80" /> 
+             </div>
+             <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Let's list your room</h2>
+             <p className="text-lg text-gray-600 font-medium mb-8 max-w-md">You need to have an active listing to view and match with students taking over leases.</p>
+             <button 
+               onClick={() => isLoggedIn ? navigate('/lister/createlisting') : navigate('/login')}
+               className="px-8 py-4 bg-black text-white rounded-xl font-bold text-[17px] hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+             >
+               {isLoggedIn ? 'Create a Listing' : 'Log in to List'}
+             </button>
+          </div>
         ) : (
+          activeSearch || appliedFilters ? (
+            finalResults.length === 0 ? (
+              <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
+                <p className="text-xl text-black/50 font-semibold">No students matched your search criteria.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {finalResults.map((seeker) => (
+                  <SeekerCard
+                    key={seeker.id}
+                    id={seeker.id}
+                    name={seeker.name}
+                    age={seeker.age}
+                    gender={seeker.gender}
+                    major={(seeker as any).major}
+                    university={(seeker as any).university}
+                    year={(seeker as any).year}
+                    budget={seeker.budget}
+                    timeline={seeker.timeline}
+                    imageSrc={seeker.image}
+                    onClick={() => setSelectedProfileId(seeker.id)}
+                  />
+                ))}
+              </div>
+            )
+          ) : (
           <>
             <Carousel
               items={exampleSeekers}
@@ -241,6 +257,7 @@ export const ListerHome = () => {
               />
             </div>
           </>
+          )
         )}
 
       </div>

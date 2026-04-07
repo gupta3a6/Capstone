@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
 
@@ -44,6 +45,8 @@ const INITIAL_REQUESTS: MatchRequest[] = [
 ];
 
 export const Matches = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Find Your Match" message="Log in to view your property and roommate matches." />;
   const navigate = useNavigate();
   const [requests, setRequests] = useState<MatchRequest[]>(INITIAL_REQUESTS);
   const [selectedListing, setSelectedListing] = useState<MatchRequest | null>(null);

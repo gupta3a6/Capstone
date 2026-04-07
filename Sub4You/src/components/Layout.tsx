@@ -57,7 +57,7 @@ export const Layout = ({
           />
         </div>
         <div className="">
-          {children || <Outlet context={{ searchQuery }} />}
+          {children || <Outlet context={{ searchQuery, isLoggedIn }} />}
         </div>
       </div>
     </PageBackground>

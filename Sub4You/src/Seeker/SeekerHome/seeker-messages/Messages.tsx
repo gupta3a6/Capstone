@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
 
@@ -78,6 +80,8 @@ const MOCK_THREADS = [
 ];
 
 export const Messages = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to listers." />;
   const [activeThread, setActiveThread] = useState(MOCK_THREADS[0]);
   const [inputText, setInputText] = useState("");
   const [showListingDetails, setShowListingDetails] = useState(true);

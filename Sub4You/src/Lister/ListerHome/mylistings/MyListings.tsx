@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { AuthPlaceholder } from '../../../components/AuthPlaceholder'
 
 import { PropertyCard } from '../../../components/PropertyCard'
 import RoomForSubleaseImage from '../../../assets/RoomForSublease.jpg'
@@ -7,6 +8,8 @@ import { getListerProperties, deleteListing } from '../../../lib/api'
 import { supabase } from '../../../lib/supabase'
 
 export const MyListings = () => {
+  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
+  if (!isLoggedIn) return <AuthPlaceholder title="Manage Listings" message="Log in to view and manage your active sublease listings." />;
   const navigate = useNavigate()
   const [listings, setListings] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)

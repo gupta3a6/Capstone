@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
-import { FiFilter, FiMap, FiList } from 'react-icons/fi'
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { FiFilter, FiMap, FiList, FiArrowLeft } from 'react-icons/fi'
 import { Carousel } from '../../components/Carousel'
 import { PropertyCard } from '../../components/PropertyCard'
 import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
@@ -14,6 +14,8 @@ export const SeekerHome = () => {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
   const [savedPropertyIds, setSavedPropertyIds] = useState<string[]>([]);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isMapView = searchParams.get('view') === 'map';
   
   // Realtime Search Mapping Pipeline
   const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {};
@@ -22,7 +24,18 @@ export const SeekerHome = () => {
   // Advanced Filtering Pipeline
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<any>(null);
-  const [isMapView, setIsMapView] = useState(false);
+
+  const setIsMapView = (val: boolean) => {
+    if (val) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('view', 'map');
+      setSearchParams(newParams);
+    } else {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('view');
+      setSearchParams(newParams);
+    }
+  };
 
   useEffect(() => {
     const fetchSavedState = () => {
@@ -231,19 +244,26 @@ export const SeekerHome = () => {
       </div>
 
       {activeSearch || appliedFilters || isMapView ? (
-        <div className={`w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative ${isMapView ? 'flex gap-6 max-h-[calc(100vh-140px)]' : ''}`}>
+        <div className={`w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative ${isMapView ? 'flex gap-6' : ''}`}>
           
-          <div className={`${isMapView ? 'w-full lg:w-[60%] overflow-y-auto custom-scrollbar pr-2 pb-10' : 'w-full'}`}>
+          <div className={`${isMapView ? 'hidden lg:block w-full lg:w-1/2 pr-2' : 'w-full'}`}>
             <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
-              <div>
-                <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
-                  {(activeSearch || appliedFilters) ? `Search Results (${finalResults.length})` : `All Properties (${finalResults.length})`}
-                </h1>
-                {activeSearch && (
-                  <p className="text-black/80 font-medium mt-2">
-                    Results matching "{searchQuery}"
-                  </p>
+              <div className="flex items-center gap-4">
+                {isMapView && (
+                  <button onClick={() => setIsMapView(false)} className="p-2 hover:bg-black/5 rounded-full transition-colors hidden sm:block">
+                    <FiArrowLeft size={24} />
+                  </button>
                 )}
+                <div>
+                  <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
+                    {isMapView ? 'Map View' : (activeSearch || appliedFilters) ? `Search Results (${finalResults.length})` : `All Properties (${finalResults.length})`}
+                  </h1>
+                  {activeSearch && (
+                    <p className="text-black/80 font-medium mt-2">
+                      Results matching "{searchQuery}"
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
             {finalResults.length === 0 ? (
@@ -251,7 +271,7 @@ export const SeekerHome = () => {
                 <p className="text-xl text-black/50 font-semibold">No properties matched your criteria.</p>
               </div>
             ) : (
-              <div className={`grid grid-cols-1 sm:grid-cols-2 ${isMapView ? 'xl:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'} gap-6`}>
+              <div className={`grid ${isMapView ? 'grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'} gap-6`}>
                 {finalResults.map((property) => (
                   <PropertyCard
                     key={property.id}
@@ -275,7 +295,7 @@ export const SeekerHome = () => {
           </div>
 
           {isMapView && (
-            <div className="hidden lg:block w-[40%] flex-shrink-0 h-[calc(100vh-140px)] sticky top-[10px] z-0">
+            <div className="w-full lg:w-1/2 flex-shrink-0 h-[calc(100vh-140px)] sticky top-[100px] z-0">
                <SeekerMap properties={finalResults} onMarkerClick={setSelectedProperty} />
             </div>
           )}
