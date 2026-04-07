@@ -3,7 +3,6 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import { FiFilter, FiMap, FiList } from 'react-icons/fi'
 import { Carousel } from '../../components/Carousel'
 import { PropertyCard } from '../../components/PropertyCard'
-<<<<<<< HEAD
 import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
 import { SeekerFilter } from './seeker-filter/SeekerFilter'
 import { SeekerMap } from './SeekerMap'
@@ -202,34 +201,8 @@ export const SeekerHome = () => {
              setAppliedFilters(filters); 
              setIsFilterOpen(false); 
            }} 
-=======
-import { useNavigate } from 'react-router-dom'
-import { mockProperties } from '../../data/mockProperties'
-
-export const SeekerHome = () => {
-  const navigate = useNavigate()
-
-  return (
-    <>
-    <Carousel
-      items={mockProperties}
-      itemsPerPage={4}
-      title="Featured Listings in Cincinnati"
-      renderItem={(property) => (
-        <PropertyCard
-          key={property.id}
-          name={property.name}
-          rent={property.rent}
-          subleasePeriod={property.subleasePeriod}
-          bedrooms={property.bedrooms}
-          location={property.location}
-          imageSrc={property.image}
-          onClick={() => navigate(`/property/${property.id}`)}
->>>>>>> origin/main
         />
       )}
-
-<<<<<<< HEAD
       {/* Persistent Filters Bar */}
       <div className="w-full px-4 sm:px-8 lg:px-12 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
          <div className="flex-1 w-full sm:w-auto flex justify-start">
@@ -420,22 +393,6 @@ export const SeekerHome = () => {
              setSelectedProperty(null);
              navigate('/seeker/messages', { state: { createThreadWith: selectedProperty.hostName, property: selectedProperty } });
           }}
-=======
-    <Carousel
-      items={mockProperties}
-      itemsPerPage={4}
-      title="Featured Listings in Cincinnati"
-      renderItem={(property) => (
-        <PropertyCard
-          key={property.id}
-          name={property.name}
-          rent={property.rent}
-          subleasePeriod={property.subleasePeriod}
-          bedrooms={property.bedrooms}
-          location={property.location}
-          imageSrc={property.image}
-          onClick={() => navigate(`/property/${property.id}`)}
->>>>>>> origin/main
         />
       )}
     </>

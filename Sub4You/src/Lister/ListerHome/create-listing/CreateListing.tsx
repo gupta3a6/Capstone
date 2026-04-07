@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { FiUploadCloud, FiX } from 'react-icons/fi'
 import { THEME } from '../../../constants/theme'
 import { supabase } from '../../../lib/supabase'
+import { uploadListing } from '../../../lib/api'
 
 const AMENITIES_OPTIONS = [
   'High-Speed WiFi', 'In-Unit Washer/Dryer', 'Air Conditioning',
@@ -19,6 +20,7 @@ export const CreateListing = () => {
   
   // Form State
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([])
+  const [photoFiles, setPhotoFiles] = useState<File[]>([])
   
   // Basic
   const [listingTitle, setListingTitle] = useState('')
@@ -134,14 +136,22 @@ export const CreateListing = () => {
     const files = e.target.files
     if (files) {
       let sizeError = false
+      const validFiles: File[] = []
+      
       Array.from(files).forEach(file => {
         if (file.size > 5 * 1024 * 1024) { sizeError = true; return }
+        validFiles.push(file)
+        
         const reader = new FileReader()
         reader.onloadend = () => {
           setPhotoPreviews(prev => [...prev, reader.result as string])
         }
         reader.readAsDataURL(file)
       })
+
+      if (validFiles.length > 0) {
+        setPhotoFiles(prev => [...prev, ...validFiles])
+      }
 
       if (sizeError) setError('One or more images must be less than 5MB')
       else setError(null)
@@ -150,6 +160,7 @@ export const CreateListing = () => {
 
   const removePhoto = (indexToRemove: number) => {
     setPhotoPreviews(prev => prev.filter((_, idx) => idx !== indexToRemove))
+    setPhotoFiles(prev => prev.filter((_, idx) => idx !== indexToRemove))
   }
 
   const handleSave = async (e: React.FormEvent) => {
@@ -189,31 +200,18 @@ export const CreateListing = () => {
       }
 
       const listingData = { 
-        id: editId || Date.now().toString(),
-        photoPreviews, listingTitle, address, city, stateCode, zipcode, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
+        listingTitle, address, city, stateCode, zipcode, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
         commuteType, commuteMinutes, moveInType, moveInSemesters, moveInDate, moveOutDate,
-        leaseDuration, description, amenities 
+        leaseDuration, description
       }
       
-      const savedArr = localStorage.getItem('sub4you_lister_listings_array')
-      let arr = savedArr ? JSON.parse(savedArr) : []
-      
-      if (editId) {
-         const idx = arr.findIndex((l: any) => l.id === editId)
-         if (idx >= 0) arr[idx] = listingData
-         else arr.push(listingData)
-      } else {
-         arr.push(listingData)
-      }
-      
-      localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(arr))
+      await uploadListing(session.user.id, listingData, photoFiles, amenities)
 
-      setTimeout(() => {
-        setIsLoading(false)
-        navigate('/lister/mylistings')
-      }, 800)
+      setIsLoading(false)
+      navigate('/lister/mylistings')
     } catch (err) {
-      setError('Failed to save listing')
+      console.error(err);
+      setError('Failed to securely save listing to database')
       setIsLoading(false)
     }
   }

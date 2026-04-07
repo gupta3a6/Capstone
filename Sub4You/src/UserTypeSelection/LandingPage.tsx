@@ -41,7 +41,6 @@ export const LandingPage = () => {
         }
     }
 
-<<<<<<< HEAD
     return (
         <PageBackground>
             <div className='flex flex-col items-center justify-center h-screen'>
@@ -52,32 +51,6 @@ export const LandingPage = () => {
                       src="/logo.png" 
                       alt="Sub4You Logo" 
                       className="h-14 sm:h-20 w-auto object-contain drop-shadow-md" 
-=======
-  return  (
-    <PageBackground>
-        <div className='flex flex-col items-center justify-center h-screen'>
-            <div 
-                className=' absolute top-10 z-20'
-                onClick={() => navigate('/')}>
-                <GradientText
-                        colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
-                        animationSpeed={15}
-                        showBorder={false}
-                        className="text-5xl font-bold"
-                >
-                        {'Sub4You'}
-                </GradientText>
-            </div>
-            <div className='flex items-center w-full h-screen relative'>
-                <div className='flex flex-col items-center w-full h-screen relative overflow-hidden'>
-                    <div
-                        className='absolute inset-0 bg-cover bg-center transition-transform duration-500 hover:scale-105'
-                        style={{ 
-                            backgroundImage: `url(${HouseShowingImage})`,
-                            maskImage: 'linear-gradient(to top, black 50%, transparent 85%)',
-                            WebkitMaskImage: 'linear-gradient(to top, black 50%, transparent 85%)'
-                            }}
->>>>>>> origin/main
                     />
                 </div>
                 <div className='flex items-center w-full h-screen relative'>

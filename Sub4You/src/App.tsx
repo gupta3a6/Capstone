@@ -1,5 +1,4 @@
 import Layout from "./components/Layout";
-<<<<<<< HEAD
 import SeekerHome from "./Seeker/SeekerHome/SeekerHome";
 import ListerHome from "./Lister/ListerHome/ListerHome";
 import SeekerCreateProfile from "./Seeker/SeekerHome/seeker-profile/SeekerCreateProfile";
@@ -13,11 +12,7 @@ import Support from "./Seeker/SeekerHome/seeker-support/Support";
 import Matches from "./Seeker/SeekerHome/seeker-matches/Matches";
 import Messages from "./Seeker/SeekerHome/seeker-messages/Messages";
 import Saved from "./Seeker/SeekerHome/seeker-saved/Saved";
-=======
-import SeekerHome from "./Seeker/SeekerHome/SeekerHome.tsx";
-import PropertyDetails from "./Seeker/PropertyDetails/PropertyDetails.tsx";
-import ListerHome from "./Lister/ListerHome/ListerHome.tsx";
->>>>>>> origin/main
+import PropertyDetails from "./Seeker/PropertyDetails/PropertyDetails";
 import { Routes, Route } from "react-router-dom";
 import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
 import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
@@ -67,7 +62,6 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
     {/* Lister Routes */}
     <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} navItems={listerNavItems} />}>
       <Route path="/lister/home" element={<ListerHome />} />
-<<<<<<< HEAD
       <Route path="/lister/createlisting" element={<CreateListing />} />
       <Route path="/lister/mylistings" element={<MyListings />} />
       <Route path="/lister/profile" element={<ListerCreateProfile />} />
@@ -80,9 +74,6 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
       <Route path="/seeker/support" element={<Support />} />
       <Route path="/lister/support" element={<ListerSupport />} />
       {/* Add other main app pages here that need the TopBar */}
-=======
-      {/* Add other lister specific routes here */}
->>>>>>> origin/main
     </Route>
 
     {/* Auth Routes - Standalone with AuthHandle */}
