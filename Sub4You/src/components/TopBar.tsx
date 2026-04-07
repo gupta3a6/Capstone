@@ -47,6 +47,18 @@ export const TopBar = ({
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const [localProfileImage, setLocalProfileImage] = useState<string | undefined>(profileImageSrc)
+  const [pendingMatchesCount, setPendingMatchesCount] = useState(0)
+
+  useEffect(() => {
+    const updateMatchesCount = () => {
+      const count = parseInt(localStorage.getItem('sub4you_pending_matches') || '0', 10);
+      setPendingMatchesCount(count);
+    };
+
+    updateMatchesCount();
+    window.addEventListener('matchesUpdated', updateMatchesCount);
+    return () => window.removeEventListener('matchesUpdated', updateMatchesCount);
+  }, []);
 
   useEffect(() => {
     setLocalProfileImage(profileImageSrc)
@@ -401,10 +413,15 @@ export const TopBar = ({
           <button
             key={item.path}
             onClick={() => handleNavClick(item.path)}
-            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
+            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110 relative`}
             aria-label={item.label}
           >
             {item.label}
+            {item.label === 'Matches' && !isLister && pendingMatchesCount > 0 && (
+              <span className="absolute -top-3 -right-3.5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-sm">
+                {pendingMatchesCount}
+              </span>
+            )}
           </button>
         ))}
       </div>

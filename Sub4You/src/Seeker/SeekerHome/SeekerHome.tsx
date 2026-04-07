@@ -8,6 +8,7 @@ import { SeekerFilter } from './seeker-filter/SeekerFilter'
 import { SeekerMap } from './SeekerMap'
 import HouseShowingImage from '../../assets/HouseShowing-image1.jpeg'
 import RoomForSubleaseImage from '../../assets/RoomForSublease.jpg'
+import { getProperties } from '../../lib/api'
 
 export const SeekerHome = () => {
   const [selectedProperty, setSelectedProperty] = useState<any>(null);
@@ -68,179 +69,57 @@ export const SeekerHome = () => {
     localStorage.setItem('sub4you_saved_properties', JSON.stringify(savedArr));
   };
 
-  const exampleproperties = [
-    {
-      id: 1,
-      name: 'Luxury Downtown Apartment',
-      title: 'Luxury Downtown Apartment w/ City Views',
-      address: 'Downtown, Cincinnati, Ohio',
-      rent: '1200',
-      utilities: '150',
-      subleasePeriod: 'May - Aug 2026',
-      moveInDate: 'May 1, 2026',
-      moveOutDate: 'August 31, 2026',
-      bedrooms: 2,
-      baths: 2,
-      sqft: '1100',
-      propertyType: 'Entire Apartment',
-      genderPref: 'Any',
-      commuteType: 'bus',
-      commuteMinutes: '10',
-      description: 'Stunning luxury apartment right in the heart of downtown Cincinnati! The building has premium amenities including a fully equipped fitness center, rooftop lounge, and 24/7 security. Perfect for summer interns or students working downtown.',
-      amenities: ['High-Speed WiFi', 'In-Unit Washer/Dryer', 'Air Conditioning', 'Gym/Fitness Center', 'Rooftop Access'],
-      location: 'Downtown',
-      image: HouseShowingImage,
-      images: [
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80',
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
-        'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80',
-        'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
-        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
-      ],
-      hostName: 'David K.',
-      hostAvatar: 'https://i.pravatar.cc/150?u=12',
-      lat: 39.1000, lng: -84.5100
-    },
-    {
-      id: 2,
-      name: 'Cozy Studio Near Campus',
-      title: 'Minimalist Cozy Studio directly across Campus',
-      address: 'University District, Cincinnati, Ohio',
-      rent: '850',
-      utilities: '80',
-      subleasePeriod: 'Jun - Aug 2026',
-      moveInDate: 'June 1, 2026',
-      moveOutDate: 'August 15, 2026',
-      bedrooms: 1,
-      baths: 1,
-      sqft: '450',
-      propertyType: 'Private Studio',
-      genderPref: 'Female',
-      commuteType: 'walk',
-      commuteMinutes: '5',
-      description: 'Super peaceful studio heavily preferred for someone quiet! Located literal steps away from campus so you can wake up 10 minutes before class. Fully furnished with a workstation and a queen bed.',
-      amenities: ['High-Speed WiFi', 'Heating', 'Fully Furnished', 'Utilities Included'],
-      location: 'University District',
-      image: RoomForSubleaseImage,
-      images: [
-        'https://images.unsplash.com/photo-1502672260266-1c1ea2a5098c?w=1000&q=80',
-        'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80',
-        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80',
-        'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
-        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',
-      ],
-      hostName: 'Sarah Jenkins',
-      hostAvatar: 'https://i.pravatar.cc/150?u=42',
-      lat: 39.1320, lng: -84.5150
-    },
-    {
-      id: 3,
-      name: 'Modern 3-Bedroom House',
-      title: 'Spacious Modern 3-Bedroom House with Backyard',
-      address: 'Northgate, Cincinnati, Ohio',
-      rent: '900',
-      utilities: '100',
-      subleasePeriod: 'Jan - May 2027',
-      moveInDate: 'January 10, 2027',
-      moveOutDate: 'May 30, 2027',
-      bedrooms: 3,
-      baths: 2.5,
-      sqft: '1850',
-      propertyType: 'Entire House',
-      genderPref: 'Male',
-      commuteType: 'drive',
-      commuteMinutes: '15',
-      description: 'Massive property best for a group of 3 friends! Has a fully renovated kitchen, attached double-garage, and a huge backyard with a fire pit that we just set up. Looking to sublease the entire house for the Spring semester.',
-      amenities: ['Parking Space', 'Dishwasher', 'In-Unit Washer/Dryer', 'Pet Friendly', 'Balcony/Patio'],
-      location: 'Northgate',
-      image: HouseShowingImage,
-      images: [
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=80',
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
-        'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80',
-        'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80',
-        'https://images.unsplash.com/photo-1583847268964-b28e503d982b?w=800&q=80',
-      ],
-      hostName: 'Alex Mercer',
-      hostAvatar: 'https://i.pravatar.cc/150?u=9',
-      lat: 39.2500, lng: -84.6000
-    },
-    {
-      id: 4,
-      name: 'Spacious Shared Room',
-      rent: '650',
-      subleasePeriod: 'Sep - Dec 2026',
-      bedrooms: 4,
-      location: 'Capitol Hill',
-      image: RoomForSubleaseImage,
-      lat: 39.1350, lng: -84.5200
-    },
-    {
-      id: 5,
-      name: 'Sunny 2-Bed Condo',
-      title: 'Beautiful Sunlit Condo near the River',
-      address: 'Hyde Park, Cincinnati, Ohio',
-      rent: '1400',
-      utilities: '0',
-      subleasePeriod: 'Aug - Dec 2026',
-      moveInDate: 'August 1, 2026',
-      moveOutDate: 'December 20, 2026',
-      bedrooms: 2,
-      baths: 2,
-      sqft: '1050',
-      propertyType: 'Condo',
-      genderPref: 'Any',
-      commuteType: 'drive',
-      commuteMinutes: '20',
-      description: 'A higher-end condo in a completely safe, walkable neighborhood with immediate access to cafes and parks. All utilities are included in the rent! Seeking responsible subtenants.',
-      amenities: ['Swimming Pool', 'Security System', 'Elevator', 'Utilities Included', 'Dishwasher'],
-      location: 'Hyde Park',
-      image: RoomForSubleaseImage,
-      images: [
-        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1000&q=80',
-        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80',
-        'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&q=80',
-        'https://images.unsplash.com/photo-1595526114101-9ccba7015093?w=800&q=80',
-        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',
-      ],
-      hostName: 'Emily & Mike',
-      hostAvatar: 'https://i.pravatar.cc/150?u=18',
-      lat: 39.1380, lng: -84.4440
-    },
-    {
-      id: 6,
-      name: 'Historic Brick House',
-      rent: '750',
-      subleasePeriod: 'May - Aug 2026',
-      bedrooms: 1,
-      location: 'Over-the-Rhine',
-      image: HouseShowingImage,
-      lat: 39.1100, lng: -84.5150
-    },
-    {
-      id: 7,
-      name: 'Modern Loft',
-      rent: '1,100',
-      subleasePeriod: 'Jun - Dec 2026',
-      bedrooms: 1,
-      location: 'Downtown',
-      image: RoomForSubleaseImage,
-      lat: 39.1050, lng: -84.5120
-    },
-    {
-      id: 8,
-      name: 'Campus View Apartment',
-      rent: '950',
-      subleasePeriod: 'Sep - May 2027',
-      bedrooms: 2,
-      location: 'University District',
-      image: HouseShowingImage,
-      lat: 39.1300, lng: -84.5180
+  const [properties, setProperties] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadRealData() {
+      setIsLoading(true);
+      const dbData = await getProperties();
+      
+      // Map the backend DB format into the precise format expected by the frontend UI
+      const mappedProps = dbData.map(p => ({
+        id: p.id,
+        name: p.title || 'Sublease',
+        title: p.title || 'Sublease',
+        address: `${p.street_address}, ${p.city}, ${p.state}`,
+        rent: p.monthly_rent,
+        utilities: p.estimated_utilities || 0,
+        subleasePeriod: `${p.available_from || 'Now'} - ${p.available_until || 'TBD'}`,
+        moveInDate: p.available_from,
+        moveOutDate: p.available_until,
+        bedrooms: p.bedrooms,
+        baths: p.bathrooms,
+        sqft: p.sqft || 0,
+        propertyType: p.property_type,
+        genderPref: p.gender_preference || 'Any',
+        commuteType: p.distance_type || 'drive',
+        commuteMinutes: p.estimated_commute_minutes || 0,
+        description: p.description || 'No description provided.',
+        amenities: p.listing_amenities?.map((la: any) => la.amenities.name) || [],
+        location: p.city || 'Unknown',
+        city: p.city,
+        state: p.state,
+        zipcode: p.zipcode,
+        image: p.listing_images?.[0]?.image_url || RoomForSubleaseImage,
+        images: p.listing_images?.length 
+          ? p.listing_images.map((img: any) => img.image_url)
+          : [RoomForSubleaseImage],
+        hostName: p.profiles ? `${p.profiles.first_name} ${p.profiles.last_name}` : 'Unknown Host',
+        hostAvatar: p.profiles?.profile_picture_url || 'https://i.pravatar.cc/150?u=Unknown',
+        lat: p.latitude || 39.1000, 
+        lng: p.longitude || -84.5100
+      }));
+      
+      setProperties(mappedProps);
+      setIsLoading(false);
     }
-  ]
+    
+    loadRealData();
+  }, []);
 
   const searchResults = activeSearch
-    ? exampleproperties.filter(p => {
+    ? properties.filter(p => {
         const term = activeSearch;
         return (
           (p.name && p.name.toLowerCase().includes(term)) ||
@@ -254,7 +133,7 @@ export const SeekerHome = () => {
           ((p as any).zipcode && (p as any).zipcode.includes(term))
         );
       })
-    : exampleproperties;
+    : properties;
 
   let finalResults = searchResults;
 
@@ -330,9 +209,23 @@ export const SeekerHome = () => {
          <div className="flex-1 w-full sm:w-auto flex justify-start">
             {renderFilterPills()}
          </div>
+
+         {/* Phase 2 Test Button */}
+         <button 
+           onClick={async () => {
+             console.log("Testing connection...");
+             const properties = await getProperties();
+             console.log("Successfully fetched properties from Supabase:", properties);
+             alert("Connection works! Check your browser console to see the JSON data returned from the database.");
+           }}
+           className="flex items-center gap-2 px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-bold transition-all shadow-lg shrink-0 ml-auto"
+         >
+           Test Database Connection
+         </button>
+
          <button 
            onClick={() => setIsFilterOpen(true)} 
-           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
+           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-2"
          >
             <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
          </button>
@@ -391,12 +284,23 @@ export const SeekerHome = () => {
         </div>
       ) : (
         <div className="w-full mx-auto pb-24 z-10 relative">
-          <div className="-mt-6">
-            <Carousel
-            items={exampleproperties}
+          {isLoading && (
+            <div className="w-full h-40 flex items-center justify-center text-black/50 font-bold">
+              Fetching properties...
+            </div>
+          )}
+          {!isLoading && properties.length === 0 && (
+            <div className="w-full h-40 flex items-center justify-center text-black/50 font-bold bg-white/20 rounded-xl mt-4">
+              Your property feed is empty! Go create a test property in Supabase.
+            </div>
+          )}
+          {!isLoading && properties.length > 0 && (
+            <div className="-mt-6">
+              <Carousel
+              items={properties}
             itemsPerPage={4}
             title="Featured Listings in Cincinnati"
-            renderItem={(property) => (
+            renderItem={(property: any) => (
               <PropertyCard
                 key={property.id}
                 name={property.name}
@@ -417,10 +321,10 @@ export const SeekerHome = () => {
           />
 
           <Carousel
-        items={exampleproperties}
+        items={properties}
         itemsPerPage={4}
         title="Featured Listings in Cincinnati"
-        renderItem={(property) => (
+        renderItem={(property: any) => (
           <PropertyCard
             key={property.id}
             name={property.name}
@@ -441,10 +345,10 @@ export const SeekerHome = () => {
       />
 
       <Carousel
-        items={exampleproperties}
+        items={properties}
         itemsPerPage={4}
         title="Featured Listings in Cincinnati"
-        renderItem={(property) => (
+        renderItem={(property: any) => (
           <PropertyCard
             key={property.id}
             name={property.name}
@@ -464,6 +368,7 @@ export const SeekerHome = () => {
         )}
           />
           </div>
+          )}
         </div>
       )}
       

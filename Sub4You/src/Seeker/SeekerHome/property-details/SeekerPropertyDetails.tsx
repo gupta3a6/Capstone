@@ -273,8 +273,6 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
                 >
                   Send a message
                 </button>
-                
-                <p className="text-center text-[14px] text-gray-500 mt-4 font-semibold opacity-80">You won't be charged yet</p>
 
                 <div className="mt-8 border-t border-black/10 pt-6">
                    <div className="flex justify-between items-center mb-4">
