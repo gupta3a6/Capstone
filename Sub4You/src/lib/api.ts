@@ -30,6 +30,38 @@ export async function getProperties(): Promise<JoinedPropertyListing[]> {
   }
 }
 
+export async function getListerProperties(listerId: string): Promise<JoinedPropertyListing[]> {
+  try {
+    const { data, error } = await supabase
+      .from('property_listings')
+      .select(`
+        *,
+        profiles (*),
+        listing_images (*),
+        listing_amenities ( amenities (*) )
+      `)
+      .eq('lister_id', listerId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return (data || []) as JoinedPropertyListing[];
+  } catch (error) {
+    console.error('Unexpected error in getListerProperties:', error);
+    return [];
+  }
+}
+
+export async function deleteListing(listingId: number) {
+  try {
+    const { error } = await supabase.from('property_listings').delete().eq('id', listingId);
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.error('Error deleting listing:', err);
+    return false;
+  }
+}
+
 export async function uploadListing(userId: string, formData: any, photoFiles: File[], selectedAmenities: string[]) {
   try {
     // 1. Insert into property_listings

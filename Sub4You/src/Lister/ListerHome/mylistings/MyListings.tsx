@@ -3,39 +3,75 @@ import { useNavigate } from 'react-router-dom'
 
 import { PropertyCard } from '../../../components/PropertyCard'
 import RoomForSubleaseImage from '../../../assets/RoomForSublease.jpg'
+import { getListerProperties, deleteListing } from '../../../lib/api'
+import { supabase } from '../../../lib/supabase'
 
 export const MyListings = () => {
   const navigate = useNavigate()
   const [listings, setListings] = useState<any[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const fetchListings = () => {
-      const savedJson = localStorage.getItem('sub4you_lister_listings_array')
-      if (savedJson) {
-        try {
-          const parsed = JSON.parse(savedJson)
-          // ensure it's an array
-          if (Array.isArray(parsed)) {
-            setListings(parsed)
-          } else {
-            // Migrating the old legacy data format automatically to new array format if exists
-            setListings([parsed])
-            localStorage.setItem('sub4you_lister_listings_array', JSON.stringify([parsed]))
-          }
-        } catch (e) {
-          console.error("Failed to parse listings array", e)
+    const fetchListings = async () => {
+      try {
+        setIsLoading(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+           const dbData = await getListerProperties(session.user.id);
+           
+           // Map database structure safely
+           const mappedProps = dbData.map(p => ({
+             id: p.id,
+             listingTitle: p.title || 'Sublease',
+             address: p.street_address,
+             city: p.city,
+             stateCode: p.state,
+             zipcode: p.zipcode,
+             rent: p.monthly_rent || 0,
+             beds: p.bedrooms || 0,
+             photoPreviews: p.listing_images?.map((img: any) => img.image_url) || [],
+             moveInType: p.availability_type,
+             moveInDate: p.available_from,
+             moveOutDate: p.available_until
+           }));
+           setListings(mappedProps);
+        } else {
+           // Fallback to legacy local format for non-authed devs
+           const savedJson = localStorage.getItem('sub4you_lister_listings_array')
+           if (savedJson) {
+             const parsed = JSON.parse(savedJson)
+             setListings(Array.isArray(parsed) ? parsed : [parsed])
+           }
         }
+      } catch (e) {
+        console.error("Failed to load listings", e)
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchListings()
   }, [])
 
-  const handleDelete = (e: React.MouseEvent, id: string) => {
+  const handleDelete = async (e: React.MouseEvent, id: string | number) => {
     e.stopPropagation()
     if (window.confirm('Are you certain you want to permanently delete this listing?')) {
-      const updatedListings = listings.filter(item => item.id !== id)
-      setListings(updatedListings)
-      localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(updatedListings))
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session && typeof id === 'number') {
+        // Live Database delete
+        const success = await deleteListing(id);
+        if (success) {
+           setListings(listings.filter(item => item.id !== id));
+        } else {
+           alert("Failed to delete from database");
+        }
+      } else {
+        // Localstorage legacy delete
+        const updatedListings = listings.filter(item => item.id !== id)
+        setListings(updatedListings)
+        localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(updatedListings))
+      }
     }
   }
 
@@ -56,7 +92,11 @@ export const MyListings = () => {
           </button>
         </div>
 
-        {listings.length === 0 ? (
+        {isLoading ? (
+          <div className="w-full flex justify-center items-center h-64 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
+            <p className="text-xl text-white/50 font-semibold">Loading your listings...</p>
+          </div>
+        ) : listings.length === 0 ? (
           <div className="w-full flex justify-center items-center h-64 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
             <p className="text-xl text-white/50 font-semibold">You don't have any active listings yet.</p>
           </div>
@@ -86,9 +126,9 @@ export const MyListings = () => {
                      <PropertyCard
                        imageSrc={imgData}
                        name={item.listingTitle || item.address || 'Untitled Listing'}
-                       rent={item.rent || '0'}
+                       rent={item.rent?.toString() || '0'}
                        subleasePeriod={timeStr}
-                       bedrooms={parseInt(item.beds) || 0}
+                       bedrooms={parseFloat(item.beds) || 0}
                        location={item.address || 'Unknown Location'}
                        address={item.address}
                        city={item.city}
