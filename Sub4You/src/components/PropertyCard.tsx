@@ -92,14 +92,13 @@ export const PropertyCard = ({
 
         <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-4">
           <div className="flex flex-col">
-            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Period</span>
+            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Duration</span>
             <span className={`${THEME.light.classes.text} font-medium text-sm`}>{subleasePeriod}</span>
           </div>
           <div className="flex flex-col items-end">
-            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Bedrooms</span>
+            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Rooms Available</span>
             <span className={`${THEME.light.classes.text} font-medium text-sm flex items-center gap-1`}>
               {bedrooms}
-              <IoHomeOutline />
             </span>
           </div>
         </div>

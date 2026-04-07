@@ -2,9 +2,11 @@ import { useState, type ReactNode } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import PageBackground from './PageBackground'
 import TopBar from './TopBar'
+import type { NavItem } from './TopBar'
 
 interface LayoutProps {
   children?: ReactNode
+  navItems?: NavItem[]
   isLoggedIn?: boolean
   profileImageSrc?: string
   profileImageAlt?: string
@@ -22,6 +24,7 @@ interface LayoutProps {
  */
 export const Layout = ({
   children,
+  navItems,
   isLoggedIn = false,
   profileImageSrc,
   profileImageAlt,
@@ -40,6 +43,7 @@ export const Layout = ({
       <div className="flex flex-col min-h-screen">
         <div className="sticky top-0 z-50">
           <TopBar
+            navItems={navItems}
             isLoggedIn={isLoggedIn}
             profileImageSrc={profileImageSrc}
             profileImageAlt={profileImageAlt}
