@@ -1,0 +1,7 @@
+Our UI design prioritizes a seamless user experience (UX) tailored for mobile users. Rakshana led the visual components and frontend feature ideation to ensure an intuitive flow.
+
+**Core Views:**
+    * **Login/Registration:** Secure authentication portal.
+    * **Home/Feed:** Displays available subleases with high-quality images and critical details (price, distance, dates).
+    * **Listing Creation:** A guided form for users to upload their sublease details.
+    * **Profile/Settings:** User management and active listing tracking.
