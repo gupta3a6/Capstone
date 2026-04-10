@@ -1,0 +1,27 @@
+Summary of Hours and Justification
+Team Member: Akarsh Gupta
+Fall Semester: 35 hours ($1,050 equivalent at $30/hr)
+
+Spring Semester: 40 hours ($1,200 equivalent at $30/hr)
+
+Total Year: 75 hours ($2,250 equivalent)
+
+Justification: Activities centered on establishing the technical infrastructure and backend architecture for the Sub4You mobile application. Fall semester involved designing the native Swift codebase using the MVVM architectural pattern, setting up project directories, and architecting the database schema to manage student listings. Spring semester efforts focused on implementing secure user authentication, developing the API endpoints to handle sublease data transfer, integrating those backend data streams with the Swift ViewModels, and finalizing deployment configurations.
+
+Evidence: [Link to Akarsh's GitHub Commits / Engineering Notebook]
+
+Team Member: Rakshana
+Fall Semester: 30 hours ($900 equivalent at $30/hr)
+
+Spring Semester: 38 hours ($1,140 equivalent at $30/hr)
+
+Total Year: 68 hours ($2,040 equivalent)
+
+Justification: Activities focused on feature ideation, frontend component development, and visual design. Fall semester included wireframing the user interface, defining the mobile user experience flow tailored for student subleasers, and creating high-fidelity mockups. Spring semester effort was dedicated to translating these visual designs into functional frontend components within the Swift environment, implementing the core user-facing views (such as the main feed and listing creation screens), and iterating on visual feedback to ensure an intuitive mobile experience.
+
+Evidence: [Link to Rakshana's GitHub Commits / Design Notebook]
+
+Project Totals
+Total Project Effort: 143 hours
+
+Total Project Value: $4,290 equivalent
