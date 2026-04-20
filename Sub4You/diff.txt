@@ -1,0 +1,2107 @@
+﻿diff --git a/Sub4You/package-lock.json b/Sub4You/package-lock.json
+index db9a302..14e7e0b 100644
+--- a/Sub4You/package-lock.json
++++ b/Sub4You/package-lock.json
+@@ -89,7 +89,6 @@
+       "integrity": "sha512-e7jT4DxYvIDLk1ZHmU/m/mB19rex9sv0c2ftBtjSBv+kVM/902eh0fINUzD7UwLLNR+jU585GxUJ8/EBfAM5fw==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/code-frame": "^7.27.1",
+         "@babel/generator": "^7.28.5",
+@@ -1169,7 +1168,6 @@
+       "resolved": "https://registry.npmjs.org/@react-three/fiber/-/fiber-9.4.0.tgz",
+       "integrity": "sha512-k4iu1R6e5D54918V4sqmISUkI5OgTw3v7/sDRKEC632Wd5g2WBtUS5gyG63X0GJO/HZUj1tsjSXfyzwrUHZl1g==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.17.8",
+         "@types/react-reconciler": "^0.32.0",
+@@ -2000,7 +1998,6 @@
+       "resolved": "https://registry.npmjs.org/@types/react/-/react-19.2.2.tgz",
+       "integrity": "sha512-6mDvHUFSjyT2B2yeNx2nUgMxh9LtOWvkhIU3uePn2I2oyNymUAX1NIsdgviM4CH+JSrp2D2hsMvJOkxY+0wNRA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "csstype": "^3.0.2"
+       }
+@@ -2035,7 +2032,6 @@
+       "resolved": "https://registry.npmjs.org/@types/three/-/three-0.181.0.tgz",
+       "integrity": "sha512-MLF1ks8yRM2k71D7RprFpDb9DOX0p22DbdPqT/uAkc6AtQXjxWCVDjCy23G9t1o8HcQPk7woD2NIyiaWcWPYmA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@dimforge/rapier3d-compat": "~0.12.0",
+         "@tweenjs/tween.js": "~23.1.3",
+@@ -2107,7 +2103,6 @@
+       "integrity": "sha512-tK3GPFWbirvNgsNKto+UmB/cRtn6TZfyw0D6IKrW55n6Vbs7KJoZtI//kpTKzE/DUmmnAFD8/Ca46s7Obs92/w==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@typescript-eslint/scope-manager": "8.46.4",
+         "@typescript-eslint/types": "8.46.4",
+@@ -2384,7 +2379,6 @@
+       "integrity": "sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "bin": {
+         "acorn": "bin/acorn"
+       },
+@@ -2570,7 +2564,6 @@
+         }
+       ],
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "baseline-browser-mapping": "^2.8.25",
+         "caniuse-lite": "^1.0.30001754",
+@@ -2918,7 +2911,6 @@
+       "integrity": "sha512-BhHmn2yNOFA9H9JmmIVKJmd288g9hrVRDkdoIgRCRuSySRUHH7r/DI6aAXW9T1WwUuY3DFgrcaqB+deURBLR5g==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@eslint-community/eslint-utils": "^4.8.0",
+         "@eslint-community/regexpp": "^4.12.1",
+@@ -3542,8 +3534,7 @@
+       "version": "1.9.4",
+       "resolved": "https://registry.npmjs.org/leaflet/-/leaflet-1.9.4.tgz",
+       "integrity": "sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==",
+-      "license": "BSD-2-Clause",
+-      "peer": true
++      "license": "BSD-2-Clause"
+     },
+     "node_modules/levn": {
+       "version": "0.4.1",
+@@ -4115,7 +4106,6 @@
+         }
+       ],
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "nanoid": "^3.3.11",
+         "picocolors": "^1.1.1",
+@@ -4194,7 +4184,6 @@
+       "resolved": "https://registry.npmjs.org/react/-/react-19.2.0.tgz",
+       "integrity": "sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=0.10.0"
+       }
+@@ -4204,7 +4193,6 @@
+       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz",
+       "integrity": "sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "scheduler": "^0.27.0"
+       },
+@@ -4543,8 +4531,7 @@
+       "version": "4.1.17",
+       "resolved": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.17.tgz",
+       "integrity": "sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/tailwindcss-animate": {
+       "version": "1.0.7",
+@@ -4573,8 +4560,7 @@
+       "version": "0.181.1",
+       "resolved": "https://registry.npmjs.org/three/-/three-0.181.1.tgz",
+       "integrity": "sha512-bz9xZUQMw3pJbjKy7roiwXWgAp+oVUa+4k5o0oBAQ+IFJuru1xzvtk63h6k72XZanXS/SgoEhV6927Vgazyq2w==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/three-mesh-bvh": {
+       "version": "0.8.3",
+@@ -4649,7 +4635,6 @@
+       "integrity": "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=12"
+       },
+@@ -4775,7 +4760,6 @@
+       "integrity": "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==",
+       "dev": true,
+       "license": "Apache-2.0",
+-      "peer": true,
+       "bin": {
+         "tsc": "bin/tsc",
+         "tsserver": "bin/tsserver"
+@@ -4879,7 +4863,6 @@
+       "integrity": "sha512-BxAKBWmIbrDgrokdGZH1IgkIk/5mMHDreLDmCJ0qpyJaAteP8NvMhkwr/ZCQNqNH97bw/dANTE9PDzqwJghfMQ==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "esbuild": "^0.25.0",
+         "fdir": "^6.5.0",
+@@ -4973,7 +4956,6 @@
+       "integrity": "sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==",
+       "dev": true,
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=12"
+       },
+diff --git a/Sub4You/src/App.tsx b/Sub4You/src/App.tsx
+index 20bc6a3..9ffaf41 100644
+--- a/Sub4You/src/App.tsx
++++ b/Sub4You/src/App.tsx
+@@ -12,28 +12,11 @@ import Support from "./Seeker/SeekerHome/seeker-support/Support";
+ import Matches from "./Seeker/SeekerHome/seeker-matches/Matches";
+ import Messages from "./Seeker/SeekerHome/seeker-messages/Messages";
+ import Saved from "./Seeker/SeekerHome/seeker-saved/Saved";
+-import PropertyDetails from "./Seeker/PropertyDetails/PropertyDetails";
+ import { Routes, Route } from "react-router-dom";
+ import { LoginPage } from './AuthPage/LoginPage/LoginPage.tsx'
+ import { SignUpPage } from './AuthPage/SignUpPage/SignUpPage.tsx'
+ import AuthHandle from './AuthPage/AuthHandle.tsx'
+ import { LandingPage } from './UserTypeSelection/LandingPage.tsx'
+-import type { NavItem } from './components/TopBar'
+-
+-const seekerNavItems: NavItem[] = [
+-  { label: 'Home', path: '/seeker/home' },
+-  { label: 'Messages', path: '/messages' },
+-  { label: 'Matches', path: '/matches' },
+-  { label: 'Saved', path: '/saved' },
+-  { label: 'Support', path: '/help' },
+-]
+-
+-const listerNavItems: NavItem[] = [
+-  { label: 'Home', path: '/lister/home' },
+-  { label: 'Messages', path: '/messages' },
+-  { label: 'My Listings', path: '/lister/listings' },
+-  { label: 'Support', path: '/help' },
+-]
+ 
+ interface AppProps {
+   isLoggedIn?: boolean
+@@ -51,16 +34,8 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
+     <Route path="/" element={<LandingPage />} />
+ 
+     {/* Main App Routes - Accessible to everyone with Layout */}
+-    
+-    {/* Seeker Routes */}
+-    <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} navItems={seekerNavItems} />}>
++    <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} />}>
+       <Route path="/seeker/home" element={<SeekerHome />} />
+-      <Route path="/property/:id" element={<PropertyDetails />} />
+-      {/* Add other seeker specific routes here */}
+-    </Route>
+-
+-    {/* Lister Routes */}
+-    <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} navItems={listerNavItems} />}>
+       <Route path="/lister/home" element={<ListerHome />} />
+       <Route path="/lister/createlisting" element={<CreateListing />} />
+       <Route path="/lister/mylistings" element={<MyListings />} />
+diff --git a/Sub4You/src/AuthPage/SignUpPage/SignUpPage.tsx b/Sub4You/src/AuthPage/SignUpPage/SignUpPage.tsx
+index 15228c8..8b7dc4a 100644
+--- a/Sub4You/src/AuthPage/SignUpPage/SignUpPage.tsx
++++ b/Sub4You/src/AuthPage/SignUpPage/SignUpPage.tsx
+@@ -266,7 +266,7 @@ export const SignUpPage = () => {
+                       supabase.auth.getSession().then(({ data: { session } }) => {
+                         if (session) {
+                           setNeedsEmailVerification(false)
+-                          navigate('/seeker/Home')
++                          navigate('/')
+                         }
+                       })
+                     }}
+diff --git a/Sub4You/src/Lister/ListerHome/ListerHome.tsx b/Sub4You/src/Lister/ListerHome/ListerHome.tsx
+index c8e9c3c..73941dd 100644
+--- a/Sub4You/src/Lister/ListerHome/ListerHome.tsx
++++ b/Sub4You/src/Lister/ListerHome/ListerHome.tsx
+@@ -1,7 +1,7 @@
+ import { useEffect, useState } from 'react'
+ 
+ import { useNavigate, useOutletContext } from 'react-router-dom'
+-import { FiFilter } from 'react-icons/fi'
++import { FiFilter, FiHome } from 'react-icons/fi'
+ import { Carousel } from '../../components/Carousel'
+ import { SeekerCard } from '../../components/SeekerCard'
+ import SeekerViewProfile from '../../Seeker/SeekerViewProfile/SeekerViewProfile'
+@@ -12,20 +12,19 @@ export const ListerHome = () => {
+   const [selectedProfileId, setSelectedProfileId] = useState<string | number | null>(null)
+   
+   // Connect cleanly into the Layout routing orchestrator to intercept global search text natively
+-  const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {}
++  const { searchQuery, isLoggedIn } = useOutletContext<{ searchQuery?: string, isLoggedIn?: boolean }>() || {}
+   const activeSearch = searchQuery?.trim().toLowerCase() || ''
+ 
+   // Advanced Filtering Pipeline
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
+   const [appliedFilters, setAppliedFilters] = useState<any>(null);
++  
++  const [hasListings, setHasListings] = useState(false);
+ 
+   useEffect(() => {
+     const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+-    const hasListings = savedArr ? JSON.parse(savedArr).length > 0 : false
+-    if (!hasListings) {
+-      navigate('/lister/createlisting')
+-    }
+-  }, [navigate])
++    setHasListings(savedArr ? JSON.parse(savedArr).length > 0 : false)
++  }, [])
+ 
+   // Dummy Seeker Data mimicking Seeker Profile Form elements
+   const exampleSeekers = [
+@@ -144,17 +143,19 @@ export const ListerHome = () => {
+       )}
+ 
+       {/* Persistent Filters Bar */}
+-      <div className="w-full px-8 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10 max-w-[1400px] mx-auto">
+-         <div className="flex-1 w-full sm:w-auto flex justify-start">
+-            {renderFilterPills()}
+-         </div>
+-         <button 
+-           onClick={() => setIsFilterOpen(true)} 
+-           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
+-         >
+-            <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
+-         </button>
+-      </div>
++      {isLoggedIn && hasListings && (
++        <div className="w-full px-8 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10 max-w-[1400px] mx-auto">
++           <div className="flex-1 w-full sm:w-auto flex justify-start">
++              {renderFilterPills()}
++           </div>
++           <button 
++             onClick={() => setIsFilterOpen(true)} 
++             className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
++           >
++              <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
++           </button>
++        </div>
++      )}
+ 
+       <div className="w-full min-h-screen pt-4 pb-24 px-8 max-w-[1400px] mx-auto z-10 relative">
+         <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+@@ -168,32 +169,47 @@ export const ListerHome = () => {
+           </div>
+         </div>
+ 
+-        {activeSearch || appliedFilters ? (
+-          finalResults.length === 0 ? (
+-            <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
+-              <p className="text-xl text-black/50 font-semibold">No students matched your search criteria.</p>
+-            </div>
+-          ) : (
+-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+-              {finalResults.map((seeker) => (
+-                <SeekerCard
+-                  key={seeker.id}
+-                  id={seeker.id}
+-                  name={seeker.name}
+-                  age={seeker.age}
+-                  gender={seeker.gender}
+-                  major={(seeker as any).major}
+-                  university={(seeker as any).university}
+-                  year={(seeker as any).year}
+-                  budget={seeker.budget}
+-                  timeline={seeker.timeline}
+-                  imageSrc={seeker.image}
+-                  onClick={() => setSelectedProfileId(seeker.id)}
+-                />
+-              ))}
+-            </div>
+-          )
++        {(!isLoggedIn || !hasListings) ? (
++          <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white/40 backdrop-blur-md rounded-[32px] border border-white/60 shadow-sm mt-10">
++             <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center mb-6">
++                <FiHome size={40} className="text-black/80" /> 
++             </div>
++             <h2 className="text-3xl font-extrabold text-gray-900 mb-4">Let's list your room</h2>
++             <p className="text-lg text-gray-600 font-medium mb-8 max-w-md">You need to have an active listing to view and match with students taking over leases.</p>
++             <button 
++               onClick={() => isLoggedIn ? navigate('/lister/createlisting') : navigate('/login')}
++               className="px-8 py-4 bg-black text-white rounded-xl font-bold text-[17px] hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
++             >
++               {isLoggedIn ? 'Create a Listing' : 'Log in to List'}
++             </button>
++          </div>
+         ) : (
++          activeSearch || appliedFilters ? (
++            finalResults.length === 0 ? (
++              <div className="w-full flex justify-center items-center h-64 bg-black/5 backdrop-blur-md rounded-3xl border border-black/10">
++                <p className="text-xl text-black/50 font-semibold">No students matched your search criteria.</p>
++              </div>
++            ) : (
++              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
++                {finalResults.map((seeker) => (
++                  <SeekerCard
++                    key={seeker.id}
++                    id={seeker.id}
++                    name={seeker.name}
++                    age={seeker.age}
++                    gender={seeker.gender}
++                    major={(seeker as any).major}
++                    university={(seeker as any).university}
++                    year={(seeker as any).year}
++                    budget={seeker.budget}
++                    timeline={seeker.timeline}
++                    imageSrc={seeker.image}
++                    onClick={() => setSelectedProfileId(seeker.id)}
++                  />
++                ))}
++              </div>
++            )
++          ) : (
+           <>
+             <Carousel
+               items={exampleSeekers}
+@@ -241,6 +257,7 @@ export const ListerHome = () => {
+               />
+             </div>
+           </>
++          )
+         )}
+ 
+       </div>
+diff --git a/Sub4You/src/Lister/ListerHome/create-listing/CreateListing.tsx b/Sub4You/src/Lister/ListerHome/create-listing/CreateListing.tsx
+index 0e8acd8..56c4f52 100644
+--- a/Sub4You/src/Lister/ListerHome/create-listing/CreateListing.tsx
++++ b/Sub4You/src/Lister/ListerHome/create-listing/CreateListing.tsx
+@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
+ import { FiUploadCloud, FiX } from 'react-icons/fi'
+ import { THEME } from '../../../constants/theme'
+ import { supabase } from '../../../lib/supabase'
+-import { uploadListing } from '../../../lib/api'
+ 
+ const AMENITIES_OPTIONS = [
+   'High-Speed WiFi', 'In-Unit Washer/Dryer', 'Air Conditioning',
+@@ -20,7 +19,6 @@ export const CreateListing = () => {
+   
+   // Form State
+   const [photoPreviews, setPhotoPreviews] = useState<string[]>([])
+-  const [photoFiles, setPhotoFiles] = useState<File[]>([])
+   
+   // Basic
+   const [listingTitle, setListingTitle] = useState('')
+@@ -136,12 +134,8 @@ export const CreateListing = () => {
+     const files = e.target.files
+     if (files) {
+       let sizeError = false
+-      const validFiles: File[] = []
+-      
+       Array.from(files).forEach(file => {
+         if (file.size > 5 * 1024 * 1024) { sizeError = true; return }
+-        validFiles.push(file)
+-        
+         const reader = new FileReader()
+         reader.onloadend = () => {
+           setPhotoPreviews(prev => [...prev, reader.result as string])
+@@ -149,10 +143,6 @@ export const CreateListing = () => {
+         reader.readAsDataURL(file)
+       })
+ 
+-      if (validFiles.length > 0) {
+-        setPhotoFiles(prev => [...prev, ...validFiles])
+-      }
+-
+       if (sizeError) setError('One or more images must be less than 5MB')
+       else setError(null)
+     }
+@@ -160,7 +150,6 @@ export const CreateListing = () => {
+ 
+   const removePhoto = (indexToRemove: number) => {
+     setPhotoPreviews(prev => prev.filter((_, idx) => idx !== indexToRemove))
+-    setPhotoFiles(prev => prev.filter((_, idx) => idx !== indexToRemove))
+   }
+ 
+   const handleSave = async (e: React.FormEvent) => {
+@@ -200,18 +189,31 @@ export const CreateListing = () => {
+       }
+ 
+       const listingData = { 
+-        listingTitle, address, city, stateCode, zipcode, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
++        id: editId || Date.now().toString(),
++        photoPreviews, listingTitle, address, city, stateCode, zipcode, rent, utilities, propertyType, beds, baths, bathroomType, sqft, genderPref,
+         commuteType, commuteMinutes, moveInType, moveInSemesters, moveInDate, moveOutDate,
+-        leaseDuration, description
++        leaseDuration, description, amenities 
+       }
+       
+-      await uploadListing(session.user.id, listingData, photoFiles, amenities)
++      const savedArr = localStorage.getItem('sub4you_lister_listings_array')
++      let arr = savedArr ? JSON.parse(savedArr) : []
++      
++      if (editId) {
++         const idx = arr.findIndex((l: any) => l.id === editId)
++         if (idx >= 0) arr[idx] = listingData
++         else arr.push(listingData)
++      } else {
++         arr.push(listingData)
++      }
++      
++      localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(arr))
+ 
+-      setIsLoading(false)
+-      navigate('/lister/mylistings')
++      setTimeout(() => {
++        setIsLoading(false)
++        navigate('/lister/mylistings')
++      }, 800)
+     } catch (err) {
+-      console.error(err);
+-      setError('Failed to securely save listing to database')
++      setError('Failed to save listing')
+       setIsLoading(false)
+     }
+   }
+diff --git a/Sub4You/src/Lister/ListerHome/lister-filters/ListerFilter.tsx b/Sub4You/src/Lister/ListerHome/lister-filters/ListerFilter.tsx
+index b9062c7..3fa6acd 100644
+--- a/Sub4You/src/Lister/ListerHome/lister-filters/ListerFilter.tsx
++++ b/Sub4You/src/Lister/ListerHome/lister-filters/ListerFilter.tsx
+@@ -118,7 +118,7 @@ export const ListerFilter: React.FC<ListerFilterProps> = ({ onClose, onApply, in
+         </div>
+ 
+         {/* Scrollable Form Body */}
+-        <div className="p-6 sm:p-8 overflow-y-auto space-y-10 custom-scrollbar flex-1 pb-16">
++        <div className="p-6 sm:p-8 overflow-y-auto space-y-10 custom-scrollbar flex-1 pb-28 sm:pb-32">
+           
+           {/* Candidate Profile Details */}
+           <section>
+diff --git a/Sub4You/src/Lister/ListerHome/lister-matches/ListerMatches.tsx b/Sub4You/src/Lister/ListerHome/lister-matches/ListerMatches.tsx
+index 7b05f1e..973d05a 100644
+--- a/Sub4You/src/Lister/ListerHome/lister-matches/ListerMatches.tsx
++++ b/Sub4You/src/Lister/ListerHome/lister-matches/ListerMatches.tsx
+@@ -1,5 +1,6 @@
+ import { useState, useEffect } from 'react';
+-import { useNavigate } from 'react-router-dom';
++import { useNavigate, useOutletContext } from 'react-router-dom';
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
+ import { THEME } from '../../../constants/theme';
+ import SeekerViewProfile from '../../../Seeker/SeekerViewProfile/SeekerViewProfile';
+ 
+@@ -63,6 +64,8 @@ const MOCK_SEEKERS_SYNC = [
+ ];
+ 
+ export const ListerMatches = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Find Subleasers" message="Log in to view students matched with your listing." />;
+   const navigate = useNavigate();
+   const [sentMatches, setSentMatches] = useState<Record<string, string>>({});
+   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
+diff --git a/Sub4You/src/Lister/ListerHome/lister-messages/ListerMessages.tsx b/Sub4You/src/Lister/ListerHome/lister-messages/ListerMessages.tsx
+index 14684d2..af56d4b 100644
+--- a/Sub4You/src/Lister/ListerHome/lister-messages/ListerMessages.tsx
++++ b/Sub4You/src/Lister/ListerHome/lister-messages/ListerMessages.tsx
+@@ -1,5 +1,6 @@
+ import { useState, useEffect } from 'react';
+-import { useLocation } from 'react-router-dom';
++import { useLocation, useOutletContext } from 'react-router-dom';
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
+ import { THEME } from '../../../constants/theme';
+ import SeekerViewProfile from '../../../Seeker/SeekerViewProfile/SeekerViewProfile';
+ 
+@@ -67,6 +68,8 @@ const MOCK_THREADS = [
+ ];
+ 
+ export const ListerMessages = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to potential subleasers." />;
+   const location = useLocation();
+   
+   // Conditionally initialize active thread based on incoming payload from ListerMatches
+@@ -215,7 +218,7 @@ export const ListerMessages = () => {
+         {showSeekerDetails && (
+           <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar backdrop-blur-sm">
+             <div className="flex items-center justify-between mb-6">
+-              <h2 className="text-xl font-extrabold text-black">Seeker Facts</h2>
++              <h2 className="text-xl font-extrabold text-black">About {activeThread.seeker.name}</h2>
+               <button 
+                 onClick={() => setShowSeekerDetails(false)}
+                 className="p-1.5 rounded-full hover:bg-black/10 text-black/40 hover:text-black transition-colors"
+diff --git a/Sub4You/src/Lister/ListerHome/mylistings/MyListings.tsx b/Sub4You/src/Lister/ListerHome/mylistings/MyListings.tsx
+index fc4ea17..4e44914 100644
+--- a/Sub4You/src/Lister/ListerHome/mylistings/MyListings.tsx
++++ b/Sub4You/src/Lister/ListerHome/mylistings/MyListings.tsx
+@@ -1,77 +1,44 @@
+ import { useState, useEffect } from 'react'
+-import { useNavigate } from 'react-router-dom'
++import { useNavigate, useOutletContext } from 'react-router-dom'
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder'
+ 
+ import { PropertyCard } from '../../../components/PropertyCard'
+ import RoomForSubleaseImage from '../../../assets/RoomForSublease.jpg'
+-import { getListerProperties, deleteListing } from '../../../lib/api'
+-import { supabase } from '../../../lib/supabase'
+ 
+ export const MyListings = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Manage Listings" message="Log in to view and manage your active sublease listings." />;
+   const navigate = useNavigate()
+   const [listings, setListings] = useState<any[]>([])
+-  const [isLoading, setIsLoading] = useState(true)
+ 
+   useEffect(() => {
+-    const fetchListings = async () => {
+-      try {
+-        setIsLoading(true);
+-        const { data: { session } } = await supabase.auth.getSession();
+-        
+-        if (session) {
+-           const dbData = await getListerProperties(session.user.id);
+-           
+-           // Map database structure safely
+-           const mappedProps = dbData.map(p => ({
+-             id: p.id,
+-             listingTitle: p.title || 'Sublease',
+-             address: p.street_address,
+-             city: p.city,
+-             stateCode: p.state,
+-             zipcode: p.zipcode,
+-             rent: p.monthly_rent || 0,
+-             beds: p.bedrooms || 0,
+-             photoPreviews: p.listing_images?.map((img: any) => img.image_url) || [],
+-             moveInType: p.availability_type,
+-             moveInDate: p.available_from,
+-             moveOutDate: p.available_until
+-           }));
+-           setListings(mappedProps);
+-        } else {
+-           // Fallback to legacy local format for non-authed devs
+-           const savedJson = localStorage.getItem('sub4you_lister_listings_array')
+-           if (savedJson) {
+-             const parsed = JSON.parse(savedJson)
+-             setListings(Array.isArray(parsed) ? parsed : [parsed])
+-           }
++    const fetchListings = () => {
++      const savedJson = localStorage.getItem('sub4you_lister_listings_array')
++      if (savedJson) {
++        try {
++          const parsed = JSON.parse(savedJson)
++          // ensure it's an array
++          if (Array.isArray(parsed)) {
++            setListings(parsed)
++          } else {
++            // Migrating the old legacy data format automatically to new array format if exists
++            setListings([parsed])
++            localStorage.setItem('sub4you_lister_listings_array', JSON.stringify([parsed]))
++          }
++        } catch (e) {
++          console.error("Failed to parse listings array", e)
+         }
+-      } catch (e) {
+-        console.error("Failed to load listings", e)
+-      } finally {
+-        setIsLoading(false);
+       }
+     }
+     fetchListings()
+   }, [])
+ 
+-  const handleDelete = async (e: React.MouseEvent, id: string | number) => {
++  const handleDelete = (e: React.MouseEvent, id: string) => {
+     e.stopPropagation()
+     if (window.confirm('Are you certain you want to permanently delete this listing?')) {
+-      const { data: { session } } = await supabase.auth.getSession();
+-      
+-      if (session && typeof id === 'number') {
+-        // Live Database delete
+-        const success = await deleteListing(id);
+-        if (success) {
+-           setListings(listings.filter(item => item.id !== id));
+-        } else {
+-           alert("Failed to delete from database");
+-        }
+-      } else {
+-        // Localstorage legacy delete
+-        const updatedListings = listings.filter(item => item.id !== id)
+-        setListings(updatedListings)
+-        localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(updatedListings))
+-      }
++      const updatedListings = listings.filter(item => item.id !== id)
++      setListings(updatedListings)
++      localStorage.setItem('sub4you_lister_listings_array', JSON.stringify(updatedListings))
+     }
+   }
+ 
+@@ -92,11 +59,7 @@ export const MyListings = () => {
+           </button>
+         </div>
+ 
+-        {isLoading ? (
+-          <div className="w-full flex justify-center items-center h-64 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
+-            <p className="text-xl text-white/50 font-semibold">Loading your listings...</p>
+-          </div>
+-        ) : listings.length === 0 ? (
++        {listings.length === 0 ? (
+           <div className="w-full flex justify-center items-center h-64 bg-white/5 backdrop-blur-md rounded-3xl border border-white/10">
+             <p className="text-xl text-white/50 font-semibold">You don't have any active listings yet.</p>
+           </div>
+@@ -126,9 +89,9 @@ export const MyListings = () => {
+                      <PropertyCard
+                        imageSrc={imgData}
+                        name={item.listingTitle || item.address || 'Untitled Listing'}
+-                       rent={item.rent?.toString() || '0'}
++                       rent={item.rent || '0'}
+                        subleasePeriod={timeStr}
+-                       bedrooms={parseFloat(item.beds) || 0}
++                       bedrooms={parseInt(item.beds) || 0}
+                        location={item.address || 'Unknown Location'}
+                        address={item.address}
+                        city={item.city}
+diff --git a/Sub4You/src/Seeker/PropertyDetails/PropertyDetails.tsx b/Sub4You/src/Seeker/PropertyDetails/PropertyDetails.tsx
+deleted file mode 100644
+index 3905b8d..0000000
+--- a/Sub4You/src/Seeker/PropertyDetails/PropertyDetails.tsx
++++ /dev/null
+@@ -1,186 +0,0 @@
+-import { useParams, useNavigate } from 'react-router-dom'
+-import { IoShareOutline, IoHeartOutline, IoPersonCircleOutline, IoKeyOutline, IoChatbubbleEllipsesOutline, IoFlagOutline } from 'react-icons/io5'
+-import { THEME } from '../../constants/theme'
+-import { mockProperties } from '../../data/mockProperties'
+-
+-export const PropertyDetails = () => {
+-  const { id } = useParams<{ id: string }>()
+-  const navigate = useNavigate()
+-  
+-  // Find the property that matches the ID from the URL
+-  const property = mockProperties.find(p => p.id === Number(id))
+-
+-  if (!property) {
+-    return (
+-      <div className={`container mx-auto px-4 max-w-6xl py-20 text-center ${THEME.light.classes.text}`}>
+-        <h2 className="text-3xl font-bold mb-4">Property not found</h2>
+-        <button 
+-          onClick={() => navigate(-1)} 
+-          className="text-blue-500 hover:underline"
+-        >
+-          Go back
+-        </button>
+-      </div>
+-    )
+-  }
+-
+-  const glassStyle = {
+-    background: 'rgba(255, 255, 255, 0.1)',
+-    backdropFilter: 'blur(50px)',
+-    WebkitBackdropFilter: 'blur(50px)',
+-    border: '1px solid rgba(255, 255, 255, 0.6)',
+-    borderRadius: '1.5rem'
+-  }
+-
+-  return (
+-    <div className={`container mx-auto px-4 max-w-6xl py-6 ${THEME.light.classes.text}`}>
+-      {/* Header */}
+-      <div className="flex justify-between items-end mb-6">
+-        <h1 className="text-3xl font-bold">{property.name}</h1>
+-        <div className="flex gap-4 font-medium underline text-sm">
+-          <button className="flex items-center gap-2 hover:opacity-75 transition-opacity">
+-            <IoShareOutline size={18} /> Share
+-          </button>
+-          <button className="flex items-center gap-2 hover:opacity-75 transition-opacity">
+-            <IoHeartOutline size={18} /> Save
+-          </button>
+-        </div>
+-      </div>
+-
+-      {/* Image Gallery */}
+-      <div className="grid grid-cols-4 grid-rows-2 gap-2 h-[50vh] md:h-[60vh] rounded-2xl overflow-hidden relative mb-10">
+-        <div className="col-span-2 row-span-2">
+-          <img src={property.images[0]} alt="Main view" className="w-full h-full object-cover hover:brightness-95 transition-all cursor-pointer" />
+-        </div>
+-        <div className="col-span-1 row-span-1">
+-          <img src={property.images[1]} alt="View 2" className="w-full h-full object-cover hover:brightness-95 transition-all cursor-pointer" />
+-        </div>
+-        <div className="col-span-1 row-span-1">
+-          <img src={property.images[2]} alt="View 3" className="w-full h-full object-cover hover:brightness-95 transition-all cursor-pointer" />
+-        </div>
+-        <div className="col-span-1 row-span-1">
+-          <img src={property.images[3]} alt="View 4" className="w-full h-full object-cover hover:brightness-95 transition-all cursor-pointer" />
+-        </div>
+-        <div className="col-span-1 row-span-1">
+-          <img src={property.images[4]} alt="View 5" className="w-full h-full object-cover hover:brightness-95 transition-all cursor-pointer" />
+-        </div>
+-        <button 
+-          className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white text-black text-sm font-semibold rounded-lg shadow-md border hover:bg-gray-50 transition-colors"
+-          style={{
+-            background: 'rgba(255, 255, 255, 0.8)',
+-            backdropFilter: 'blur(20px)',
+-            WebkitBackdropFilter: 'blur(20px)'
+-          }}
+-        >
+-          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor">
+-            <path d="M3 3h4v4H3V3zm6 0h4v4H9V3zM3 9h4v4H3V9zm6 0h4v4H9V9z" />
+-          </svg>
+-          Show all photos
+-        </button>
+-      </div>
+-
+-      {/* Content Columns */}
+-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
+-        {/* Left Column - Details */}
+-        <div className="lg:col-span-2 flex flex-col gap-6">
+-          <div className="border-b border-black/10 pb-6">
+-            <h2 className="text-2xl font-bold mb-1">Entire home in {property.location}</h2>
+-            <div className="font-medium opacity-80 flex flex-wrap gap-1 items-center">
+-              <span>{property.guests} guests</span>
+-              <span>┬╖</span>
+-              <span>{property.beds} beds</span>
+-              <span>┬╖</span>
+-              <span>{property.bedrooms} bedrooms</span>
+-              <span>┬╖</span>
+-              <span>{property.baths} baths</span>
+-            </div>
+-            <div className="font-medium mt-2 flex items-center gap-1">
+-              <span>Γÿà {property.rating.toFixed(1)}</span>
+-              <span>┬╖</span>
+-              <span className="underline cursor-pointer hover:opacity-80">{property.reviews} reviews</span>
+-            </div>
+-          </div>
+-
+-          <div className="border-b border-black/10 pb-6 flex items-center gap-4">
+-            <IoPersonCircleOutline size={48} className="opacity-80" />
+-            <div>
+-              <h3 className="font-bold text-lg">Hosted by {property.host.name}</h3>
+-              <p className="opacity-60 text-sm">{property.host.status}</p>
+-            </div>
+-          </div>
+-
+-          <div className="border-b border-black/10 pb-6 flex flex-col gap-5">
+-            <div className="flex gap-4">
+-              <IoKeyOutline size={28} className="flex-shrink-0 mt-1 opacity-80" />
+-              <div>
+-                <h4 className="font-bold text-lg">Exceptional check-in experience</h4>
+-                <p className="opacity-70">Recent guests gave the check-in process a 5-star rating.</p>
+-              </div>
+-            </div>
+-            <div className="flex gap-4">
+-              <IoChatbubbleEllipsesOutline size={28} className="flex-shrink-0 mt-1 opacity-80" />
+-              <div>
+-                <h4 className="font-bold text-lg">Exceptional host communication</h4>
+-                <p className="opacity-70">Recent guests gave {property.host.name} a 5-star rating for communication.</p>
+-              </div>
+-            </div>
+-          </div>
+-
+-          <div className="pb-6">
+-            <p className="opacity-80 leading-relaxed text-lg">
+-              {property.description}
+-            </p>
+-          </div>
+-        </div>
+-
+-        {/* Right Column - Booking Card */}
+-        <div className="relative">
+-          <div className="sticky top-28 p-6 shadow-xl" style={glassStyle}>
+-            <div className="flex justify-between items-end mb-6">
+-              <div className="text-2xl font-bold">
+-                ${property.rent} <span className="text-base font-normal opacity-80">/mo</span>
+-              </div>
+-            </div>
+-
+-            <div className="border border-black/20 rounded-xl overflow-hidden mb-4 bg-white/10 backdrop-blur-md">
+-              <div className="flex border-b border-black/20">
+-                <div className="p-3 w-1/2 border-r border-black/20">
+-                  <div className="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">Start Date</div>
+-                  <div className="text-sm font-medium">{property.subleasePeriod.split(' - ')[0]}</div>
+-                </div>
+-                <div className="p-3 w-1/2">
+-                  <div className="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">End Date</div>
+-                  <div className="text-sm font-medium">{property.subleasePeriod.split(' - ')[1]}</div>
+-                </div>
+-              </div>
+-              <div className="p-3 flex justify-between items-center cursor-pointer hover:bg-white/5 transition-colors">
+-                <div className="flex flex-col">
+-                  <div className="text-[10px] font-bold uppercase tracking-wider mb-1 opacity-70">Guests</div>
+-                  <div className="text-sm font-medium">{property.guests} guest{property.guests !== 1 ? 's' : ''}</div>
+-                </div>
+-                <svg className="w-5 h-5 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+-                </svg>
+-              </div>
+-            </div>
+-
+-            {/* Simulated gradient button to match Sub4You branding */}
+-            <button className="w-full py-3.5 rounded-xl font-bold text-white text-lg transition-transform hover:scale-[1.02] shadow-md mb-3" style={{ background: 'linear-gradient(90deg, #40ffaa 0%, #4079ff 100%)' }}>
+-              Request Sublease
+-            </button>
+-
+-            <p className="text-center text-sm font-medium opacity-70 mb-6">
+-              You won't be charged yet
+-            </p>
+-
+-            <button className="w-full flex items-center justify-center gap-2 text-sm font-medium underline opacity-60 hover:opacity-100 transition-opacity mt-4">
+-              <IoFlagOutline /> Report this listing
+-            </button>
+-          </div>
+-        </div>
+-      </div>
+-    </div>
+-  )
+-}
+-
+-export default PropertyDetails
+diff --git a/Sub4You/src/Seeker/SeekerHome/SeekerHome.tsx b/Sub4You/src/Seeker/SeekerHome/SeekerHome.tsx
+index 9ff20e7..fbb3b9d 100644
+--- a/Sub4You/src/Seeker/SeekerHome/SeekerHome.tsx
++++ b/Sub4You/src/Seeker/SeekerHome/SeekerHome.tsx
+@@ -1,6 +1,6 @@
+ import { useState, useEffect } from 'react'
+-import { useNavigate, useOutletContext } from 'react-router-dom'
+-import { FiFilter, FiMap, FiList } from 'react-icons/fi'
++import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
++import { FiFilter, FiMap, FiList, FiArrowLeft } from 'react-icons/fi'
+ import { Carousel } from '../../components/Carousel'
+ import { PropertyCard } from '../../components/PropertyCard'
+ import { SeekerPropertyDetails } from './property-details/SeekerPropertyDetails'
+@@ -8,12 +8,13 @@ import { SeekerFilter } from './seeker-filter/SeekerFilter'
+ import { SeekerMap } from './SeekerMap'
+ import HouseShowingImage from '../../assets/HouseShowing-image1.jpeg'
+ import RoomForSubleaseImage from '../../assets/RoomForSublease.jpg'
+-import { getProperties } from '../../lib/api'
+ 
+ export const SeekerHome = () => {
+   const [selectedProperty, setSelectedProperty] = useState<any>(null);
+   const [savedPropertyIds, setSavedPropertyIds] = useState<string[]>([]);
+   const navigate = useNavigate();
++  const [searchParams, setSearchParams] = useSearchParams();
++  const isMapView = searchParams.get('view') === 'map';
+   
+   // Realtime Search Mapping Pipeline
+   const { searchQuery } = useOutletContext<{ searchQuery?: string }>() || {};
+@@ -22,7 +23,18 @@ export const SeekerHome = () => {
+   // Advanced Filtering Pipeline
+   const [isFilterOpen, setIsFilterOpen] = useState(false);
+   const [appliedFilters, setAppliedFilters] = useState<any>(null);
+-  const [isMapView, setIsMapView] = useState(false);
++
++  const setIsMapView = (val: boolean) => {
++    if (val) {
++      const newParams = new URLSearchParams(searchParams);
++      newParams.set('view', 'map');
++      setSearchParams(newParams);
++    } else {
++      const newParams = new URLSearchParams(searchParams);
++      newParams.delete('view');
++      setSearchParams(newParams);
++    }
++  };
+ 
+   useEffect(() => {
+     const fetchSavedState = () => {
+@@ -69,57 +81,179 @@ export const SeekerHome = () => {
+     localStorage.setItem('sub4you_saved_properties', JSON.stringify(savedArr));
+   };
+ 
+-  const [properties, setProperties] = useState<any[]>([]);
+-  const [isLoading, setIsLoading] = useState(true);
+-
+-  useEffect(() => {
+-    async function loadRealData() {
+-      setIsLoading(true);
+-      const dbData = await getProperties();
+-      
+-      // Map the backend DB format into the precise format expected by the frontend UI
+-      const mappedProps = dbData.map(p => ({
+-        id: p.id,
+-        name: p.title || 'Sublease',
+-        title: p.title || 'Sublease',
+-        address: `${p.street_address}, ${p.city}, ${p.state}`,
+-        rent: p.monthly_rent,
+-        utilities: p.estimated_utilities || 0,
+-        subleasePeriod: `${p.available_from || 'Now'} - ${p.available_until || 'TBD'}`,
+-        moveInDate: p.available_from,
+-        moveOutDate: p.available_until,
+-        bedrooms: p.bedrooms,
+-        baths: p.bathrooms,
+-        sqft: p.sqft || 0,
+-        propertyType: p.property_type,
+-        genderPref: p.gender_preference || 'Any',
+-        commuteType: p.distance_type || 'drive',
+-        commuteMinutes: p.estimated_commute_minutes || 0,
+-        description: p.description || 'No description provided.',
+-        amenities: p.listing_amenities?.map((la: any) => la.amenities.name) || [],
+-        location: p.city || 'Unknown',
+-        city: p.city,
+-        state: p.state,
+-        zipcode: p.zipcode,
+-        image: p.listing_images?.[0]?.image_url || RoomForSubleaseImage,
+-        images: p.listing_images?.length 
+-          ? p.listing_images.map((img: any) => img.image_url)
+-          : [RoomForSubleaseImage],
+-        hostName: p.profiles ? `${p.profiles.first_name} ${p.profiles.last_name}` : 'Unknown Host',
+-        hostAvatar: p.profiles?.profile_picture_url || 'https://i.pravatar.cc/150?u=Unknown',
+-        lat: p.latitude || 39.1000, 
+-        lng: p.longitude || -84.5100
+-      }));
+-      
+-      setProperties(mappedProps);
+-      setIsLoading(false);
++  const exampleproperties = [
++    {
++      id: 1,
++      name: 'Luxury Downtown Apartment',
++      title: 'Luxury Downtown Apartment w/ City Views',
++      address: 'Downtown, Cincinnati, Ohio',
++      rent: '1200',
++      utilities: '150',
++      subleasePeriod: 'May - Aug 2026',
++      moveInDate: 'May 1, 2026',
++      moveOutDate: 'August 31, 2026',
++      bedrooms: 2,
++      baths: 2,
++      sqft: '1100',
++      propertyType: 'Entire Apartment',
++      genderPref: 'Any',
++      commuteType: 'bus',
++      commuteMinutes: '10',
++      description: 'Stunning luxury apartment right in the heart of downtown Cincinnati! The building has premium amenities including a fully equipped fitness center, rooftop lounge, and 24/7 security. Perfect for summer interns or students working downtown.',
++      amenities: ['High-Speed WiFi', 'In-Unit Washer/Dryer', 'Air Conditioning', 'Gym/Fitness Center', 'Rooftop Access'],
++      location: 'Downtown',
++      image: HouseShowingImage,
++      images: [
++        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1000&q=80',
++        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
++        'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80',
++        'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80',
++        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
++      ],
++      hostName: 'David K.',
++      hostAvatar: 'https://i.pravatar.cc/150?u=12',
++      lat: 39.1000, lng: -84.5100
++    },
++    {
++      id: 2,
++      name: 'Cozy Studio Near Campus',
++      title: 'Minimalist Cozy Studio directly across Campus',
++      address: 'University District, Cincinnati, Ohio',
++      rent: '850',
++      utilities: '80',
++      subleasePeriod: 'Jun - Aug 2026',
++      moveInDate: 'June 1, 2026',
++      moveOutDate: 'August 15, 2026',
++      bedrooms: 1,
++      baths: 1,
++      sqft: '450',
++      propertyType: 'Private Studio',
++      genderPref: 'Female',
++      commuteType: 'walk',
++      commuteMinutes: '5',
++      description: 'Super peaceful studio heavily preferred for someone quiet! Located literal steps away from campus so you can wake up 10 minutes before class. Fully furnished with a workstation and a queen bed.',
++      amenities: ['High-Speed WiFi', 'Heating', 'Fully Furnished', 'Utilities Included'],
++      location: 'University District',
++      image: RoomForSubleaseImage,
++      images: [
++        'https://images.unsplash.com/photo-1502672260266-1c1ea2a5098c?w=1000&q=80',
++        'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800&q=80',
++        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80',
++        'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80',
++        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',
++      ],
++      hostName: 'Sarah Jenkins',
++      hostAvatar: 'https://i.pravatar.cc/150?u=42',
++      lat: 39.1320, lng: -84.5150
++    },
++    {
++      id: 3,
++      name: 'Modern 3-Bedroom House',
++      title: 'Spacious Modern 3-Bedroom House with Backyard',
++      address: 'Northgate, Cincinnati, Ohio',
++      rent: '900',
++      utilities: '100',
++      subleasePeriod: 'Jan - May 2027',
++      moveInDate: 'January 10, 2027',
++      moveOutDate: 'May 30, 2027',
++      bedrooms: 3,
++      baths: 2.5,
++      sqft: '1850',
++      propertyType: 'Entire House',
++      genderPref: 'Male',
++      commuteType: 'drive',
++      commuteMinutes: '15',
++      description: 'Massive property best for a group of 3 friends! Has a fully renovated kitchen, attached double-garage, and a huge backyard with a fire pit that we just set up. Looking to sublease the entire house for the Spring semester.',
++      amenities: ['Parking Space', 'Dishwasher', 'In-Unit Washer/Dryer', 'Pet Friendly', 'Balcony/Patio'],
++      location: 'Northgate',
++      image: HouseShowingImage,
++      images: [
++        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1000&q=80',
++        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
++        'https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80',
++        'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=800&q=80',
++        'https://images.unsplash.com/photo-1583847268964-b28e503d982b?w=800&q=80',
++      ],
++      hostName: 'Alex Mercer',
++      hostAvatar: 'https://i.pravatar.cc/150?u=9',
++      lat: 39.2500, lng: -84.6000
++    },
++    {
++      id: 4,
++      name: 'Spacious Shared Room',
++      rent: '650',
++      subleasePeriod: 'Sep - Dec 2026',
++      bedrooms: 4,
++      location: 'Capitol Hill',
++      image: RoomForSubleaseImage,
++      lat: 39.1350, lng: -84.5200
++    },
++    {
++      id: 5,
++      name: 'Sunny 2-Bed Condo',
++      title: 'Beautiful Sunlit Condo near the River',
++      address: 'Hyde Park, Cincinnati, Ohio',
++      rent: '1400',
++      utilities: '0',
++      subleasePeriod: 'Aug - Dec 2026',
++      moveInDate: 'August 1, 2026',
++      moveOutDate: 'December 20, 2026',
++      bedrooms: 2,
++      baths: 2,
++      sqft: '1050',
++      propertyType: 'Condo',
++      genderPref: 'Any',
++      commuteType: 'drive',
++      commuteMinutes: '20',
++      description: 'A higher-end condo in a completely safe, walkable neighborhood with immediate access to cafes and parks. All utilities are included in the rent! Seeking responsible subtenants.',
++      amenities: ['Swimming Pool', 'Security System', 'Elevator', 'Utilities Included', 'Dishwasher'],
++      location: 'Hyde Park',
++      image: RoomForSubleaseImage,
++      images: [
++        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1000&q=80',
++        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80',
++        'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&q=80',
++        'https://images.unsplash.com/photo-1595526114101-9ccba7015093?w=800&q=80',
++        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',
++      ],
++      hostName: 'Emily & Mike',
++      hostAvatar: 'https://i.pravatar.cc/150?u=18',
++      lat: 39.1380, lng: -84.4440
++    },
++    {
++      id: 6,
++      name: 'Historic Brick House',
++      rent: '750',
++      subleasePeriod: 'May - Aug 2026',
++      bedrooms: 1,
++      location: 'Over-the-Rhine',
++      image: HouseShowingImage,
++      lat: 39.1100, lng: -84.5150
++    },
++    {
++      id: 7,
++      name: 'Modern Loft',
++      rent: '1,100',
++      subleasePeriod: 'Jun - Dec 2026',
++      bedrooms: 1,
++      location: 'Downtown',
++      image: RoomForSubleaseImage,
++      lat: 39.1050, lng: -84.5120
++    },
++    {
++      id: 8,
++      name: 'Campus View Apartment',
++      rent: '950',
++      subleasePeriod: 'Sep - May 2027',
++      bedrooms: 2,
++      location: 'University District',
++      image: HouseShowingImage,
++      lat: 39.1300, lng: -84.5180
+     }
+-    
+-    loadRealData();
+-  }, []);
++  ]
+ 
+   const searchResults = activeSearch
+-    ? properties.filter(p => {
++    ? exampleproperties.filter(p => {
+         const term = activeSearch;
+         return (
+           (p.name && p.name.toLowerCase().includes(term)) ||
+@@ -133,7 +267,7 @@ export const SeekerHome = () => {
+           ((p as any).zipcode && (p as any).zipcode.includes(term))
+         );
+       })
+-    : properties;
++    : exampleproperties;
+ 
+   let finalResults = searchResults;
+ 
+@@ -203,47 +337,41 @@ export const SeekerHome = () => {
+            }} 
+         />
+       )}
++
+       {/* Persistent Filters Bar */}
+       <div className="w-full px-4 sm:px-8 lg:px-12 pt-10 pb-2 flex flex-col-reverse sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
+          <div className="flex-1 w-full sm:w-auto flex justify-start">
+             {renderFilterPills()}
+          </div>
+-
+-         {/* Phase 2 Test Button */}
+-         <button 
+-           onClick={async () => {
+-             console.log("Testing connection...");
+-             const properties = await getProperties();
+-             console.log("Successfully fetched properties from Supabase:", properties);
+-             alert("Connection works! Check your browser console to see the JSON data returned from the database.");
+-           }}
+-           className="flex items-center gap-2 px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-bold transition-all shadow-lg shrink-0 ml-auto"
+-         >
+-           Test Database Connection
+-         </button>
+-
+          <button 
+            onClick={() => setIsFilterOpen(true)} 
+-           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-2"
++           className="flex items-center gap-2 px-6 py-2.5 bg-white/40 hover:bg-white/60 backdrop-blur-md text-black/80 rounded-full font-medium transition-all shadow-sm border border-black/5 shrink-0 ml-auto"
+          >
+             <FiFilter size={18} /> {appliedFilters ? 'Edit Filters' : 'Advanced Filters'}
+          </button>
+       </div>
+ 
+       {activeSearch || appliedFilters || isMapView ? (
+-        <div className={`w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative ${isMapView ? 'flex gap-6 max-h-[calc(100vh-140px)]' : ''}`}>
++        <div className={`w-full px-4 sm:px-8 lg:px-12 py-6 pb-24 z-10 relative ${isMapView ? 'flex gap-6' : ''}`}>
+           
+-          <div className={`${isMapView ? 'w-full lg:w-[60%] overflow-y-auto custom-scrollbar pr-2 pb-10' : 'w-full'}`}>
++          <div className={`${isMapView ? 'hidden lg:block w-full lg:w-1/2 pr-2' : 'w-full'}`}>
+             <div className="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4">
+-              <div>
+-                <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
+-                  {(activeSearch || appliedFilters) ? `Search Results (${finalResults.length})` : `All Properties (${finalResults.length})`}
+-                </h1>
+-                {activeSearch && (
+-                  <p className="text-black/80 font-medium mt-2">
+-                    Results matching "{searchQuery}"
+-                  </p>
++              <div className="flex items-center gap-4">
++                {isMapView && (
++                  <button onClick={() => setIsMapView(false)} className="p-2 hover:bg-black/5 rounded-full transition-colors hidden sm:block">
++                    <FiArrowLeft size={24} />
++                  </button>
+                 )}
++                <div>
++                  <h1 className="text-4xl font-extrabold text-black drop-shadow-sm">
++                    {isMapView ? 'Map View' : (activeSearch || appliedFilters) ? `Search Results (${finalResults.length})` : `All Properties (${finalResults.length})`}
++                  </h1>
++                  {activeSearch && (
++                    <p className="text-black/80 font-medium mt-2">
++                      Results matching "{searchQuery}"
++                    </p>
++                  )}
++                </div>
+               </div>
+             </div>
+             {finalResults.length === 0 ? (
+@@ -251,7 +379,7 @@ export const SeekerHome = () => {
+                 <p className="text-xl text-black/50 font-semibold">No properties matched your criteria.</p>
+               </div>
+             ) : (
+-              <div className={`grid grid-cols-1 sm:grid-cols-2 ${isMapView ? 'xl:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'} gap-6`}>
++              <div className={`grid ${isMapView ? 'grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'} gap-6`}>
+                 {finalResults.map((property) => (
+                   <PropertyCard
+                     key={property.id}
+@@ -275,7 +403,7 @@ export const SeekerHome = () => {
+           </div>
+ 
+           {isMapView && (
+-            <div className="hidden lg:block w-[40%] flex-shrink-0 h-[calc(100vh-140px)] sticky top-[10px] z-0">
++            <div className="w-full lg:w-1/2 flex-shrink-0 h-[calc(100vh-140px)] sticky top-[100px] z-0">
+                <SeekerMap properties={finalResults} onMarkerClick={setSelectedProperty} />
+             </div>
+           )}
+@@ -283,23 +411,12 @@ export const SeekerHome = () => {
+         </div>
+       ) : (
+         <div className="w-full mx-auto pb-24 z-10 relative">
+-          {isLoading && (
+-            <div className="w-full h-40 flex items-center justify-center text-black/50 font-bold">
+-              Fetching properties...
+-            </div>
+-          )}
+-          {!isLoading && properties.length === 0 && (
+-            <div className="w-full h-40 flex items-center justify-center text-black/50 font-bold bg-white/20 rounded-xl mt-4">
+-              Your property feed is empty! Go create a test property in Supabase.
+-            </div>
+-          )}
+-          {!isLoading && properties.length > 0 && (
+-            <div className="-mt-6">
+-              <Carousel
+-              items={properties}
++          <div className="-mt-6">
++            <Carousel
++            items={exampleproperties}
+             itemsPerPage={4}
+             title="Featured Listings in Cincinnati"
+-            renderItem={(property: any) => (
++            renderItem={(property) => (
+               <PropertyCard
+                 key={property.id}
+                 name={property.name}
+@@ -320,10 +437,10 @@ export const SeekerHome = () => {
+           />
+ 
+           <Carousel
+-        items={properties}
++        items={exampleproperties}
+         itemsPerPage={4}
+         title="Featured Listings in Cincinnati"
+-        renderItem={(property: any) => (
++        renderItem={(property) => (
+           <PropertyCard
+             key={property.id}
+             name={property.name}
+@@ -344,10 +461,10 @@ export const SeekerHome = () => {
+       />
+ 
+       <Carousel
+-        items={properties}
++        items={exampleproperties}
+         itemsPerPage={4}
+         title="Featured Listings in Cincinnati"
+-        renderItem={(property: any) => (
++        renderItem={(property) => (
+           <PropertyCard
+             key={property.id}
+             name={property.name}
+@@ -367,7 +484,6 @@ export const SeekerHome = () => {
+         )}
+           />
+           </div>
+-          )}
+         </div>
+       )}
+       
+diff --git a/Sub4You/src/Seeker/SeekerHome/property-details/SeekerPropertyDetails.tsx b/Sub4You/src/Seeker/SeekerHome/property-details/SeekerPropertyDetails.tsx
+index 73c3570..0f89a8b 100644
+--- a/Sub4You/src/Seeker/SeekerHome/property-details/SeekerPropertyDetails.tsx
++++ b/Sub4You/src/Seeker/SeekerHome/property-details/SeekerPropertyDetails.tsx
+@@ -216,20 +216,7 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
+                         Hi! I am looking for a respectful and clean subtenant to take over my place for the specified lease duration. Feel free to send me a message directly if you have any questions or want to secure the unit!
+                       </p>
+                       
+-                      <div className="space-y-3 pt-5 border-t border-black/10">
+-                         <div className="flex items-center gap-4">
+-                            <span className="font-medium text-gray-600 w-32">Speaks</span>
+-                            <span className="font-bold text-gray-900">English</span>
+-                         </div>
+-                         <div className="flex items-center gap-4">
+-                            <span className="font-medium text-gray-600 w-32">Response Rate</span>
+-                            <span className="font-bold text-gray-900">100%</span>
+-                         </div>
+-                         <div className="flex items-center gap-4">
+-                            <span className="font-medium text-gray-600 w-32">Response Time</span>
+-                            <span className="font-bold text-gray-900">Within an hour</span>
+-                         </div>
+-                      </div>
++
+                       
+                       <button 
+                         onClick={onSendMessage}
+@@ -273,6 +260,8 @@ export const SeekerPropertyDetails: React.FC<SeekerPropertyDetailsProps> = ({
+                 >
+                   Send a message
+                 </button>
++                
++                <p className="text-center text-[14px] text-gray-500 mt-4 font-semibold opacity-80">You won't be charged yet</p>
+ 
+                 <div className="mt-8 border-t border-black/10 pt-6">
+                    <div className="flex justify-between items-center mb-4">
+diff --git a/Sub4You/src/Seeker/SeekerHome/seeker-matches/Matches.tsx b/Sub4You/src/Seeker/SeekerHome/seeker-matches/Matches.tsx
+index 771c20d..3814fe0 100644
+--- a/Sub4You/src/Seeker/SeekerHome/seeker-matches/Matches.tsx
++++ b/Sub4You/src/Seeker/SeekerHome/seeker-matches/Matches.tsx
+@@ -1,5 +1,6 @@
+ import { useState, useEffect } from 'react';
+-import { useNavigate } from 'react-router-dom';
++import { useNavigate, useOutletContext } from 'react-router-dom';
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
+ import { THEME } from '../../../constants/theme';
+ import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
+ 
+@@ -44,6 +45,8 @@ const INITIAL_REQUESTS: MatchRequest[] = [
+ ];
+ 
+ export const Matches = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Find Your Match" message="Log in to view your property and roommate matches." />;
+   const navigate = useNavigate();
+   const [requests, setRequests] = useState<MatchRequest[]>(INITIAL_REQUESTS);
+   const [selectedListing, setSelectedListing] = useState<MatchRequest | null>(null);
+diff --git a/Sub4You/src/Seeker/SeekerHome/seeker-messages/Messages.tsx b/Sub4You/src/Seeker/SeekerHome/seeker-messages/Messages.tsx
+index b26882f..b24c5ad 100644
+--- a/Sub4You/src/Seeker/SeekerHome/seeker-messages/Messages.tsx
++++ b/Sub4You/src/Seeker/SeekerHome/seeker-messages/Messages.tsx
+@@ -1,4 +1,6 @@
+ import { useState } from 'react';
++import { useOutletContext } from 'react-router-dom';
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
+ import { THEME } from '../../../constants/theme';
+ import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
+ 
+@@ -78,6 +80,8 @@ const MOCK_THREADS = [
+ ];
+ 
+ export const Messages = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to listers." />;
+   const [activeThread, setActiveThread] = useState(MOCK_THREADS[0]);
+   const [inputText, setInputText] = useState("");
+   const [showListingDetails, setShowListingDetails] = useState(true);
+diff --git a/Sub4You/src/Seeker/SeekerHome/seeker-saved/Saved.tsx b/Sub4You/src/Seeker/SeekerHome/seeker-saved/Saved.tsx
+index 833f4f7..0ea4735 100644
+--- a/Sub4You/src/Seeker/SeekerHome/seeker-saved/Saved.tsx
++++ b/Sub4You/src/Seeker/SeekerHome/seeker-saved/Saved.tsx
+@@ -1,5 +1,6 @@
+ import { useState, useEffect } from 'react';
+-import { useNavigate } from 'react-router-dom';
++import { useNavigate, useOutletContext } from 'react-router-dom';
++import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
+ import { THEME } from '../../../constants/theme';
+ import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
+ 
+@@ -19,6 +20,8 @@ interface SavedProperty {
+ const MOCK_SAVED_PROPERTIES: SavedProperty[] = [];
+ 
+ export const Saved = () => {
++  const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
++  if (!isLoggedIn) return <AuthPlaceholder title="Your Saved Places" message="Log in to view and manage your saved listings." />;
+   const [savedData, setSavedData] = useState<SavedProperty[]>(MOCK_SAVED_PROPERTIES);
+   const [selectedListing, setSelectedListing] = useState<SavedProperty | null>(null);
+   const navigate = useNavigate();
+diff --git a/Sub4You/src/components/AuthPlaceholder.tsx b/Sub4You/src/components/AuthPlaceholder.tsx
+new file mode 100644
+index 0000000..007f05d
+--- /dev/null
++++ b/Sub4You/src/components/AuthPlaceholder.tsx
+@@ -0,0 +1,42 @@
++import { useNavigate } from 'react-router-dom'
++import { THEME } from '../constants/theme'
++import { FiLock } from 'react-icons/fi'
++
++interface AuthPlaceholderProps {
++  title: string
++  message: string
++}
++
++export const AuthPlaceholder = ({ title, message }: AuthPlaceholderProps) => {
++  const navigate = useNavigate()
++
++  return (
++    <div className="w-full min-h-screen pt-16 flex flex-col items-center justify-start px-4">
++      <div className="flex flex-col items-center justify-center p-12 text-center bg-white/40 backdrop-blur-md rounded-[32px] border border-white/60 shadow-sm max-w-xl w-full">
++        <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center mb-6">
++          <FiLock size={40} className="text-black/80" /> 
++        </div>
++        <h2 className="text-3xl font-extrabold text-gray-900 mb-4">{title}</h2>
++        <p className="text-lg text-gray-600 font-medium mb-8">
++          {message}
++        </p>
++        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
++          <button 
++            onClick={() => navigate('/login')}
++            className="px-8 py-4 bg-black text-white rounded-xl font-bold text-[17px] hover:bg-gray-900 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 w-full sm:w-auto"
++          >
++            Log in to your account
++          </button>
++          <button 
++            onClick={() => navigate('/signup')}
++            className="px-8 py-4 bg-white text-black border border-black/10 rounded-xl font-bold text-[17px] hover:bg-gray-50 transition-all w-full sm:w-auto"
++          >
++            Sign up
++          </button>
++        </div>
++      </div>
++    </div>
++  )
++}
++
++export default AuthPlaceholder
+diff --git a/Sub4You/src/components/GlassSurface.tsx b/Sub4You/src/components/GlassSurface.tsx
+index ef29954..5762032 100644
+--- a/Sub4You/src/components/GlassSurface.tsx
++++ b/Sub4You/src/components/GlassSurface.tsx
+@@ -62,12 +62,12 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
+   children,
+   width = 200,
+   height = 80,
+-  borderRadius = 10,
++  borderRadius = 20,
+   borderWidth = 0.07,
+   brightness = 50,
+   opacity = 0.93,
+   blur = 11,
+-  displace = 0.5,
++  displace = 0,
+   backgroundOpacity = 0,
+   saturation = 1,
+   distortionScale = -180,
+diff --git a/Sub4You/src/components/Layout.tsx b/Sub4You/src/components/Layout.tsx
+index 6c88128..d0ecd16 100644
+--- a/Sub4You/src/components/Layout.tsx
++++ b/Sub4You/src/components/Layout.tsx
+@@ -2,11 +2,9 @@ import { useState, type ReactNode } from 'react'
+ import { Outlet, useLocation } from 'react-router-dom'
+ import PageBackground from './PageBackground'
+ import TopBar from './TopBar'
+-import type { NavItem } from './TopBar'
+ 
+ interface LayoutProps {
+   children?: ReactNode
+-  navItems?: NavItem[]
+   isLoggedIn?: boolean
+   profileImageSrc?: string
+   profileImageAlt?: string
+@@ -24,7 +22,6 @@ interface LayoutProps {
+  */
+ export const Layout = ({
+   children,
+-  navItems,
+   isLoggedIn = false,
+   profileImageSrc,
+   profileImageAlt,
+@@ -43,7 +40,6 @@ export const Layout = ({
+       <div className="flex flex-col min-h-screen">
+         <div className="sticky top-0 z-50">
+           <TopBar
+-            navItems={navItems}
+             isLoggedIn={isLoggedIn}
+             profileImageSrc={profileImageSrc}
+             profileImageAlt={profileImageAlt}
+@@ -57,7 +53,7 @@ export const Layout = ({
+           />
+         </div>
+         <div className="">
+-          {children || <Outlet context={{ searchQuery }} />}
++          {children || <Outlet context={{ searchQuery, isLoggedIn }} />}
+         </div>
+       </div>
+     </PageBackground>
+diff --git a/Sub4You/src/components/PropertyCard.tsx b/Sub4You/src/components/PropertyCard.tsx
+index 3146ddc..3759925 100644
+--- a/Sub4You/src/components/PropertyCard.tsx
++++ b/Sub4You/src/components/PropertyCard.tsx
+@@ -92,13 +92,14 @@ export const PropertyCard = ({
+ 
+         <div className="mt-4 flex items-center justify-between border-t border-black/5 pt-4">
+           <div className="flex flex-col">
+-            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Duration</span>
++            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Period</span>
+             <span className={`${THEME.light.classes.text} font-medium text-sm`}>{subleasePeriod}</span>
+           </div>
+           <div className="flex flex-col items-end">
+-            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Rooms Available</span>
++            <span className={`${THEME.light.classes.text} opacity-50 text-xs uppercase tracking-wider font-semibold`}>Bedrooms</span>
+             <span className={`${THEME.light.classes.text} font-medium text-sm flex items-center gap-1`}>
+               {bedrooms}
++              <IoHomeOutline />
+             </span>
+           </div>
+         </div>
+diff --git a/Sub4You/src/components/TopBar.tsx b/Sub4You/src/components/TopBar.tsx
+index aa23e72..5cecb65 100644
+--- a/Sub4You/src/components/TopBar.tsx
++++ b/Sub4You/src/components/TopBar.tsx
+@@ -5,14 +5,8 @@ import GlassSurface from './GlassSurface'
+ import { CgProfile, CgSearch } from 'react-icons/cg'
+ import { THEME } from '../constants/theme'
+ 
+-export interface NavItem {
+-  label: string
+-  path: string
+-}
+-
+ interface TopBarProps {
+   children?: ReactNode
+-  navItems?: NavItem[]
+   profileImageSrc?: string
+   profileImageAlt?: string
+   isLoggedIn?: boolean
+@@ -32,7 +26,6 @@ interface TopBarProps {
+  */
+ export const TopBar = ({
+   children,
+-  navItems,
+   profileImageSrc,
+   profileImageAlt = 'Profile',
+   isLoggedIn = false,
+@@ -54,18 +47,6 @@ export const TopBar = ({
+   const dropdownRef = useRef<HTMLDivElement>(null)
+ 
+   const [localProfileImage, setLocalProfileImage] = useState<string | undefined>(profileImageSrc)
+-  const [pendingMatchesCount, setPendingMatchesCount] = useState(0)
+-
+-  useEffect(() => {
+-    const updateMatchesCount = () => {
+-      const count = parseInt(localStorage.getItem('sub4you_pending_matches') || '0', 10);
+-      setPendingMatchesCount(count);
+-    };
+-
+-    updateMatchesCount();
+-    window.addEventListener('matchesUpdated', updateMatchesCount);
+-    return () => window.removeEventListener('matchesUpdated', updateMatchesCount);
+-  }, []);
+ 
+   useEffect(() => {
+     setLocalProfileImage(profileImageSrc)
+@@ -235,7 +216,7 @@ export const TopBar = ({
+     blueOffset: 25,
+     brightness: 60,
+     opacity: 0.93,
+-    mixBlendMode: 'difference' as const,
++    mixBlendMode: 'screen' as const,
+     saturation: 1,
+     blur: 7,
+   }
+@@ -275,7 +256,7 @@ export const TopBar = ({
+   const isLister = location.pathname.includes('/lister')
+ 
+   // Conditional Navigation Arrays strictly separating Lister outbox tools from Seeker tools
+-  const roleNavItems = isLister
++  const navItems = isLister
+     ? [
+         { label: 'Home', path: '/lister/home' },
+         { label: 'My Listings', path: '/lister/mylistings' },
+@@ -291,7 +272,6 @@ export const TopBar = ({
+         { label: 'Support', path: '/seeker/support' },
+       ]
+ 
+-  const displayNavItems = navItems || roleNavItems
+   // Event handlers
+   const handleSearchClick = () => {
+     setIsSearchOpen(!isSearchOpen)
+@@ -417,19 +397,14 @@ export const TopBar = ({
+           willChange: 'transform, opacity'
+         }}
+       >
+-        {displayNavItems.map((item: any) => (
++        {navItems.map((item) => (
+           <button
+             key={item.path}
+             onClick={() => handleNavClick(item.path)}
+-            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110 relative`}
++            className={`${THEME.light.classes.text} ${THEME.light.classes.hover} transition-all duration-200 font-medium text-sm whitespace-nowrap hover:scale-110`}
+             aria-label={item.label}
+           >
+             {item.label}
+-            {item.label === 'Matches' && !isLister && pendingMatchesCount > 0 && (
+-              <span className="absolute -top-3 -right-3.5 bg-red-500 text-white text-[10px] font-bold w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-sm">
+-                {pendingMatchesCount}
+-              </span>
+-            )}
+           </button>
+         ))}
+       </div>
+diff --git a/Sub4You/src/data/mockProperties.ts b/Sub4You/src/data/mockProperties.ts
+deleted file mode 100644
+index e7b6ac7..0000000
+--- a/Sub4You/src/data/mockProperties.ts
++++ /dev/null
+@@ -1,213 +0,0 @@
+-import HouseShowingImage from '../assets/HouseShowing-image1.jpeg'
+-import RoomForSubleaseImage from '../assets/RoomForSublease.jpg'
+-
+-export const mockProperties = [
+-  {
+-    id: 1,
+-    name: 'Luxury Downtown Apartment',
+-    rent: '1,200',
+-    subleasePeriod: 'May - Aug 2026',
+-    bedrooms: 2,
+-    location: 'Downtown',
+-    image: HouseShowingImage,
+-    guests: 4,
+-    beds: 2,
+-    baths: 2,
+-    rating: 4.8,
+-    reviews: 12,
+-    host: {
+-      name: 'Sarah',
+-      status: 'Superhost'
+-    },
+-    images: [
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage
+-    ],
+-    description: "Enjoy luxurious living in the heart of Downtown. This modern apartment features high-end appliances, floor-to-ceiling windows, and access to a rooftop pool. Perfect for professionals or students wanting a premium summer experience."
+-  },
+-  {
+-    id: 2,
+-    name: 'Cozy Studio Near Campus',
+-    rent: '850',
+-    subleasePeriod: 'Jun - Aug 2026',
+-    bedrooms: 1,
+-    location: 'University District',
+-    image: RoomForSubleaseImage,
+-    guests: 2,
+-    beds: 1,
+-    baths: 1,
+-    rating: 4.5,
+-    reviews: 8,
+-    host: {
+-      name: 'Michael',
+-      status: 'New Host'
+-    },
+-    images: [
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage
+-    ],
+-    description: "A very cozy and comfortable studio just steps away from campus. Ideal for a student staying over the summer. Includes high-speed Wi-Fi and a small kitchenette for all your basic cooking needs."
+-  },
+-  {
+-    id: 3,
+-    name: 'Modern 3-Bedroom House',
+-    rent: '900',
+-    subleasePeriod: 'Jan - May 2027',
+-    bedrooms: 3,
+-    location: 'Northgate',
+-    image: HouseShowingImage,
+-    guests: 5,
+-    beds: 3,
+-    baths: 2.5,
+-    rating: 4.9,
+-    reviews: 24,
+-    host: {
+-      name: 'Elena',
+-      status: 'Superhost'
+-    },
+-    images: [
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage
+-    ],
+-    description: "Spacious modern home perfect for an entire group. Features a large backyard, renovated interior, and quiet neighborhood. Great place to focus on studies or relax with friends."
+-  },
+-  {
+-    id: 4,
+-    name: 'Spacious Shared Room',
+-    rent: '650',
+-    subleasePeriod: 'Sep - Dec 2026',
+-    bedrooms: 4,
+-    location: 'Capitol Hill',
+-    image: RoomForSubleaseImage,
+-    guests: 1,
+-    beds: 1,
+-    baths: 2,
+-    rating: 4.2,
+-    reviews: 5,
+-    host: {
+-      name: 'David',
+-      status: 'Host'
+-    },
+-    images: [
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage
+-    ],
+-    description: "Affordable shared room in a large 4-bedroom house. Great roommates, shared kitchen and living spaces. Convenient access to public transit."
+-  },
+-  {
+-    id: 5,
+-    name: 'Sunny 2-Bed Condo',
+-    rent: '1,400',
+-    subleasePeriod: 'Aug - Dec 2026',
+-    bedrooms: 2,
+-    location: 'Hyde Park',
+-    image: RoomForSubleaseImage,
+-    guests: 3,
+-    beds: 2,
+-    baths: 2,
+-    rating: 5.0,
+-    reviews: 30,
+-    host: {
+-      name: 'Jessica',
+-      status: 'Superhost'
+-    },
+-    images: [
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage
+-    ],
+-    description: "Beautiful, sun-filled condo in the desirable Hyde Park area. Secure building, dedicated parking, and premium furnishings."
+-  },
+-  {
+-    id: 6,
+-    name: 'Historic Brick House',
+-    rent: '750',
+-    subleasePeriod: 'May - Aug 2026',
+-    bedrooms: 1,
+-    location: 'Over-the-Rhine',
+-    image: HouseShowingImage,
+-    guests: 2,
+-    beds: 1,
+-    baths: 1,
+-    rating: 4.6,
+-    reviews: 18,
+-    host: {
+-      name: 'Brian',
+-      status: 'Host'
+-    },
+-    images: [
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage
+-    ],
+-    description: "Live in a piece of history! This brick house in OTR combines historic charm with modern amenities. Walkable to the best bars and restaurants."
+-  },
+-  {
+-    id: 7,
+-    name: 'Modern Loft',
+-    rent: '1,100',
+-    subleasePeriod: 'Jun - Dec 2026',
+-    bedrooms: 1,
+-    location: 'Downtown',
+-    image: RoomForSubleaseImage,
+-    guests: 2,
+-    beds: 1,
+-    baths: 1,
+-    rating: 4.7,
+-    reviews: 15,
+-    host: {
+-      name: 'Alex',
+-      status: 'New Host'
+-    },
+-    images: [
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage
+-    ],
+-    description: "Industrial style modern loft with high ceilings and exposed ductwork. Open concept living in a very central location."
+-  },
+-  {
+-    id: 8,
+-    name: 'Campus View Apartment',
+-    rent: '950',
+-    subleasePeriod: 'Sep - May 2027',
+-    bedrooms: 2,
+-    location: 'University District',
+-    image: HouseShowingImage,
+-    guests: 3,
+-    beds: 2,
+-    baths: 1,
+-    rating: 4.3,
+-    reviews: 9,
+-    host: {
+-      name: 'Emily',
+-      status: 'Host'
+-    },
+-    images: [
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage,
+-      RoomForSubleaseImage,
+-      HouseShowingImage
+-    ],
+-    description: "Apartment with a direct view of the campus skyline. Save commute time and live right across the street from your classes!"
+-  }
+-]
+diff --git a/Sub4You/src/lib/api.ts b/Sub4You/src/lib/api.ts
+deleted file mode 100644
+index db669f3..0000000
+--- a/Sub4You/src/lib/api.ts
++++ /dev/null
+@@ -1,155 +0,0 @@
+-import { supabase } from './supabase';
+-import type { JoinedPropertyListing } from './database.types';
+-
+-/**
+- * Fetches all active property listings from Supabase,
+- * including their images, amenities, and host profile details.
+- */
+-export async function getProperties(): Promise<JoinedPropertyListing[]> {
+-  try {
+-    const { data, error } = await supabase
+-      .from('property_listings')
+-      .select(`
+-        *,
+-        profiles (*),
+-        listing_images (*),
+-        listing_amenities ( amenities (*) )
+-      `)
+-      .eq('is_active', true)
+-      .order('created_at', { ascending: false });
+-
+-    if (error) {
+-      console.error('API Error fetching properties:', error);
+-      throw error;
+-    }
+-
+-    return (data || []) as JoinedPropertyListing[];
+-  } catch (error) {
+-    console.error('Unexpected error in getProperties:', error);
+-    return [];
+-  }
+-}
+-
+-export async function getListerProperties(listerId: string): Promise<JoinedPropertyListing[]> {
+-  try {
+-    const { data, error } = await supabase
+-      .from('property_listings')
+-      .select(`
+-        *,
+-        profiles (*),
+-        listing_images (*),
+-        listing_amenities ( amenities (*) )
+-      `)
+-      .eq('lister_id', listerId)
+-      .order('created_at', { ascending: false });
+-
+-    if (error) throw error;
+-    return (data || []) as JoinedPropertyListing[];
+-  } catch (error) {
+-    console.error('Unexpected error in getListerProperties:', error);
+-    return [];
+-  }
+-}
+-
+-export async function deleteListing(listingId: number) {
+-  try {
+-    const { error } = await supabase.from('property_listings').delete().eq('id', listingId);
+-    if (error) throw error;
+-    return true;
+-  } catch (err) {
+-    console.error('Error deleting listing:', err);
+-    return false;
+-  }
+-}
+-
+-export async function uploadListing(userId: string, formData: any, photoFiles: File[], selectedAmenities: string[]) {
+-  try {
+-    // 1. Insert into property_listings
+-    const { data: listing, error: listingError } = await supabase
+-      .from('property_listings')
+-      .insert({
+-        lister_id: userId,
+-        title: formData.listingTitle,
+-        street_address: formData.address,
+-        city: formData.city,
+-        state: formData.stateCode,
+-        zipcode: formData.zipcode,
+-        monthly_rent: parseFloat(formData.rent),
+-        estimated_utilities: parseFloat(formData.utilities) || 0,
+-        property_type: formData.propertyType,
+-        bedrooms: parseFloat(formData.beds),
+-        bathrooms: parseFloat(formData.baths),
+-        bathroom_type: formData.bathroomType || null,
+-        sqft: parseFloat(formData.sqft) || null,
+-        gender_preference: formData.genderPref || null,
+-        distance_type: formData.commuteType,
+-        estimated_commute_minutes: parseInt(formData.commuteMinutes) || null,
+-        availability_type: formData.moveInType,
+-        available_from: formData.moveInDate || null,
+-        available_until: formData.moveOutDate || null,
+-        lease_duration: formData.leaseDuration || null,
+-        description: formData.description,
+-        is_active: true
+-      })
+-      .select()
+-      .single();
+-
+-    if (listingError) throw listingError;
+-
+-    const listingId = listing.id;
+-
+-    // 2. Upload images to Supabase Storage 'listing-images' bucket
+-    const imageUrls: string[] = [];
+-    for (let i = 0; i < photoFiles.length; i++) {
+-      const file = photoFiles[i];
+-      const fileExt = file.name.split('.').pop() || 'jpeg';
+-      const fileName = `${userId}/${listingId}/${Date.now()}-${i}.${fileExt}`;
+-      
+-      const { data: uploadData, error: uploadError } = await supabase.storage
+-        .from('listing-images')
+-        .upload(fileName, file);
+-        
+-      if (uploadError) {
+-        console.error('Image upload failed:', uploadError);
+-        continue;
+-      }
+-      
+-      const { data: publicUrlData } = supabase.storage
+-        .from('listing-images')
+-        .getPublicUrl(fileName);
+-        
+-      imageUrls.push(publicUrlData.publicUrl);
+-    }
+-
+-    // 3. Insert into listing_images
+-    if (imageUrls.length > 0) {
+-      const imageRows = imageUrls.map((url, i) => ({
+-        listing_id: listingId,
+-        image_url: url,
+-        order_index: i
+-      }));
+-      await supabase.from('listing_images').insert(imageRows);
+-    }
+-
+-    // 4. Handle Amenities (Assume amenities table is pre-populated, so we fetch by name)
+-    if (selectedAmenities.length > 0) {
+-      const { data: amenityData } = await supabase
+-        .from('amenities')
+-        .select('id, name')
+-        .in('name', selectedAmenities);
+-
+-      if (amenityData && amenityData.length > 0) {
+-        const amenityRows = amenityData.map(a => ({
+-          listing_id: listingId,
+-          amenity_id: a.id
+-        }));
+-        await supabase.from('listing_amenities').insert(amenityRows);
+-      }
+-    }
+-
+-    return listing;
+-  } catch (err) {
+-    console.error("API Error in uploadListing:", err);
+-    throw err;
+-  }
+-}
+diff --git a/Sub4You/src/lib/database.types.ts b/Sub4You/src/lib/database.types.ts
+deleted file mode 100644
+index e9a5f0b..0000000
+--- a/Sub4You/src/lib/database.types.ts
++++ /dev/null
+@@ -1,123 +0,0 @@
+-export interface Profile {
+-  id: string; // uuid
+-  first_name: string;
+-  last_name: string;
+-  university?: string | null;
+-  major?: string | null;
+-  year?: string | null;
+-  age?: number | null;
+-  gender?: string | null;
+-  bio?: string | null;
+-  instagram_handle?: string | null;
+-  profile_picture_url?: string | null;
+-  role?: string | null;
+-  created_at: string;
+-  updated_at?: string;
+-}
+-
+-export interface SeekerPreference {
+-  id: string; // uuid
+-  user_id: string; // uuid
+-  city?: string | null;
+-  state?: string | null;
+-  zipcode?: string | null;
+-  budget_min?: number | null;
+-  budget_max?: number | null;
+-  commute_preference?: string | null;
+-  max_commute_minutes?: number | null;
+-  move_in_type?: string | null;
+-  move_in_date?: string | null;
+-  lease_duration?: string | null;
+-  lifestyle_preferences?: any | null; // jsonb
+-  created_at: string;
+-  updated_at?: string;
+-}
+-
+-export interface PropertyListing {
+-  id: string; // uuid
+-  lister_id: string; // uuid
+-  title: string;
+-  street_address?: string | null;
+-  city?: string | null;
+-  state?: string | null;
+-  zipcode?: string | null;
+-  latitude?: number | null;
+-  longitude?: number | null;
+-  monthly_rent: number;
+-  estimated_utilities?: number | null;
+-  property_type: string;
+-  bedrooms: number;
+-  bathrooms: number;
+-  bathroom_type?: string | null;
+-  sqft?: number | null;
+-  gender_preference?: string | null;
+-  distance_type?: string | null;
+-  estimated_commute_minutes?: number | null;
+-  availability_type?: string | null;
+-  available_from?: string | null;
+-  available_until?: string | null;
+-  lease_duration?: string | null;
+-  description?: string | null;
+-  is_active: boolean;
+-  created_at: string;
+-  updated_at?: string;
+-}
+-
+-export interface ListingImage {
+-  id: string; // uuid
+-  listing_id: string; // uuid
+-  image_url: string;
+-  order_index?: number | null;
+-  created_at: string;
+-}
+-
+-export interface Amenity {
+-  id: string; // uuid
+-  name: string;
+-}
+-
+-export interface ListingAmenity {
+-  listing_id: string; // uuid
+-  amenity_id: string; // uuid
+-}
+-
+-export interface SavedListing {
+-  id: string; // uuid
+-  user_id: string; // uuid
+-  listing_id: string; // uuid
+-  created_at: string;
+-}
+-
+-export interface MatchInvite {
+-  id: string; // uuid
+-  listing_id: string; // uuid
+-  lister_id: string; // uuid
+-  seeker_id: string; // uuid
+-  message?: string | null;
+-  status?: string | null; // pending, accepted, declined
+-  created_at: string;
+-}
+-
+-export interface MessageThread {
+-  id: string; // uuid
+-  listing_id: string; // uuid
+-  seeker_id: string; // uuid
+-  lister_id: string; // uuid
+-  created_at: string;
+-  updated_at?: string;
+-}
+-
+-export interface Message {
+-  id: string; // uuid
+-  thread_id: string; // uuid
+-  sender_id: string; // uuid
+-  content: string;
+-  created_at: string;
+-}
+-
+-// Helper typing for when we join tables via Supabase
+-export interface JoinedPropertyListing extends PropertyListing {
+-  profiles?: Profile | null; // the Lister
+-  listing_images?: ListingImage[];
+-  listing_amenities?: { amenities: Amenity }[];
+-}

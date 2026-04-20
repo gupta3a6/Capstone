@@ -22,17 +22,17 @@ import type { NavItem } from './components/TopBar'
 
 const seekerNavItems: NavItem[] = [
   { label: 'Home', path: '/seeker/home' },
-  { label: 'Messages', path: '/messages' },
-  { label: 'Matches', path: '/matches' },
-  { label: 'Saved', path: '/saved' },
-  { label: 'Support', path: '/help' },
+  { label: 'Messages', path: '/seeker/messages' },
+  { label: 'Matches', path: '/seeker/matches' },
+  { label: 'Saved', path: '/seeker/saved' },
+  { label: 'Support', path: '/seeker/support' },
 ]
 
 const listerNavItems: NavItem[] = [
   { label: 'Home', path: '/lister/home' },
-  { label: 'Messages', path: '/messages' },
-  { label: 'My Listings', path: '/lister/listings' },
-  { label: 'Support', path: '/help' },
+  { label: 'Messages', path: '/lister/messages' },
+  { label: 'My Listings', path: '/lister/mylistings' },
+  { label: 'Support', path: '/lister/support' },
 ]
 
 interface AppProps {
@@ -56,24 +56,23 @@ export const App = ({ isLoggedIn = false, onLogoutClick }: AppProps) => (
     <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} navItems={seekerNavItems} />}>
       <Route path="/seeker/home" element={<SeekerHome />} />
       <Route path="/property/:id" element={<PropertyDetails />} />
-      {/* Add other seeker specific routes here */}
+      <Route path="/seeker/profile" element={<SeekerCreateProfile />} />
+      <Route path="/seeker/matches" element={<Matches />} />
+      <Route path="/seeker/messages" element={<Messages />} />
+      <Route path="/seeker/saved" element={<Saved />} />
+      <Route path="/seeker/support" element={<Support />} />
     </Route>
 
     {/* Lister Routes */}
     <Route element={<Layout isLoggedIn={isLoggedIn} onLogoutClick={onLogoutClick} navItems={listerNavItems} />}>
       <Route path="/lister/home" element={<ListerHome />} />
       <Route path="/lister/createlisting" element={<CreateListing />} />
+      <Route path="/lister/create" element={<CreateListing />} />
       <Route path="/lister/mylistings" element={<MyListings />} />
       <Route path="/lister/profile" element={<ListerCreateProfile />} />
-      <Route path="/seeker/profile" element={<SeekerCreateProfile />} />
-      <Route path="/seeker/matches" element={<Matches />} />
       <Route path="/lister/matches" element={<ListerMatches />} />
-      <Route path="/seeker/messages" element={<Messages />} />
       <Route path="/lister/messages" element={<ListerMessages />} />
-      <Route path="/seeker/saved" element={<Saved />} />
-      <Route path="/seeker/support" element={<Support />} />
       <Route path="/lister/support" element={<ListerSupport />} />
-      {/* Add other main app pages here that need the TopBar */}
     </Route>
 
     {/* Auth Routes - Standalone with AuthHandle */}

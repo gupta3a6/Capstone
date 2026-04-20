@@ -116,6 +116,14 @@ export const SignUpPage = () => {
 
       // Success - account created
       if (data.user) {
+        // IMPORTANT PHASE 5: Immediately initialize the user's Profile in the Database!
+        await supabase.from('profiles').insert({
+           id: data.user.id,
+           first_name: firstName,
+           last_name: lastName,
+           university: 'TBD' // Placeholder to satisfy the NOT NULL constraint until they complete profile creation
+        });
+
         // Purge the local mockup environment cache so new users truly start 100% fresh!
         localStorage.removeItem('sub4you_seeker_profile')
         localStorage.removeItem('sub4you_lister_profile')

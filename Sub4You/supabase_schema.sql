@@ -93,11 +93,7 @@ CREATE TABLE public.messages (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- =========================================================================================
--- OPTIONAL PROTOTYPE SECURITY: 
--- Allow anyone to read/write for now so you can connect your frontend without 403 errors!
--- (We will lock this down tightly before the official University release)
--- =========================================================================================
+
 
 -- Enable RLS on all tables
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;

@@ -222,18 +222,6 @@ export const SeekerHome = () => {
             {renderFilterPills()}
          </div>
 
-         {/* Phase 2 Test Button */}
-         <button 
-           onClick={async () => {
-             console.log("Testing connection...");
-             const properties = await getProperties();
-             console.log("Successfully fetched properties from Supabase:", properties);
-             alert("Connection works! Check your browser console to see the JSON data returned from the database.");
-           }}
-           className="flex items-center gap-2 px-6 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-full font-bold transition-all shadow-lg shrink-0 ml-auto"
-         >
-           Test Database Connection
-         </button>
 
          <button 
            onClick={() => setIsFilterOpen(true)} 

@@ -1,100 +1,111 @@
-import { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useOutletContext, useLocation } from 'react-router-dom';
 import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
-
-// Mock Data
-const MOCK_MESSAGES = [
-  { id: 1, text: "Hey! Is this room still available?", sender: 'them', time: '10:30 AM' },
-  { id: 2, text: "Yes it is! When are you looking to move in?", sender: 'me', time: '11:15 AM' },
-  { id: 3, text: "I was hoping for the start of next semester. Sometime around early January?", sender: 'them', time: '11:20 AM' },
-  { id: 4, text: "That works perfectly. I'm moving out December 20th.", sender: 'me', time: '11:22 AM' },
-  { id: 5, text: "Awesome. Could I come see it sometime this week?", sender: 'them', time: '11:30 AM' },
-];
-
-const MOCK_THREADS = [
-  {
-    id: '1',
-    name: "Shannon, Thomas",
-    lastMessage: "Awesome. Could I come see it sometime this week?",
-    date: "12/28/25",
-    avatar: "https://i.pravatar.cc/150?1",
-    unread: true,
-    listing: {
-      name: "Sunny Room near Campus",
-      host: "Shannon",
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=80",
-      availableFrom: "Jan 1, 2026",
-      rent: "$850",
-    },
-    hostProfile: {
-      bio: "22 y/o Grad student. Love to keep common spaces super clean and host board game nights!",
-      avatar: "https://i.pravatar.cc/150?1",
-      hobbies: "Board Games, Hiking",
-      role: "Student"
-    }
-  },
-  {
-    id: '2',
-    name: "Sarah Jenkins",
-    lastMessage: "I'll let you know by tomorrow!",
-    date: "12/27/25",
-    avatar: "https://i.pravatar.cc/150?2",
-    unread: false,
-    listing: {
-      name: "Quiet Studio Apartment",
-      host: "Sarah",
-      image: "https://images.unsplash.com/photo-1502672260266-1c1ea2a5098c?w=500&q=80",
-      availableFrom: "Feb 1, 2026",
-      rent: "$1100",
-    },
-    hostProfile: {
-      bio: "Working professional. Looking for someone quiet to take over the remainder of the lease.",
-      avatar: "https://i.pravatar.cc/150?2",
-      hobbies: "Coffee, Reading, Yoga",
-      role: "Professional"
-    }
-  },
-  {
-    id: '3',
-    name: "Alex",
-    lastMessage: "Do you allow pets?",
-    date: "12/26/25",
-    avatar: "https://i.pravatar.cc/150?3",
-    unread: false,
-    listing: {
-      name: "Downtown Loft Shared",
-      host: "Alex",
-      image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500&q=80",
-      availableFrom: "Immediately",
-      rent: "$950",
-    },
-    hostProfile: {
-      bio: "Big foodie and very social! I have a super sweet golden retriever named Max.",
-      avatar: "https://i.pravatar.cc/150?3",
-      hobbies: "Cooking, Volleyball",
-      role: "Student"
-    }
-  }
-];
+import { supabase } from '../../../lib/supabase';
+import { getUserThreads, getThreadMessages, sendMessage, getOrCreateMessageThread } from '../../../lib/api';
 
 export const Messages = () => {
   const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
-  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to listers." />;
-  const [activeThread, setActiveThread] = useState(MOCK_THREADS[0]);
+  const [activeThread, setActiveThread] = useState<any>(null);
+  const [threads, setThreads] = useState<any[]>([]);
+  const [rawMessages, setRawMessages] = useState<any[]>([]);
+  const [sessionUser, setSessionUser] = useState<any>(null);
   const [inputText, setInputText] = useState("");
   const [showListingDetails, setShowListingDetails] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeListerProfile, setActiveListerProfile] = useState<any>(null);
   const [activeListingDetails, setActiveListingDetails] = useState<any>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
-  const handleSend = (e: React.FormEvent) => {
+  useEffect(() => {
+    async function loadData() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      setSessionUser(session.user);
+      
+      let initialThreadId = null;
+      // Handle programmatic navigation from Matches "Send Message"
+      if (location.state?.createThreadWith && location.state?.property) {
+         try {
+             // In Phase 6, we'll try to get or create a thread for this matching payload
+             const mockedListerId = "dummy-lister"; // As seeder might be mocked still, real integration expects real UUID
+             // Actually, if we get matched via DB, we can just resolve from matches, but for now we fallback to standard 
+         } catch(e) {}
+      }
+      
+      const res = await getUserThreads(session.user.id);
+      
+      const mapped = res.map((t: any) => {
+        const isLister = t.lister_id === session.user.id;
+        const otherParty = isLister ? t.seeker_profile : t.lister_profile;
+        const listing = t.property_listings;
+        
+        return {
+          id: t.id,
+          name: `${otherParty?.first_name || ''} ${otherParty?.last_name || ''}`.trim() || 'Unknown',
+          lastMessage: "Start of conversation...",
+          date: new Date(t.created_at).toLocaleDateString(),
+          avatar: otherParty?.avatar_url || 'https://i.pravatar.cc/150',
+          unread: false,
+          listing: {
+            name: listing?.title || "Sublease Request",
+            host: `${t.lister_profile?.first_name || ''} ${t.lister_profile?.last_name || ''}`,
+            image: listing?.listing_images?.[0]?.image_url || 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=500&q=80',
+            availableFrom: listing?.available_from || "Flexible",
+            rent: `$${listing?.monthly_rent || 0}`
+          },
+          hostProfile: {
+            bio: otherParty?.bio || "No bio available.",
+            avatar: otherParty?.avatar_url || 'https://i.pravatar.cc/150',
+            hobbies: "Ask me!",
+            role: isLister ? "Seeker" : "Lister"
+          }
+        }
+      });
+      
+      setThreads(mapped);
+      if (mapped.length > 0) setActiveThread(mapped[0]);
+    }
+    loadData();
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!activeThread || !sessionUser) return;
+    
+    async function fetchMsgs() {
+      const msgs = await getThreadMessages(activeThread.id);
+      setRawMessages(msgs);
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+    fetchMsgs();
+    
+    // Subscribe to realtime via Supabase channel!
+    const channel = supabase.channel(`messages:${activeThread.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${activeThread.id}` }, (payload) => {
+        setRawMessages(prev => [...prev, payload.new])
+        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      })
+      .subscribe()
+      
+    return () => { supabase.removeChannel(channel) }
+  }, [activeThread, sessionUser]);
+
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !activeThread || !sessionUser) return;
+    const textToSend = inputText;
     setInputText("");
-    // Message send logic would go here
+    try {
+      await sendMessage(activeThread.id, sessionUser.id, textToSend);
+    } catch(err) {
+      console.error(err)
+    }
   };
+
+  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to listers." />;
 
   return (
     <div className={`h-[calc(100vh-80px)] max-w-[1600px] mx-auto flex flex-col p-4 sm:p-6 ${THEME.light.classes.text}`}>
@@ -124,11 +135,11 @@ export const Messages = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
-            {MOCK_THREADS.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase())).map(thread => (
+            {threads.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase())).map(thread => (
               <div
                 key={thread.id}
                 onClick={() => setActiveThread(thread)}
-                className={`p-4 mx-2 my-2 rounded-2xl cursor-pointer transition-all ${activeThread.id === thread.id ? 'bg-white/30 shadow-sm border border-white/40' : 'hover:bg-white/10 border border-transparent'}`}
+                className={`p-4 mx-2 my-2 rounded-2xl cursor-pointer transition-all ${activeThread?.id === thread.id ? 'bg-white/30 shadow-sm border border-white/40' : 'hover:bg-white/10 border border-transparent'}`}
               >
                 <div className="flex gap-3">
                   <div className="relative">
@@ -147,12 +158,18 @@ export const Messages = () => {
                 </div>
               </div>
             ))}
+            {threads.length === 0 && (
+               <div className="p-8 text-center text-black/50 text-sm font-medium">
+                 No conversations yet. Match with a property to start chatting!
+               </div>
+            )}
           </div>
         </div>
 
         {/* MIDDLE COLUMN: Chat Window */}
         <div className="flex-1 flex flex-col relative bg-transparent">
-          {/* Active Chat Header */}
+          {activeThread ? (
+          <>
           <div className="h-20 border-b border-black/10 flex items-center justify-between px-6 bg-white/5 shrink-0 backdrop-blur-sm">
             <div className="flex items-center gap-3">
               <img src={activeThread.avatar} alt={activeThread.name} className="w-10 h-10 rounded-full object-cover border border-white/30" />
@@ -174,22 +191,27 @@ export const Messages = () => {
 
           {/* Messages Feed */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-            <p className="text-center text-xs font-bold text-black/40 uppercase mb-8">Dec 28, 2025</p>
-            {MOCK_MESSAGES.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'them' && (
+            <p className="text-center text-xs font-bold text-black/40 uppercase mb-8">Beginning of Conversation</p>
+            {rawMessages.map((msg) => {
+              const isMe = msg.sender_id === sessionUser?.id;
+              return (
+              <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                {!isMe && (
                   <img src={activeThread.avatar} alt="Sender" className="w-8 h-8 rounded-full object-cover mr-2 self-end mb-1 shadow-sm border border-white/20" />
                 )}
                 <div className="flex flex-col">
                   <div
-                    className={`px-5 py-3 rounded-2xl max-w-[80%] shadow-sm ${msg.sender === 'me' ? 'bg-black text-white rounded-br-sm ml-auto border border-black/50' : 'bg-white/20 backdrop-blur-md text-black border border-white/30 rounded-bl-sm'}`}
+                    className={`px-5 py-3 rounded-2xl max-w-full shadow-sm ${isMe ? 'bg-black text-white rounded-br-sm ml-auto border border-black/50' : 'bg-white/20 backdrop-blur-md text-black border border-white/30 rounded-bl-sm'}`}
                   >
-                    <p className="text-[15px] font-medium leading-relaxed">{msg.text}</p>
+                    <p className="text-[15px] font-medium leading-relaxed break-words">{msg.content}</p>
                   </div>
-                  <span className={`text-[10px] font-bold text-black/40 mt-1 uppercase ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>{msg.time}</span>
+                  <span className={`text-[10px] font-bold text-black/40 mt-1 uppercase ${isMe ? 'text-right' : 'text-left'}`}>
+                    {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
-            ))}
+            )})}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Chat Input */}
@@ -214,10 +236,16 @@ export const Messages = () => {
               </button>
             </form>
           </div>
+          </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-black/40 font-medium pb-20">
+              Select a conversation to start messaging.
+            </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN: Listing Details */}
-        {showListingDetails && (
+        {(showListingDetails && activeThread) && (
           <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar backdrop-blur-sm relative z-10">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-extrabold text-black">Listing Details</h2>

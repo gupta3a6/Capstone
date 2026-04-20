@@ -1,98 +1,106 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useOutletContext } from 'react-router-dom';
 import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import SeekerViewProfile from '../../../Seeker/SeekerViewProfile/SeekerViewProfile';
-
-// Mock Data
-const MOCK_MESSAGES = [
-  { id: 1, text: "Hey! Thanks for accepting my match request.", sender: 'me', time: '10:30 AM' },
-  { id: 2, text: "Hey! No problem. Your listing looks perfect for what I need.", sender: 'them', time: '11:15 AM' },
-  { id: 3, text: "Awesome. Did you have any questions about the utility split?", sender: 'me', time: '11:20 AM' },
-  { id: 4, text: "Not really, it seems super straightforward. When would I be able to tour?", sender: 'them', time: '11:22 AM' },
-  { id: 5, text: "I'm free all day Thursday or Friday!", sender: 'me', time: '11:30 AM' },
-];
-
-const MOCK_THREADS = [
-  {
-    id: '1',
-    name: "Alice Smith",
-    lastMessage: "I'm free all day Thursday or Friday!",
-    date: "12/28/25",
-    avatar: "https://i.pravatar.cc/300?img=5",
-    unread: false,
-    seeker: {
-      name: "Alice Smith",
-      major: "Computer Science",
-      university: "State University",
-      image: "https://i.pravatar.cc/300?img=5",
-      budget: "$800",
-      commute: "Walkable (15m)",
-      gender: "Female",
-    }
-  },
-  {
-    id: '2',
-    name: "Jason Lee",
-    lastMessage: "I'll let you know by tomorrow!",
-    date: "12/27/25",
-    avatar: "https://i.pravatar.cc/300?img=11",
-    unread: true,
-    seeker: {
-      name: "Jason Lee",
-      major: "Business Administration",
-      university: "State University",
-      image: "https://i.pravatar.cc/300?img=11",
-      budget: "$1,000",
-      commute: "Driving (20m)",
-      gender: "Male"
-    }
-  },
-  {
-    id: '3',
-    name: "Sarah Jenkins",
-    lastMessage: "Do you allow pets?",
-    date: "12/26/25",
-    avatar: "https://i.pravatar.cc/300?img=1",
-    unread: false,
-    seeker: {
-      name: "Sarah Jenkins",
-      major: "Nursing",
-      university: "State University",
-      image: "https://i.pravatar.cc/300?img=1",
-      budget: "$750",
-      commute: "Public Transit (30m)",
-      gender: "Female"
-    }
-  }
-];
+import { supabase } from '../../../lib/supabase';
+import { getUserThreads, getThreadMessages, sendMessage } from '../../../lib/api';
 
 export const ListerMessages = () => {
   const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
-  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to potential subleasers." />;
+  const [activeThread, setActiveThread] = useState<any>(null);
+  const [threads, setThreads] = useState<any[]>([]);
+  const [rawMessages, setRawMessages] = useState<any[]>([]);
+  const [sessionUser, setSessionUser] = useState<any>(null);
   const location = useLocation();
-  
-  // Conditionally initialize active thread based on incoming payload from ListerMatches
-  const [activeThread, setActiveThread] = useState(() => {
-    const passedId = location.state?.openThreadId;
-    if (passedId) {
-       const found = MOCK_THREADS.find(t => t.id === passedId.toString());
-       if (found) return found;
-    }
-    return MOCK_THREADS[0];
-  });
   
   const [inputText, setInputText] = useState("");
   const [showSeekerDetails, setShowSeekerDetails] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = (e: React.FormEvent) => {
+  useEffect(() => {
+    async function loadData() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      setSessionUser(session.user);
+      
+      const res = await getUserThreads(session.user.id);
+      
+      const mapped = res.map((t: any) => {
+        // Here we are always the Lister!
+        const otherParty = t.seeker_profile;
+        
+        return {
+          id: t.id,
+          name: `${otherParty?.first_name || ''} ${otherParty?.last_name || ''}`.trim() || 'Unknown',
+          lastMessage: "Start of conversation...",
+          date: new Date(t.created_at).toLocaleDateString(),
+          avatar: otherParty?.avatar_url || 'https://i.pravatar.cc/150',
+          unread: false,
+          seeker: {
+            name: `${otherParty?.first_name || ''} ${otherParty?.last_name || ''}`.trim() || 'Unknown',
+            major: "Unknown Major", // We don't fetch major natively in this query without joining seeker_preferences
+            university: otherParty?.university || "University",
+            image: otherParty?.avatar_url || 'https://i.pravatar.cc/150',
+            budget: "Depends on property",
+            commute: "Flexible",
+            gender: "Unknown",
+            rawId: otherParty?.id
+          }
+        }
+      });
+      
+      setThreads(mapped);
+      
+      // Conditionally initialize active thread based on incoming payload
+      const passedId = location.state?.openThreadId;
+      if (passedId) {
+         const found = mapped.find((t: any) => t.id === passedId.toString());
+         if (found) setActiveThread(found);
+         else if (mapped.length > 0) setActiveThread(mapped[0]);
+      } else if (mapped.length > 0) {
+         setActiveThread(mapped[0]);
+      }
+    }
+    loadData();
+  }, [location.state]);
+
+  useEffect(() => {
+    if (!activeThread || !sessionUser) return;
+    
+    async function fetchMsgs() {
+      const msgs = await getThreadMessages(activeThread.id);
+      setRawMessages(msgs);
+      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+    fetchMsgs();
+    
+    // Subscribe to realtime via Supabase channel!
+    const channel = supabase.channel(`lister_messages:${activeThread.id}`)
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${activeThread.id}` }, (payload) => {
+        setRawMessages(prev => [...prev, payload.new])
+        setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+      })
+      .subscribe()
+      
+    return () => { supabase.removeChannel(channel) }
+  }, [activeThread, sessionUser]);
+
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || !activeThread || !sessionUser) return;
+    const textToSend = inputText;
     setInputText("");
-    // Message send logic would go here
+    try {
+      await sendMessage(activeThread.id, sessionUser.id, textToSend);
+    } catch(err) {
+      console.error(err)
+    }
   };
+
+  if (!isLoggedIn) return <AuthPlaceholder title="Stay Connected" message="Log in to view and send messages to potential subleasers." />;
 
   return (
     <div className={`h-[calc(100vh-80px)] max-w-[1600px] mx-auto flex flex-col p-4 sm:p-6 ${THEME.light.classes.text}`}>
@@ -122,11 +130,11 @@ export const ListerMessages = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
-            {MOCK_THREADS.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase())).map(thread => (
+            {threads.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase())).map(thread => (
               <div
                 key={thread.id}
                 onClick={() => setActiveThread(thread)}
-                className={`p-4 mx-2 my-2 rounded-2xl cursor-pointer transition-all ${activeThread.id === thread.id ? 'bg-white/30 shadow-sm border border-white/40' : 'hover:bg-white/10 border border-transparent'}`}
+                className={`p-4 mx-2 my-2 rounded-2xl cursor-pointer transition-all ${activeThread?.id === thread.id ? 'bg-white/30 shadow-sm border border-white/40' : 'hover:bg-white/10 border border-transparent'}`}
               >
                 <div className="flex gap-3">
                   <div className="relative">
@@ -145,12 +153,18 @@ export const ListerMessages = () => {
                 </div>
               </div>
             ))}
+            {threads.length === 0 && (
+               <div className="p-8 text-center text-black/50 text-sm font-medium">
+                 No conversations yet. Match with a seeker to start chatting!
+               </div>
+            )}
           </div>
         </div>
 
         {/* MIDDLE COLUMN: Chat Window */}
         <div className="flex-1 flex flex-col relative bg-transparent">
-          {/* Active Chat Header */}
+          {activeThread ? (
+          <>
           <div className="h-20 border-b border-black/10 flex items-center justify-between px-6 bg-white/5 shrink-0 backdrop-blur-sm">
             <div className="flex items-center gap-3">
               <img src={activeThread.avatar} alt={activeThread.name} className="w-10 h-10 rounded-full object-cover border border-white/30" />
@@ -172,22 +186,27 @@ export const ListerMessages = () => {
 
           {/* Messages Feed */}
           <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-            <p className="text-center text-xs font-bold text-black/40 uppercase mb-8">Dec 28, 2025</p>
-            {MOCK_MESSAGES.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'them' && (
+            <p className="text-center text-xs font-bold text-black/40 uppercase mb-8">Beginning of Conversation</p>
+            {rawMessages.map((msg) => {
+              const isMe = msg.sender_id === sessionUser?.id;
+              return (
+              <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
+                {!isMe && (
                   <img src={activeThread.avatar} alt="Sender" className="w-8 h-8 rounded-full object-cover mr-2 self-end mb-1 shadow-sm border border-white/20" />
                 )}
                 <div className="flex flex-col">
                   <div
-                    className={`px-5 py-3 rounded-2xl max-w-[80%] shadow-sm ${msg.sender === 'me' ? 'bg-black text-white rounded-br-sm ml-auto border border-black/50' : 'bg-white/20 backdrop-blur-md text-black border border-white/30 rounded-bl-sm'}`}
+                    className={`px-5 py-3 rounded-2xl max-w-full shadow-sm ${isMe ? 'bg-black text-white rounded-br-sm ml-auto border border-black/50' : 'bg-white/20 backdrop-blur-md text-black border border-white/30 rounded-bl-sm'}`}
                   >
-                    <p className="text-[15px] font-medium leading-relaxed">{msg.text}</p>
+                    <p className="text-[15px] font-medium leading-relaxed break-words">{msg.content}</p>
                   </div>
-                  <span className={`text-[10px] font-bold text-black/40 mt-1 uppercase ${msg.sender === 'me' ? 'text-right' : 'text-left'}`}>{msg.time}</span>
+                  <span className={`text-[10px] font-bold text-black/40 mt-1 uppercase ${isMe ? 'text-right' : 'text-left'}`}>
+                    {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
               </div>
-            ))}
+            )})}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Chat Input */}
@@ -212,10 +231,16 @@ export const ListerMessages = () => {
               </button>
             </form>
           </div>
+          </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-black/40 font-medium pb-20">
+              Select a conversation to start messaging.
+            </div>
+          )}
         </div>
 
         {/* RIGHT COLUMN: Seeker Details */}
-        {showSeekerDetails && (
+        {(showSeekerDetails && activeThread) && (
           <div className="w-[340px] shrink-0 border-l border-black/10 bg-white/5 p-6 flex flex-col overflow-y-auto custom-scrollbar backdrop-blur-sm">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-extrabold text-black">About {activeThread.seeker.name}</h2>
@@ -257,7 +282,7 @@ export const ListerMessages = () => {
               </div>
 
               <button 
-                onClick={() => setSelectedProfileId(activeThread.id)}
+                onClick={() => setSelectedProfileId(activeThread.seeker.rawId)}
                 className="w-full py-3 bg-white/40 hover:bg-white/60 text-black font-extrabold rounded-xl border border-white/40 shadow-sm transition-colors cursor-pointer text-sm"
               >
                 View Full Profile

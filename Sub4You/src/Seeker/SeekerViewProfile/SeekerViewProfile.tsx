@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { THEME } from '../../constants/theme'
 import { IoSchoolOutline, IoCalendarOutline, IoLocationOutline, IoLogoInstagram, IoClose } from "react-icons/io5"
+import { sendMatchRequest } from '../../lib/api'
+import { supabase } from '../../lib/supabase'
 
 interface SeekerViewProfileProps {
   profileId: string | number
@@ -80,16 +82,26 @@ export const SeekerViewProfile = ({ profileId, onClose }: SeekerViewProfileProps
     }
   }, [profileId])
 
-  const handleMatch = () => {
+  const handleMatch = async () => {
     if (isPending || !profile) return;
     
     const confirm = window.confirm(`Are you sure you want to send ${profile.name} a match request?`)
     if (confirm) {
-        alert(`Congratulations! You sent a match request to ${profile.name}.`)
-        setIsPending(true)
-        const stored = JSON.parse(localStorage.getItem('sub4you_sent_matches') || '{}')
-        stored[profile.id] = 'pending'
-        localStorage.setItem('sub4you_sent_matches', JSON.stringify(stored))
+        try {
+          const { data: { session } } = await supabase.auth.getSession()
+          if (!session) throw new Error("You must be logged in.")
+          
+          await sendMatchRequest(session.user.id, profileId.toString())
+          alert(`Congratulations! You sent a match request to ${profile.name}.`)
+          setIsPending(true)
+          
+          const stored = JSON.parse(localStorage.getItem('sub4you_sent_matches') || '{}')
+          stored[profile.id] = 'pending'
+          localStorage.setItem('sub4you_sent_matches', JSON.stringify(stored))
+        } catch (err: any) {
+          console.error(err)
+          alert(err.message || 'Failed to send match request.')
+        }
     }
   }
 

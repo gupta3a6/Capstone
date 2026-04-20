@@ -2,12 +2,15 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiUploadCloud } from 'react-icons/fi'
 import { THEME } from '../../../constants/theme'
+import { updateListerProfile } from '../../../lib/api'
+import { supabase } from '../../../lib/supabase'
 
 export const ListerCreateProfile = () => {
   const navigate = useNavigate()
   
   // Form State
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [age, setAge] = useState('')
   const [gender, setGender] = useState('')
   const [university, setUniversity] = useState('')
@@ -57,6 +60,7 @@ export const ListerCreateProfile = () => {
       const reader = new FileReader()
       reader.onloadend = () => {
         setPhotoPreview(reader.result as string)
+        setPhotoFile(file)
         setError(null)
       }
       reader.readAsDataURL(file)
@@ -67,42 +71,39 @@ export const ListerCreateProfile = () => {
     e.preventDefault()
     setError(null)
 
-    if (!photoPreview || !age || !gender || !university) {
-      setError('Please fill out all required fields: Profile Photo, Age, Gender, and University Name.')
+    if (!age || !gender || !university) {
+      setError('Please fill out all required fields: Age, Gender, and University Name.')
       return
     }
     
     setIsLoading(true)
 
     try {
+      const { data: { session } } = await supabase.auth.getSession()
+
       const profileData = {
-        photoPreview,
-        age,
-        gender,
-        university,
-        major,
-        year,
-        bio,
-        instagram,
-        setupComplete: true
+        photoPreview, age, gender, university, major, year, bio, instagram,
       }
 
-      localStorage.setItem('sub4you_lister_profile', JSON.stringify(profileData))
-      window.dispatchEvent(new Event('listerProfileUpdated'))
+      if (session) {
+         await updateListerProfile(session.user.id, profileData, photoFile)
+      } else {
+         localStorage.setItem('sub4you_lister_profile', JSON.stringify({ ...profileData, setupComplete: true }))
+         window.dispatchEvent(new Event('listerProfileUpdated'))
+      }
 
-      setTimeout(() => {
-        setIsLoading(false)
-        const savedArr = localStorage.getItem('sub4you_lister_listings_array')
-        const hasListings = savedArr ? JSON.parse(savedArr).length > 0 : false
-        
-        if (hasListings) {
-          navigate('/lister/home')
-        } else {
-          navigate('/lister/createlisting')
-        }
-      }, 800)
+      setIsLoading(false)
+      const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+      const hasListings = savedArr ? JSON.parse(savedArr).length > 0 : false
+      
+      if (hasListings) {
+        navigate('/lister/home')
+      } else {
+        navigate('/lister/createlisting')
+      }
     } catch (err) {
-      setError('Failed to save profile')
+      console.error(err)
+      setError('Failed to securely save profile to database')
       setIsLoading(false)
     }
   }
@@ -125,7 +126,7 @@ export const ListerCreateProfile = () => {
             <form className="space-y-10" onSubmit={handleSave}>
               {/* Profile Photo Section */}
               <div>
-                <h3 className={`text-lg font-medium ${THEME.light.classes.text} mb-4`}>Profile Photo <span className="text-red-400">*</span></h3>
+                <h3 className={`text-lg font-medium ${THEME.light.classes.text} mb-4`}>Profile Photo</h3>
                 <div className="flex items-center gap-6">
                   <div 
                     className="relative group w-24 h-24 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 cursor-pointer hover:bg-white/20 transition-colors"

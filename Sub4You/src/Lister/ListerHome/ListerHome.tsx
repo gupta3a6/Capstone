@@ -6,6 +6,8 @@ import { Carousel } from '../../components/Carousel'
 import { SeekerCard } from '../../components/SeekerCard'
 import SeekerViewProfile from '../../Seeker/SeekerViewProfile/SeekerViewProfile'
 import { ListerFilter } from './lister-filters/ListerFilter'
+import { supabase } from '../../lib/supabase'
+import { getListerProperties, getSeekers } from '../../lib/api'
 
 export const ListerHome = () => {
   const navigate = useNavigate()
@@ -20,81 +22,68 @@ export const ListerHome = () => {
   const [appliedFilters, setAppliedFilters] = useState<any>(null);
   
   const [hasListings, setHasListings] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dbSeekers, setDbSeekers] = useState<any[]>([]);
 
   useEffect(() => {
-    const savedArr = localStorage.getItem('sub4you_lister_listings_array')
-    setHasListings(savedArr ? JSON.parse(savedArr).length > 0 : false)
+    const checkListings = async () => {
+      try {
+        setIsLoading(true);
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        const fetchedSeekers = await getSeekers();
+        setDbSeekers(fetchedSeekers);
+
+        if (session) {
+          const dbData = await getListerProperties(session.user.id);
+          setHasListings(dbData.length > 0);
+        } else {
+          const savedArr = localStorage.getItem('sub4you_lister_listings_array')
+          setHasListings(savedArr ? JSON.parse(savedArr).length > 0 : false)
+        }
+      } catch (err) {
+        console.error("Failed to check listings", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkListings();
   }, [])
 
-  // Dummy Seeker Data mimicking Seeker Profile Form elements
-  const exampleSeekers = [
-    {
-      id: 1, name: 'Alice Smith', age: 20, gender: 'F', major: 'Computer Science', university: 'University of Cincinnati', year: 'Junior',
-      budget: '800', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=5', city: 'Cincinnati', state: 'OH', zipcode: '45219'
-    },
-    {
-      id: 2, name: 'Jason Lee', age: 22, gender: 'M', major: 'Business Administration', university: 'University of Cincinnati', year: 'Senior',
-      budget: '1,000', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=11', city: 'Cincinnati', state: 'OH', zipcode: '45220'
-    },
-    {
-      id: 3, name: 'Sarah Jenkins', age: 19, gender: 'F', university: 'Xavier University',
-      budget: '750', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=1', city: 'Norwood', state: 'OH', zipcode: '45212'
-    },
-    {
-      id: 4, name: 'Michael Chen', age: 21, gender: 'M', major: 'Engineering', university: 'University of Cincinnati', year: 'Sophomore',
-      budget: '950', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=59', city: 'Cincinnati', state: 'OH', zipcode: '45219'
-    },
-    {
-      id: 5, name: 'Emma Davis', age: 20, gender: 'F', major: 'Psychology',
-      budget: '850', timeline: 'Spring 2027', image: 'https://i.pravatar.cc/300?img=9', city: 'Columbus', state: 'OH', zipcode: '43210'
-    },
-    {
-      id: 6, name: 'David Wilson', age: 23, gender: 'M', major: 'Law',
-      budget: '1,200', timeline: 'Fall 2026 - Spring 2027', image: 'https://i.pravatar.cc/300?img=60', city: 'Cincinnati', state: 'OH', zipcode: '45221'
-    },
-    {
-      id: 7, name: 'Chloe Brown', age: 21, gender: 'F', major: 'Marketing',
-      budget: '900', timeline: 'Summer 2026', image: 'https://i.pravatar.cc/300?img=43', city: 'Dayton', state: 'OH', zipcode: '45469'
-    },
-    {
-      id: 8, name: 'Ryan Taylor', age: 20, gender: 'M', major: 'Architecture',
-      budget: '1,100', timeline: 'Fall 2026', image: 'https://i.pravatar.cc/300?img=53', city: 'Cincinnati', state: 'OH', zipcode: '45220'
-    }
-  ]
-
   const searchResults = activeSearch
-    ? exampleSeekers.filter(s => {
+    ? dbSeekers.filter(s => {
         const term = activeSearch;
         return (
-          s.name.toLowerCase().includes(term) ||
+          (s.name && s.name.toLowerCase().includes(term)) ||
           (s.major && s.major.toLowerCase().includes(term)) ||
           (s.university && s.university.toLowerCase().includes(term)) ||
-          s.timeline.toLowerCase().includes(term) ||
-          s.budget.includes(term) ||
-          ((s as any).city && (s as any).city.toLowerCase().includes(term)) ||
-          ((s as any).state && (s as any).state.toLowerCase().includes(term)) ||
-          ((s as any).zipcode && (s as any).zipcode.includes(term))
+          (s.city && s.city.toLowerCase().includes(term)) ||
+          (s.state && s.state.toLowerCase().includes(term)) ||
+          (s.zipcode && s.zipcode.includes(term))
         );
       })
-    : exampleSeekers;
+    : dbSeekers;
 
   let finalResults = searchResults;
 
   if (appliedFilters) {
     finalResults = finalResults.filter(s => {
        let ok = true;
-       const budgetVal = typeof s.budget === 'string' ? parseInt(s.budget.replace(/\D/g, ''), 10) : s.budget;
-       if (budgetVal !== undefined && (budgetVal > appliedFilters.maxBudget || budgetVal < appliedFilters.minBudget)) ok = false;
-       if (appliedFilters.minAge && s.age < appliedFilters.minAge) ok = false;
-       if (appliedFilters.maxAge && s.age > appliedFilters.maxAge) ok = false;
+       // We now use maxBudget provided natively as an integer from our Phase 5 Supabase DB
+       if (s.maxBudget !== null && s.maxBudget !== undefined) {
+         if (s.maxBudget > appliedFilters.maxBudget || s.maxBudget < appliedFilters.minBudget) ok = false;
+       }
+       if (appliedFilters.minAge && s.age && s.age < appliedFilters.minAge) ok = false;
+       if (appliedFilters.maxAge && s.age && s.age > appliedFilters.maxAge) ok = false;
        
        let mappedMockGender = '';
-       if (s.gender === 'M') mappedMockGender = 'Male Only';
-       if (s.gender === 'F') mappedMockGender = 'Female Only';
+       if (s.gender === 'Male' || s.gender === 'M') mappedMockGender = 'Male Only';
+       if (s.gender === 'Female' || s.gender === 'F') mappedMockGender = 'Female Only';
        if (appliedFilters.genderPref && mappedMockGender && mappedMockGender !== appliedFilters.genderPref && appliedFilters.genderPref !== 'Any' && appliedFilters.genderPref !== 'No Preference') ok = false;
        
-       if (appliedFilters.university && (s as any).university && (s as any).university !== appliedFilters.university) ok = false;
-       if (appliedFilters.year && (s as any).year && (s as any).year !== appliedFilters.year) ok = false;
+       if (appliedFilters.university && s.university && s.university !== appliedFilters.university) ok = false;
+       if (appliedFilters.year && s.year && s.year !== appliedFilters.year) ok = false;
+       if (appliedFilters.city && s.city && s.city.toLowerCase() !== appliedFilters.city.toLowerCase()) ok = false;
        return ok;
     });
   }
@@ -169,7 +158,12 @@ export const ListerHome = () => {
           </div>
         </div>
 
-        {(!isLoggedIn || !hasListings) ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white/40 backdrop-blur-md rounded-[32px] border border-white/60 shadow-sm mt-10">
+             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mb-6"></div>
+             <p className="text-lg text-gray-600 font-medium">Loading your profile status...</p>
+          </div>
+        ) : (!isLoggedIn || !hasListings) ? (
           <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-white/40 backdrop-blur-md rounded-[32px] border border-white/60 shadow-sm mt-10">
              <div className="w-20 h-20 bg-black/5 rounded-full flex items-center justify-center mb-6">
                 <FiHome size={40} className="text-black/80" /> 
@@ -191,19 +185,19 @@ export const ListerHome = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {finalResults.map((seeker) => (
+                {finalResults.map((seeker: any) => (
                   <SeekerCard
                     key={seeker.id}
                     id={seeker.id}
                     name={seeker.name}
                     age={seeker.age}
                     gender={seeker.gender}
-                    major={(seeker as any).major}
-                    university={(seeker as any).university}
-                    year={(seeker as any).year}
-                    budget={seeker.budget}
-                    timeline={seeker.timeline}
-                    imageSrc={seeker.image}
+                    major={seeker.major}
+                    university={seeker.university}
+                    year={seeker.year}
+                    budget={`$${seeker.maxBudget || 0}`}
+                    timeline={`${seeker.moveInDate || ''}`}
+                    imageSrc={seeker.avatar}
                     onClick={() => setSelectedProfileId(seeker.id)}
                   />
                 ))}
@@ -212,22 +206,22 @@ export const ListerHome = () => {
           ) : (
           <>
             <Carousel
-              items={exampleSeekers}
+              items={dbSeekers}
               itemsPerPage={4}
               title="Students Actively Looking"
-              renderItem={(seeker) => (
+              renderItem={(seeker: any) => (
                 <SeekerCard
                   key={seeker.id}
                   id={seeker.id}
                   name={seeker.name}
                   age={seeker.age}
                   gender={seeker.gender}
-                  major={(seeker as any).major}
-                  university={(seeker as any).university}
-                  year={(seeker as any).year}
-                  budget={seeker.budget}
-                  timeline={seeker.timeline}
-                  imageSrc={seeker.image}
+                  major={seeker.major}
+                  university={seeker.university}
+                  year={seeker.year}
+                  budget={`$${seeker.maxBudget || 0}`}
+                  timeline={`${seeker.moveInDate || ''}`}
+                  imageSrc={seeker.avatar}
                   onClick={() => setSelectedProfileId(seeker.id)}
                 />
               )}
@@ -235,22 +229,22 @@ export const ListerHome = () => {
             
             <div className="mt-12">
               <Carousel
-                items={[...exampleSeekers].reverse()}
+                items={[...dbSeekers].reverse()}
                 itemsPerPage={4}
                 title="Newest Seeker Profiles"
-                renderItem={(seeker) => (
+                renderItem={(seeker: any) => (
                   <SeekerCard
                     key={seeker.id}
                     id={seeker.id}
                     name={seeker.name}
                     age={seeker.age}
                     gender={seeker.gender}
-                    major={(seeker as any).major}
-                    university={(seeker as any).university}
-                    year={(seeker as any).year}
-                    budget={seeker.budget}
-                    timeline={seeker.timeline}
-                    imageSrc={seeker.image}
+                    major={seeker.major}
+                    university={seeker.university}
+                    year={seeker.year}
+                    budget={`$${seeker.maxBudget || 0}`}
+                    timeline={`${seeker.moveInDate || ''}`}
+                    imageSrc={seeker.avatar}
                     onClick={() => setSelectedProfileId(seeker.id)}
                   />
                 )}

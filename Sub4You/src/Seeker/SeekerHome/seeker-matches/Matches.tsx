@@ -3,6 +3,8 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { AuthPlaceholder } from '../../../components/AuthPlaceholder';
 import { THEME } from '../../../constants/theme';
 import { SeekerPropertyDetails } from '../property-details/SeekerPropertyDetails';
+import { supabase } from '../../../lib/supabase';
+import { getSeekerIncomingMatches, updateMatchRequestStatus, getOrCreateMessageThread } from '../../../lib/api';
 
 interface MatchRequest {
   id: string;
@@ -12,44 +14,55 @@ interface MatchRequest {
   propertyImage: string;
   rent: number;
   location: string;
-  status: 'pending' | 'approved' | 'denied';
+  status: 'pending' | 'accepted' | 'declined';
   roomSpecs: string;
   amenities: string[];
+  listingId: string;
+  listerId: string;
 }
-
-const INITIAL_REQUESTS: MatchRequest[] = [
-  {
-    id: 'req_1',
-    listerName: 'Sarah Jenkins',
-    listerAvatar: 'https://i.pravatar.cc/150?img=32',
-    propertyName: 'Sunny Downtown Loft',
-    propertyImage: 'https://picsum.photos/seed/apt1/800/600',
-    rent: 950,
-    location: '123 Main St, Downtown',
-    status: 'pending',
-    roomSpecs: '1 Bed / 1 Bath in 3B2B apartment',
-    amenities: ['In-unit Washer/Dryer', 'Gym', 'Pool', 'High-speed Wi-Fi'],
-  },
-  {
-    id: 'req_2',
-    listerName: 'Michael Chang',
-    listerAvatar: 'https://i.pravatar.cc/150?img=11',
-    propertyName: 'Quiet Campus Edge Room',
-    propertyImage: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80',
-    rent: 700,
-    location: '404 University Dr',
-    status: 'pending',
-    roomSpecs: 'Master Bedroom with Private Bath',
-    amenities: ['Furnished', 'Utilities Included', 'Free Parking'],
-  },
-];
 
 export const Matches = () => {
   const { isLoggedIn } = useOutletContext<{ isLoggedIn?: boolean }>() || {};
   if (!isLoggedIn) return <AuthPlaceholder title="Find Your Match" message="Log in to view your property and roommate matches." />;
   const navigate = useNavigate();
-  const [requests, setRequests] = useState<MatchRequest[]>(INITIAL_REQUESTS);
+  const [requests, setRequests] = useState<MatchRequest[]>([]);
   const [selectedListing, setSelectedListing] = useState<MatchRequest | null>(null);
+
+  useEffect(() => {
+    async function loadMatches() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) return;
+
+        const data = await getSeekerIncomingMatches(session.user.id);
+        const mapped: MatchRequest[] = data.map((req: any) => {
+           let imageUrl = 'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80';
+           if (req.property_listings?.listing_images?.length > 0) {
+             imageUrl = req.property_listings.listing_images[0].image_url;
+           }
+           
+           return {
+              id: req.id,
+              listerName: req.profiles ? `${req.profiles.first_name || ''} ${req.profiles.last_name || ''}`.trim() : 'Unknown Lister',
+              listerAvatar: req.profiles?.avatar_url || 'https://i.pravatar.cc/150?u=Unknown',
+              propertyName: req.property_listings?.title || 'Sublease',
+              propertyImage: imageUrl,
+              rent: req.property_listings?.monthly_rent || 0,
+              location: `${req.property_listings?.city || ''}, ${req.property_listings?.state_code || ''}`,
+              status: req.status,
+              roomSpecs: 'Details available in description',
+              amenities: ['High-Speed WiFi', 'Utilities Included'],
+              listingId: req.property_listings?.id,
+              listerId: req.profiles?.id
+           };
+        });
+        setRequests(mapped);
+      } catch (err) {
+        console.error('Failed to load matches:', err);
+      }
+    }
+    loadMatches();
+  }, []);
 
   useEffect(() => {
     const pendingCount = requests.filter(req => req.status === 'pending').length;
@@ -57,17 +70,31 @@ export const Matches = () => {
     window.dispatchEvent(new Event('matchesUpdated'));
   }, [requests]);
 
-  const handleAction = (id: string, action: 'approved' | 'denied') => {
-    setRequests(current =>
-      current.map(req => (req.id === id ? { ...req, status: action } : req))
-    );
+  const handleAction = async (id: string, action: 'accepted' | 'declined') => {
+    try {
+      await updateMatchRequestStatus(id, action);
+      
+      const req = requests.find(r => r.id === id);
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      let threadId = null;
+      if (action === 'accepted' && req && session) {
+        // Automatically create the bridge
+        threadId = await getOrCreateMessageThread(req.listingId, session.user.id, req.listerId);
+      }
+      
+      setRequests(current => current.map(r => (r.id === id ? { ...r, status: action } : r)));
 
-    if (action === 'approved') {
-      setTimeout(() => {
-        if (window.confirm('Would you like to send a message to the lister now?')) {
-          navigate('/seeker/messages');
-        }
-      }, 50);
+      if (action === 'accepted') {
+        setTimeout(() => {
+          if (window.confirm('Would you like to send a message to the lister now?')) {
+            navigate('/seeker/messages', { state: { openThreadId: threadId } });
+          }
+        }, 50);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Failed to update match status.');
     }
   };
 
@@ -115,8 +142,8 @@ export const Matches = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
                 {req.status !== 'pending' && (
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-sm z-20">
-                    <span className="px-4 py-1.5 rounded-full text-sm font-bold shadow-sm" style={req.status === 'approved' ? { backgroundColor: 'rgba(34, 197, 94, 0.3)', color: '#4ade80', border: '1px solid rgba(74, 222, 128, 0.5)' } : { backgroundColor: 'rgba(239, 68, 68, 0.3)', color: '#f87171', border: '1px solid rgba(248, 113, 113, 0.5)' }}>
-                      {req.status === 'approved' ? 'Accepted' : 'Declined'}
+                    <span className="px-4 py-1.5 rounded-full text-sm font-bold shadow-sm" style={req.status === 'accepted' ? { backgroundColor: 'rgba(34, 197, 94, 0.3)', color: '#4ade80', border: '1px solid rgba(74, 222, 128, 0.5)' } : { backgroundColor: 'rgba(239, 68, 68, 0.3)', color: '#f87171', border: '1px solid rgba(248, 113, 113, 0.5)' }}>
+                      {req.status === 'accepted' ? 'Accepted' : 'Declined'}
                     </span>
                   </div>
                 )}
@@ -156,13 +183,13 @@ export const Matches = () => {
                   {req.status === 'pending' && (
                     <div className="flex gap-2">
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleAction(req.id, 'denied'); }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(req.id, 'declined'); }}
                         className="flex-1 py-1.5 rounded-lg text-sm font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-colors"
                       >
                         Decline
                       </button>
                       <button
-                        onClick={(e) => { e.stopPropagation(); handleAction(req.id, 'approved'); }}
+                        onClick={(e) => { e.stopPropagation(); handleAction(req.id, 'accepted'); }}
                         className="flex-1 py-1.5 rounded-lg text-sm font-bold text-green-400 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 transition-colors"
                       >
                         Accept
